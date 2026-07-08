@@ -41,3 +41,40 @@ setInterval(renderTime, 30_000);
 
 // Footer year
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// Scroll reveals: tag elements, staggering siblings within each group.
+// Only hide content if IntersectionObserver can reveal it again.
+if ("IntersectionObserver" in window) {
+const revealGroups = [
+  ".rule-head",
+  ".index__row",
+  ".ledger__entry",
+  ".about__text",
+  ".about__list li",
+  ".contact__lead",
+  ".contact__row",
+];
+revealGroups.forEach((sel) => {
+  document.querySelectorAll(sel).forEach((el, i) => {
+    el.classList.add("anim");
+    el.style.setProperty("--i", i % 6);
+  });
+});
+
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
+);
+document
+  .querySelectorAll(".anim, .colophon__name")
+  .forEach((el) => revealObserver.observe(el));
+} else {
+  document.querySelector(".colophon__name").classList.add("in");
+}

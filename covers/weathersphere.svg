@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Georgia, serif">
   <rect width="800" height="500" fill="#eae3d5"/>
   <text x="770" y="470" text-anchor="end" font-size="380" font-weight="600" fill="#dfd6c4">01</text>
-  <circle cx="180" cy="150" r="70" fill="none" stroke="#d4520e" stroke-width="4"/>
-  <path d="M 110 150 A 70 70 0 0 1 250 150" fill="#d4520e" opacity="0.85"/>
-  <text x="60" y="330" font-size="54" fill="#211d18">WeatherSphere</text>
-  <text x="60" y="380" font-family="'Courier New', monospace" font-size="20" fill="#6f675b">flutter · weather · 7-day forecast</text>
-  <text x="60" y="452" font-family="'Courier New', monospace" font-size="16" fill="#b3a892">( placeholder — replace with screenshot )</text>
+  <circle cx="180" cy="150" r="70" fill="none" stroke="#000814" stroke-width="4"/>
+  <path d="M 110 150 A 70 70 0 0 1 250 150" fill="#ffd60a"/>
+  <text x="60" y="330" font-size="54" fill="#000814">WeatherSphere</text>
+  <text x="60" y="380" font-family="'Courier New', monospace" font-size="20" fill="#001d3d">flutter · weather · 7-day forecast</text>
+  <text x="60" y="452" font-family="'Courier New', monospace" font-size="16" fill="#8d97a5">( placeholder — replace with screenshot )</text>
 </svg>

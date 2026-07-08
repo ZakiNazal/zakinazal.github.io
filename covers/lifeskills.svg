@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Georgia, serif">
   <rect width="800" height="500" fill="#eae3d5"/>
   <text x="770" y="470" text-anchor="end" font-size="380" font-weight="600" fill="#dfd6c4">02</text>
-  <g stroke="#d4520e" stroke-width="4" stroke-linecap="round">
+  <g stroke="#ffd60a" stroke-width="6" stroke-linecap="round">
     <line x1="110" y1="180" x2="110" y2="120"/>
     <line x1="150" y1="180" x2="150" y2="95"/>
     <line x1="190" y1="180" x2="190" y2="140"/>
     <line x1="230" y1="180" x2="230" y2="70"/>
   </g>
-  <line x1="90" y1="180" x2="250" y2="180" stroke="#211d18" stroke-width="3"/>
-  <text x="60" y="330" font-size="54" fill="#211d18">LifeSkills</text>
-  <text x="60" y="380" font-family="'Courier New', monospace" font-size="20" fill="#6f675b">flutter · habits · streaks · firebase</text>
-  <text x="60" y="452" font-family="'Courier New', monospace" font-size="16" fill="#b3a892">( placeholder — replace with screenshot )</text>
+  <line x1="90" y1="180" x2="250" y2="180" stroke="#000814" stroke-width="3"/>
+  <text x="60" y="330" font-size="54" fill="#000814">LifeSkills</text>
+  <text x="60" y="380" font-family="'Courier New', monospace" font-size="20" fill="#001d3d">flutter · habits · streaks · firebase</text>
+  <text x="60" y="452" font-family="'Courier New', monospace" font-size="16" fill="#8d97a5">( placeholder — replace with screenshot )</text>
 </svg>
