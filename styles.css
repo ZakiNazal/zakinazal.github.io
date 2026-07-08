@@ -2,10 +2,10 @@
 :root {
   --paper: #f2ede3;
   --paper-dim: #eae3d5;
-  --ink: #211d18;
-  --ink-soft: #6f675b;
-  --rule: #c9c0af;
-  --accent: #d4520e;
+  --ink: #000814;
+  --ink-soft: #001d3d;
+  --rule: #003566;
+  --accent: #ffd60a;
   --serif: "Fraunces", Georgia, serif;
   --mono: "IBM Plex Mono", monospace;
   --pad: clamp(1.25rem, 4vw, 3.5rem);
@@ -270,8 +270,21 @@ section {
 }
 
 .index__row.open .index__detail {
-  max-height: 220px;
-  padding: 0.4rem 0 0.6rem;
+  max-height: 460px;
+  padding: 0.4rem 0 0.9rem;
+}
+
+.index__detail-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.index__cover {
+  width: 100%;
+  border: 1px solid var(--paper-dim);
+  display: block;
 }
 
 .index__row.open {
@@ -502,6 +515,15 @@ section {
 
   .index__detail {
     grid-column: 1 / -1;
+  }
+
+  .index__detail-grid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .index__row.open .index__detail {
+    max-height: 640px;
   }
 
   .ledger__entry {
