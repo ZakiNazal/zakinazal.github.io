@@ -543,16 +543,6 @@ section {
   transform: none;
 }
 
-/* giant footer name rises from the page edge */
-.colophon__name {
-  transform: translateY(60%);
-  transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.colophon__name.in {
-  transform: none;
-}
-
 /* nav links: underline slides in from the left, out to the right */
 .masthead__nav a {
   position: relative;
