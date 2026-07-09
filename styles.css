@@ -466,7 +466,7 @@ section {
   letter-spacing: -0.03em;
   text-align: center;
   white-space: nowrap;
-  margin-top: 1.2rem;
+  margin-top: 0.5rem;
   margin-bottom: -0.12em;
   /* crop the baseline off the page edge */
   color: var(--ink);
