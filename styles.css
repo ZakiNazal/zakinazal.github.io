@@ -593,11 +593,6 @@ section {
     transition: none !important;
   }
 
-  .anim,
-  .colophon__name {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* ============ MOBILE ============ */
