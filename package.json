@@ -1,0 +1,23 @@
+{
+  "name": "zakinazal-portfolio",
+  "version": "1.0.0",
+  "description": "Zaki Nazzal's Portfolio Website",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZakiNazal/zakinazal.github.io.git"
+  },
+  "keywords": ["portfolio", "personal-site"],
+  "author": "Zaki Nazzal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZakiNazal/zakinazal.github.io/issues"
+  },
+  "homepage": "https://github.com/ZakiNazal/zakinazal.github.io#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
