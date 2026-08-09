@@ -9,9 +9,32 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
    box, read back from layout. They re-measure on resize, so they stay true. */
 (() => {
   const box = document.getElementById("measure");
+  const line = document.getElementById("thesisLine");
   const wOut = document.getElementById("dimW");
   const hOut = document.getElementById("dimH");
-  if (!box || !wOut || !hOut) return;
+  if (!box || !line || !wOut || !hOut) return;
+
+  // Sizes go up: the headline reports the width of its longest rendered line,
+  // and the box takes that as its size. CSS max-width still sets the wrap; this
+  // only removes the slack a wrapped block leaves on its last line.
+  const hugText = () => {
+    line.style.width = "";
+    const full = line.getBoundingClientRect().width;
+    const lines = line.getBoundingClientRect().height;
+    if (!full || !lines) return;
+
+    // Smallest width that still wraps to the same number of lines. Range rects
+    // report line boxes, not text extents, so search for it instead.
+    let lo = 0;
+    let hi = full;
+    for (let i = 0; i < 12; i++) {
+      const mid = (lo + hi) / 2;
+      line.style.width = mid + "px";
+      if (line.getBoundingClientRect().height > lines) lo = mid;
+      else hi = mid;
+    }
+    line.style.width = Math.ceil(hi) + "px";
+  };
 
   let played = false;
   const frames = new Map();
@@ -40,6 +63,7 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   };
 
   const measure = (animate) => {
+    hugText();
     const r = box.getBoundingClientRect();
     write(wOut, r.width, animate);
     write(hOut, r.height, animate);
@@ -61,13 +85,18 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     playOnce();
   }
 
+  let busy = false;
   const remeasure = () => {
-    if (!played) return; // the count-up owns the labels until it has run
+    if (!played || busy) return; // the count-up owns the labels until it has run
+    busy = true;
     measure(false);
+    requestAnimationFrame(() => { busy = false; });
   };
 
   if ("ResizeObserver" in window) {
-    new ResizeObserver(remeasure).observe(box);
+    // Watch the container, not the box — the box's own width is an output of
+    // hugText(), so observing it would feed the observer its own changes.
+    new ResizeObserver(remeasure).observe(box.parentElement);
   } else {
     window.addEventListener("resize", remeasure);
   }
