@@ -4,203 +4,389 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zaki Nazzal</title>
+  <title>Zaki Nazzal — Flutter apps &amp; study tools</title>
   <meta name="description"
-    content="Zaki Nazzal — Computer Science Student, Aspiring Software Developer & Tech Enthusiast" />
+    content="Zaki Nazzal builds Flutter apps and the tools he needed while studying computer science in Kuala Lumpur. Six projects, all open source." />
+  <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Zaki Nazzal — Flutter apps &amp; study tools" />
+  <meta property="og:description"
+    content="Six projects, all open source. Flutter, Dart, Firebase, TypeScript. Computer science student in Kuala Lumpur." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Martian+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+
+  <script>
+    // Set the theme before first paint so the page never flashes the wrong one.
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) { /* private mode — fall back to the OS preference */ }
+    })();
+  </script>
 </head>
 
 <body>
+  <a class="skip" href="#work">Skip to work</a>
 
-  <div class="frame">
-
-    <!-- ============ HEADER ============ -->
-    <header class="masthead">
+  <!-- ============ MASTHEAD ============ -->
+  <header class="masthead">
+    <div class="shell masthead__inner">
       <a class="masthead__name" href="#top">Zaki&nbsp;Nazzal</a>
-      <p class="masthead__meta">computer science&nbsp;student&nbsp;·&nbsp;aspiring&nbsp;software&nbsp;developer</p>
-      <nav class="masthead__nav">
-        <a href="#work">work</a><a href="#path">path</a><a href="#about">about</a><a href="#contact">contact</a>
+      <nav class="masthead__nav" aria-label="Sections">
+        <a href="#work">work</a>
+        <a href="#timeline">timeline</a>
+        <a href="#about">about</a>
+        <a href="#contact">contact</a>
       </nav>
-    </header>
+      <button class="theme" id="themeToggle" type="button" aria-pressed="false">
+        <span class="theme__dot" aria-hidden="true"></span>
+        <span class="theme__label" id="themeLabel">dark</span>
+      </button>
+    </div>
+  </header>
 
-    <!-- ============ INTRO ============ -->
-    <section class="intro" id="top">
-      <h1 class="intro__line">
-        Building software<br />
-        <em>one project</em> at a&nbsp;time&nbsp;—<br />
-        learning in <span class="u-circle">public</span>.
-      </h1>
-      <div class="intro__foot">
-        <p class="intro__note">
-          Mobile apps, web apps, and tools.<br />
-          Currently studying, always learning.
+  <main>
+    <!-- ============ THESIS ============ -->
+    <section class="shell thesis" id="top">
+      <div class="thesis__measure" id="measure">
+        <div class="thesis__box" aria-hidden="true">
+          <i class="thesis__edge thesis__edge--t"></i>
+          <i class="thesis__edge thesis__edge--b"></i>
+          <i class="thesis__edge thesis__edge--l"></i>
+          <i class="thesis__edge thesis__edge--r"></i>
+        </div>
+
+        <h1 class="thesis__line" id="thesisLine">
+          I build Flutter apps, and the tools
+          I needed while <em>studying</em>.
+        </h1>
+
+        <span class="dim dim--w" aria-hidden="true">
+          <i class="dim__rule"></i>
+          <b class="dim__val" id="dimW">0</b>
+          <i class="dim__rule"></i>
+        </span>
+        <span class="dim dim--h" aria-hidden="true">
+          <i class="dim__rule"></i>
+          <b class="dim__val" id="dimH">0</b>
+          <i class="dim__rule"></i>
+        </span>
+      </div>
+
+      <p class="thesis__axiom">constraints go down &middot; sizes go up</p>
+
+      <div class="thesis__foot">
+        <p class="thesis__note">
+          Computer science undergraduate at APU, Kuala&nbsp;Lumpur. Six projects so far — five of them
+          Flutter, all of them open source.
         </p>
-        <p class="intro__status">
-          <span class="dot"></span> open to internships — <span id="localTime"></span> local
+        <p class="thesis__status">
+          <span class="dot" aria-hidden="true"></span>
+          Open to internships &middot; Kuala&nbsp;Lumpur <span id="localTime">—</span>
         </p>
       </div>
     </section>
 
-    <!-- ============ WORK INDEX ============ -->
-    <section class="work" id="work">
-      <div class="rule-head">
-        <span>Selected work</span><span class="rule-head__count">4 projects</span>
+    <!-- ============ WORK ============ -->
+    <section class="shell band" id="work">
+      <header class="band__head">
+        <h2 class="band__label">Work</h2>
+        <p class="band__meta">6 repositories &middot; newest commit first</p>
+      </header>
+
+      <div class="grid">
+
+        <article class="proj">
+          <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
+            tabindex="-1" aria-hidden="true">
+            <img src="covers/listyapp.svg" alt="" loading="lazy" width="800" height="500" />
+          </a>
+          <div class="proj__body">
+            <h3 class="proj__name">
+              <a href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener">ListyApp</a>
+            </h3>
+            <p class="proj__desc">
+              Shared lists that stay in sync. Make a list, assign items to friends, and watch them get ticked
+              off while you're still looking at the screen.
+            </p>
+            <ul class="chips">
+              <li>Flutter</li>
+              <li>Dart</li>
+              <li>Firebase</li>
+            </ul>
+            <footer class="proj__foot">
+              <time class="proj__when" datetime="2026-08-04">updated 2026&#8209;08&#8209;04</time>
+              <span class="proj__links">
+                <a href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener">Source<i
+                    aria-hidden="true">→</i></a>
+              </span>
+            </footer>
+          </div>
+        </article>
+
+        <article class="proj">
+          <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
+            tabindex="-1" aria-hidden="true">
+            <img src="covers/smartdesk.svg" alt="" loading="lazy" width="800" height="500" />
+          </a>
+          <div class="proj__body">
+            <h3 class="proj__name">
+              <a href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener">SmartDesk</a>
+            </h3>
+            <p class="proj__desc">
+              A fault report goes in; four roles move it out. Triage sorts and scores it, routing sends it to the
+              right technician, and the SLA clock starts. Faults that keep coming back get flagged.
+            </p>
+            <ul class="chips">
+              <li>Flutter</li>
+              <li>Dart</li>
+              <li>SLA tracking</li>
+            </ul>
+            <footer class="proj__foot">
+              <time class="proj__when" datetime="2026-07-27">updated 2026&#8209;07&#8209;27</time>
+              <span class="proj__links">
+                <a href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener">Source<i
+                    aria-hidden="true">→</i></a>
+              </span>
+            </footer>
+          </div>
+        </article>
+
+        <article class="proj">
+          <a class="proj__cover" href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener"
+            tabindex="-1" aria-hidden="true">
+            <img src="covers/cocostudy.jpeg" alt="" loading="lazy" />
+          </a>
+          <div class="proj__body">
+            <h3 class="proj__name">
+              <a href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener">CocoStudy</a>
+            </h3>
+            <p class="proj__desc">
+              Turns a lecture you sat through into something you can revise from — a summary, a quiz, and a deck of
+              flashcards, generated from the recording.
+            </p>
+            <ul class="chips">
+              <li>TypeScript</li>
+              <li>Node.js</li>
+              <li>Gemini API</li>
+            </ul>
+            <footer class="proj__foot">
+              <time class="proj__when" datetime="2026-06-20">updated 2026&#8209;06&#8209;20</time>
+              <span class="proj__links">
+                <a href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener">Source<i
+                    aria-hidden="true">→</i></a>
+              </span>
+            </footer>
+          </div>
+        </article>
+
+        <article class="proj">
+          <a class="proj__cover" href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener"
+            tabindex="-1" aria-hidden="true">
+            <img src="covers/weathersphere.jpeg" alt="" loading="lazy" />
+          </a>
+          <div class="proj__body">
+            <h3 class="proj__name">
+              <a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener">WeatherSphere</a>
+            </h3>
+            <p class="proj__desc">
+              Conditions now, a seven-day forecast, and a map you can drop a pin on to check anywhere else. One
+              Flutter codebase, iOS and Android.
+            </p>
+            <ul class="chips">
+              <li>Flutter</li>
+              <li>Dart</li>
+              <li>Figma</li>
+            </ul>
+            <footer class="proj__foot">
+              <time class="proj__when" datetime="2026-05-22">updated 2026&#8209;05&#8209;22</time>
+              <span class="proj__links">
+                <a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener">Source<i
+                    aria-hidden="true">→</i></a>
+              </span>
+            </footer>
+          </div>
+        </article>
+
+        <article class="proj">
+          <a class="proj__cover" href="https://life-skills-zeta.vercel.app" target="_blank" rel="noopener"
+            tabindex="-1" aria-hidden="true">
+            <img src="covers/lifeskills.svg" alt="" loading="lazy" width="800" height="500" />
+          </a>
+          <div class="proj__body">
+            <h3 class="proj__name">
+              <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">LifeSkills</a>
+            </h3>
+            <p class="proj__desc">
+              Builds an exercise habit by making the streak the whole point. Daily check-ins, a mood log, an activity
+              explorer, and a profile you can actually edit.
+            </p>
+            <ul class="chips">
+              <li>Flutter</li>
+              <li>Dart</li>
+              <li>Firebase</li>
+            </ul>
+            <footer class="proj__foot">
+              <time class="proj__when" datetime="2026-05-22">updated 2026&#8209;05&#8209;22</time>
+              <span class="proj__links">
+                <a href="https://life-skills-zeta.vercel.app" target="_blank" rel="noopener">Live<i
+                    aria-hidden="true">→</i></a>
+                <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">Source<i
+                    aria-hidden="true">→</i></a>
+              </span>
+            </footer>
+          </div>
+        </article>
+
+        <article class="proj">
+          <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1"
+            aria-hidden="true">
+            <img src="covers/qbooking.jpeg" alt="" loading="lazy" />
+          </a>
+          <div class="proj__body">
+            <h3 class="proj__name">
+              <a href="https://qbooking.app" target="_blank" rel="noopener">QBooking</a>
+            </h3>
+            <p class="proj__desc">
+              The native companion to qbooking.app. Sign in once and stay signed in, land on the right screen for your
+              role, and read the portal from your phone.
+            </p>
+            <ul class="chips">
+              <li>Flutter</li>
+              <li>Dart</li>
+              <li>iOS &amp; Android</li>
+            </ul>
+            <footer class="proj__foot">
+              <span class="proj__when">with AltaDevs</span>
+              <span class="proj__links">
+                <a href="https://qbooking.app" target="_blank" rel="noopener">Visit<i aria-hidden="true">→</i></a>
+                <a href="https://github.com/AltaDevs/qbooking-application" target="_blank" rel="noopener">Source<i
+                    aria-hidden="true">→</i></a>
+              </span>
+            </footer>
+          </div>
+        </article>
+
       </div>
 
-      <ol class="index">
-        <li class="index__row" tabindex="0">
-          <span class="index__no">01</span>
-          <span class="index__name">WeatherSphere</span>
-          <span class="index__tech">Flutter · Figma</span>
-          <span class="index__year">2025</span>
-          <div class="index__detail">
-            <div class="index__detail-grid">
-              <img class="index__cover" src="covers/weathersphere.jpeg" alt="WeatherSphere app cover" loading="lazy" />
-              <div>
-                <p>WeatherSphere is a sleek, cross-platform weather app built with Flutter that delivers real-time
-                  weather updates, 7-day forecasts, and location-based insights in a beautifully responsive UI.</p>
-                <p class="index__links"><a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank"
-                    rel="noopener">source ↗</a></p>
-              </div>
-            </div>
+      <p class="band__after">
+        <a href="https://github.com/ZakiNazal?tab=repositories" target="_blank" rel="noopener">
+          Everything else on GitHub<i aria-hidden="true">→</i>
+        </a>
+      </p>
+    </section>
+
+    <!-- ============ TIMELINE ============ -->
+    <section class="shell band" id="timeline">
+      <header class="band__head">
+        <h2 class="band__label">Timeline</h2>
+        <p class="band__meta">2019 → now</p>
+      </header>
+
+      <ol class="tl">
+        <li class="tl__item">
+          <span class="tl__year">2025<span class="tl__year-to">→now</span></span>
+          <div class="tl__body">
+            <h3 class="tl__what">BSc Computer Science</h3>
+            <p class="tl__where">Asia Pacific University of Technology &amp; Innovation, Kuala Lumpur</p>
+            <p class="tl__note">Algorithms, data structures, and software engineering — the theory under the things I'd
+              already been building by feel.</p>
           </div>
         </li>
-        <li class="index__row" tabindex="0">
-          <span class="index__no">02</span>
-          <span class="index__name">LifeSkills</span>
-          <span class="index__tech">Flutter · Dart</span>
-          <span class="index__year">2025</span>
-          <div class="index__detail">
-            <div class="index__detail-grid">
-              <img class="index__cover" src="covers/lifeskills.svg" alt="LifeSkills app cover" loading="lazy" />
-              <div>
-                <p>Flutter mobile app for building healthy exercise habits. Features a daily streak tracker, mood
-                  check-ins, activity explorer, and editable user profiles — powered by Firebase Auth, Firestore, and
-                  Storage.</p>
-                <p class="index__links"><a href="https://github.com/ZakiNazal/LifeSkills" target="_blank"
-                    rel="noopener">source ↗</a></p>
-              </div>
-            </div>
+        <li class="tl__item">
+          <span class="tl__year">2024</span>
+          <div class="tl__body">
+            <h3 class="tl__what">Started shipping my own projects</h3>
+            <p class="tl__where">Self-directed</p>
+            <p class="tl__note">Picked up Flutter properly and started finishing things instead of abandoning them.
+              LifeSkills was the first one that made it to a real user.</p>
           </div>
         </li>
-        <li class="index__row" tabindex="0">
-          <span class="index__no">03</span>
-          <span class="index__name">CocoStudy</span>
-          <span class="index__tech">TypeScript · Node.js · Gemini API</span>
-          <span class="index__year">2025</span>
-          <div class="index__detail">
-            <div class="index__detail-grid">
-              <img class="index__cover" src="covers/cocostudy.jpeg" alt="CocoStudy website cover" loading="lazy" />
-              <div>
-                <p>CocoStudy is a website that helps students summarize their lectures and videos, and ease their way
-                  of studying by creating quizzes and flashcards.</p>
-                <p class="index__links"><a href="https://github.com/ZakiNazal/CocoStudy" target="_blank"
-                    rel="noopener">source ↗</a></p>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="index__row" tabindex="0">
-          <span class="index__no">04</span>
-          <span class="index__name">QBooking</span>
-          <span class="index__tech">Flutter · Figma</span>
-          <span class="index__year">2026</span>
-          <div class="index__detail">
-            <div class="index__detail-grid">
-              <img class="index__cover" src="covers/qbooking.jpeg" alt="QBooking app cover" loading="lazy" />
-              <div>
-                <p>Native Flutter companion app for QBooking on iOS and Android.
-                  The app provides native login, session restore, role routing, read-only portal views,
-                  profile/settings screens, and legal/support links.</p>
-                <p class="index__links"><a href="https://qbooking.app" target="_blank" rel="noopener">visit ↗</a><a
-                    href="https://github.com/AltaDevs/qbooking-application" target="_blank" rel="noopener">source
-                    ↗</a></p>
-              </div>
-            </div>
+        <li class="tl__item">
+          <span class="tl__year">2019</span>
+          <div class="tl__body">
+            <h3 class="tl__what">First line of code</h3>
+            <p class="tl__where">Dart</p>
+            <p class="tl__note">Dart first, then Python, C++, Java, and HTML/CSS. Came back to Dart and stayed.</p>
           </div>
         </li>
       </ol>
-      <p class="index__hint">( click a row )</p>
-    </section>
-
-    <!-- ============ PATH ============ -->
-    <section class="path" id="path">
-      <div class="rule-head"><span>Path so far</span></div>
-      <dl class="ledger">
-        <div class="ledger__entry">
-          <dt>2025 — now</dt>
-          <dd>
-            <strong>Bachelor of Computer Science</strong> — Asia Pacific University of Technology and Innovation
-            <p>Studying computer science, learning about algorithms, data structures, software engineering,
-              and other core concepts of computer science.</p>
-          </dd>
-        </div>
-        <div class="ledger__entry">
-          <dt>2024</dt>
-          <dd>
-            <strong>Beginning of my personal projects</strong> — Self-started
-            <p>Started working on my own projects using flutter, experimenting with different technologies and concepts,
-              learning by doing and building things I found interesting.</p>
-          </dd>
-        </div>
-        <div class="ledger__entry">
-          <dt>2019</dt>
-          <dd>
-            <strong>Started coding</strong>
-            <p>Started with Dart/Flutter, soon after I tried Python, then C++, then Java, then HTML/CSS, and now I'm
-              hooked ever since.</p>
-          </dd>
-        </div>
-      </dl>
     </section>
 
     <!-- ============ ABOUT ============ -->
-    <section class="about" id="about">
-      <div class="rule-head"><span>About</span></div>
-      <div class="about__grid">
-        <p class="about__text">
-          I'm a computer science undergraduate who codes because making things is the fastest way to
-          learn them. Most of what I know comes from projects that started as
-          <em>"how hard could it be?"</em> and ended two weeks later, working.
+    <section class="shell band" id="about">
+      <header class="band__head">
+        <h2 class="band__label">About</h2>
+      </header>
+
+      <div class="about">
+        <p class="about__lead">
+          I write code because building a thing is the fastest way to understand it. Most of what I know started as
+          <em>“how hard could it be?”</em> and finished two weeks later, working.
         </p>
-        <ul class="about__list">
-          <li><span>based in</span>Kuala Lumpur, Malaysia (studying)</li>
-          <li><span>studying</span>Computer Science, APU, Malaysia</li>
-          <li><span>working with</span>Dart, Flutter, Figma, Python, C++, HTML/CSS</li>
-          <li><span>learning</span>Web Development, Mobile Development, App Development</li>
-        </ul>
+        <dl class="facts">
+          <div class="facts__row">
+            <dt>Based in</dt>
+            <dd>Kuala Lumpur, Malaysia</dd>
+          </div>
+          <div class="facts__row">
+            <dt>Studying</dt>
+            <dd>Computer Science, APU</dd>
+          </div>
+          <div class="facts__row">
+            <dt>Building with</dt>
+            <dd>Dart, Flutter, Firebase, TypeScript, Python, C++, Figma</dd>
+          </div>
+          <div class="facts__row">
+            <dt>Learning next</dt>
+            <dd>Backend architecture and testing at scale</dd>
+          </div>
+        </dl>
       </div>
     </section>
 
     <!-- ============ CONTACT ============ -->
-    <section class="contact" id="contact">
-      <div class="rule-head"><span>Contact</span></div>
-      <p class="contact__lead">Got a project, an internship,<br />or just a question? <em>Write to me.</em></p>
+    <section class="shell band" id="contact">
+      <header class="band__head">
+        <h2 class="band__label">Contact</h2>
+      </header>
+
+      <p class="contact__lead">Hiring an intern, or just curious how one of these works? <em>Write to me.</em></p>
+
       <div class="contact__row">
         <a class="contact__email" href="mailto:zakinazal112@gmail.com" id="copyEmail"
           data-email="zakinazal112@gmail.com">
-          zakinazal112@gmail.com <span class="contact__copy">— click to copy</span>
+          zakinazal112@gmail.com
+          <span class="contact__copy" id="copyLabel">Click to copy</span>
         </a>
-        <nav class="contact__links">
-          <a href="https://github.com/ZakiNazal" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/zakinazzal/" target="_blank" rel="noopener">LinkedIn</a>
+        <nav class="contact__links" aria-label="Elsewhere">
+          <a href="https://github.com/ZakiNazal" target="_blank" rel="noopener">GitHub<i aria-hidden="true">→</i></a>
+          <a href="https://www.linkedin.com/in/zakinazzal/" target="_blank" rel="noopener">LinkedIn<i
+              aria-hidden="true">→</i></a>
         </nav>
       </div>
+      <p class="contact__live" role="status" aria-live="polite" id="copyStatus"></p>
     </section>
+  </main>
 
-  </div>
-
-  <!-- ============ GIANT FOOTER NAME ============ -->
-  <footer class="colophon" aria-label="Footer">
-    <span class="colophon__meta">© <span id="year"></span> — made by hand, no template</span>
-    <div class="colophon__name" aria-hidden="true">ZAKI NAZZAL</div>
+  <!-- ============ COLOPHON ============ -->
+  <footer class="colophon">
+    <div class="shell colophon__meta">
+      <span>© <span id="year">2026</span> Zaki Nazzal</span>
+      <span>Written by hand · three typefaces · no framework</span>
+    </div>
+    <div class="colophon__mark" aria-hidden="true">ZAKI&nbsp;NAZZAL</div>
   </footer>
 
   <script src="script.js"></script>
