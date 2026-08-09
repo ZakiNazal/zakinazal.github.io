@@ -258,7 +258,7 @@ ol {
   position: relative;
   width: fit-content;
   max-width: min(100%, 54rem);
-  padding: clamp(1rem, 2.6vw, 2rem) clamp(1.1rem, 3vw, 2.4rem);
+  padding: clamp(1.7rem, 4.2vw, 3.4rem) clamp(1.1rem, 3vw, 2.4rem);
   /* leaves room for the width dimension line, which hangs 1.5rem below */
   margin-bottom: 3rem;
 }
@@ -325,15 +325,20 @@ ol {
 }
 
 .thesis__line {
-  max-width: 15ch;
   font-family: var(--display);
   font-size: clamp(2.3rem, 7.4vw, 5.2rem);
   font-weight: 620;
   line-height: 1.02;
   letter-spacing: -0.038em;
   font-variation-settings: "opsz" 96;
-  text-wrap: balance;
   animation: rise 0.8s 0.1s var(--ease) both;
+}
+
+/* Each line is its own unbreakable block, so the box's fit-content width
+   settles on the longest line — no JS measuring, no layout thrash. */
+.thesis__line span {
+  display: block;
+  white-space: nowrap;
 }
 
 .thesis__line em {
@@ -894,6 +899,23 @@ ol {
 @media (max-width: 860px) {
   .about {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Below this the fixed lines would outrun the column, so let them reflow and
+   give the box the full width — a hugging box looks stranded on a phone. */
+@media (max-width: 560px) {
+  .thesis__measure {
+    width: auto;
+  }
+
+  .thesis__line {
+    text-wrap: balance;
+  }
+
+  .thesis__line span {
+    display: inline;
+    white-space: normal;
   }
 }
 
