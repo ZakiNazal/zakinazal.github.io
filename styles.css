@@ -540,26 +540,26 @@ ol {
   background: var(--line);
   border: 1px solid var(--line);
   border-radius: var(--r);
-  /* no overflow clip: hovered cards lift out of the grid */
+  overflow: hidden;
 }
 
 .proj {
-  position: relative;
-  z-index: 0;
   background: var(--surface);
   display: flex;
   flex-direction: column;
-  transition: transform 0.4s var(--ease);
+  transition: background 0.2s;
+}
+
+.proj:hover {
+  background: color-mix(in srgb, var(--accent-quiet) 45%, var(--surface));
 }
 
 .proj__cover {
   display: block;
-  position: relative;
   background: var(--sunken);
   border-bottom: 1px solid var(--line-soft);
   aspect-ratio: 8 / 5;
   overflow: hidden;
-  transition: aspect-ratio 0.4s var(--ease);
 }
 
 .proj__cover img {
@@ -567,23 +567,11 @@ ol {
   height: 100%;
   object-fit: cover;
   object-position: top center;
+  transition: transform 0.5s var(--ease);
 }
 
-/* pop out and let the photo grow taller — fine pointers only, never on touch */
-@media (hover: hover) and (pointer: fine) {
-
-  /* .grid prefix outranks the .anim.in reveal rule, which resets transform */
-  .grid .proj:hover,
-  .grid .proj:focus-within {
-    z-index: 5;
-    transform: scale(1.06);
-  }
-
-  /* the cover extends, revealing more of the picture instead of cropping in */
-  .grid .proj:hover .proj__cover,
-  .grid .proj:focus-within .proj__cover {
-    aspect-ratio: 8 / 6.6;
-  }
+.proj:hover .proj__cover img {
+  transform: scale(1.025);
 }
 
 .proj__body {
@@ -889,17 +877,6 @@ ol {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     transition-delay: 0ms !important;
-  }
-
-  /* no pop-out or photo extension on hover */
-  .grid .proj:hover,
-  .grid .proj:focus-within {
-    transform: none;
-  }
-
-  .grid .proj:hover .proj__cover,
-  .grid .proj:focus-within .proj__cover {
-    aspect-ratio: 8 / 5;
   }
 
   /* keep the drawn edges and dimension labels visible, just not animated */
