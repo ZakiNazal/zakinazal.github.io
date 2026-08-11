@@ -549,8 +549,7 @@ ol {
   background: var(--surface);
   display: flex;
   flex-direction: column;
-  transition: background 0.25s var(--ease), transform 0.35s var(--ease),
-    box-shadow 0.35s var(--ease);
+  transition: transform 0.4s var(--ease);
 }
 
 .proj__cover {
@@ -560,6 +559,7 @@ ol {
   border-bottom: 1px solid var(--line-soft);
   aspect-ratio: 8 / 5;
   overflow: hidden;
+  transition: aspect-ratio 0.4s var(--ease);
 }
 
 .proj__cover img {
@@ -567,76 +567,22 @@ ol {
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  transition: transform 0.55s var(--ease);
 }
 
-/* scrim + prompt that wash in over the cover, Netflix-style */
-.proj__cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* fixed dark, not themed: it sits over a photo under white text */
-  background: linear-gradient(to top,
-      rgb(6 10 20 / 82%) 0%,
-      rgb(6 10 20 / 34%) 40%,
-      rgb(6 10 20 / 0%) 72%);
-  opacity: 0;
-  transition: opacity 0.35s var(--ease);
-  pointer-events: none;
-}
-
-.proj__peek {
-  position: absolute;
-  left: 1rem;
-  bottom: 0.85rem;
-  z-index: 2;
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #fff;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-  pointer-events: none;
-  text-shadow: 0 1px 6px rgb(0 0 0 / 45%);
-}
-
-/* the lift itself — only for real pointers, never on touch */
+/* pop out and let the photo grow taller — fine pointers only, never on touch */
 @media (hover: hover) and (pointer: fine) {
 
   /* .grid prefix outranks the .anim.in reveal rule, which resets transform */
   .grid .proj:hover,
   .grid .proj:focus-within {
     z-index: 5;
-    transform: scale(1.055);
-    border-radius: 6px;
-    background: color-mix(in srgb, var(--accent-quiet) 45%, var(--surface));
-    box-shadow:
-      0 2px 6px rgb(0 0 0 / 8%),
-      0 18px 44px -12px color-mix(in srgb, var(--ink) 45%, transparent);
+    transform: scale(1.06);
   }
 
+  /* the cover extends, revealing more of the picture instead of cropping in */
   .grid .proj:hover .proj__cover,
   .grid .proj:focus-within .proj__cover {
-    border-radius: 6px 6px 0 0;
-  }
-
-  /* the closer look */
-  .grid .proj:hover .proj__cover img,
-  .grid .proj:focus-within .proj__cover img {
-    transform: scale(1.16);
-  }
-
-  .proj:hover .proj__cover::after,
-  .proj:focus-within .proj__cover::after {
-    opacity: 1;
-  }
-
-  .proj:hover .proj__peek,
-  .proj:focus-within .proj__peek {
-    opacity: 1;
-    transform: none;
+    aspect-ratio: 8 / 6.6;
   }
 }
 
@@ -945,17 +891,15 @@ ol {
     transition-delay: 0ms !important;
   }
 
-  /* no lift or zoom on hover — keep the colour and scrim cues only */
+  /* no pop-out or photo extension on hover */
   .grid .proj:hover,
-  .grid .proj:focus-within,
-  .grid .proj:hover .proj__cover img,
-  .grid .proj:focus-within .proj__cover img {
+  .grid .proj:focus-within {
     transform: none;
   }
 
-  .grid .proj:hover,
-  .grid .proj:focus-within {
-    box-shadow: none;
+  .grid .proj:hover .proj__cover,
+  .grid .proj:focus-within .proj__cover {
+    aspect-ratio: 8 / 5;
   }
 
   /* keep the drawn edges and dimension labels visible, just not animated */
