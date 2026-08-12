@@ -193,34 +193,6 @@ ol {
   flex: none;
 }
 
-/* one artwork per theme: the toggle sets [data-theme], the OS sets the query */
-.masthead__logo--dark {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-
-  :root:not([data-theme="light"]) .masthead__logo--light {
-    display: none;
-  }
-
-  :root:not([data-theme="light"]) .masthead__logo--dark {
-    display: block;
-  }
-}
-
-:root[data-theme="dark"] .masthead__logo--light {
-  display: none;
-}
-
-:root[data-theme="dark"] .masthead__logo--dark {
-  display: block;
-}
-
-:root[data-theme="light"] .masthead__logo--light {
-  display: block;
-}
-
 .masthead__nav {
   margin-left: auto;
   display: flex;
