@@ -25,6 +25,9 @@
   --gut: clamp(1.15rem, 4vw, 3rem);
   --r: 4px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* how loud the hero marquee is allowed to be behind the headline */
+  --drift: 0.42;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,6 +41,8 @@
     --line-soft: #1b2436;
     --accent: #7ba4ff;
     --accent-quiet: #1a2540;
+    /* bright covers on a near-black field read much louder — pull them back */
+    --drift: 0.3;
   }
 }
 
@@ -51,6 +56,7 @@
   --line-soft: #1b2436;
   --accent: #7ba4ff;
   --accent-quiet: #1a2540;
+  --drift: 0.3;
 }
 
 /* ---------------- BASE ---------------- */
@@ -258,8 +264,97 @@ ol {
 
 /* ---------------- THESIS ---------------- */
 .thesis {
+  position: relative;
+  /* new stacking context, so the marquee's z-index:-1 stays inside the hero
+     and never slides under the page background */
+  isolation: isolate;
   padding-top: clamp(4.5rem, 13vh, 9rem);
   padding-bottom: clamp(3rem, 7vh, 4.5rem);
+}
+
+/* ---------------- DIAGONAL MARQUEE (hero backdrop) ----------------
+   Three slanted rows of covers, each a different speed, the middle one
+   running the other way. Clipped to the hero, then knocked back by a scrim
+   so the headline sits on near-solid ground. */
+.dmc {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dmc__stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: clamp(0.5rem, 1.2vw, 0.95rem);
+  /* scaled past the edges so the rotation can't expose the corners */
+  transform: rotate(-9deg) scale(1.3);
+  opacity: var(--drift);
+}
+
+.dmc__row {
+  overflow: hidden;
+}
+
+.dmc__track {
+  display: flex;
+  gap: clamp(0.5rem, 1.2vw, 0.95rem);
+  width: max-content;
+  will-change: transform;
+  animation: dmc-drift var(--dur, 60s) linear infinite;
+}
+
+/* same keyframes, run backwards — the row reads as moving the other way */
+.dmc__row--rev .dmc__track {
+  animation-direction: reverse;
+}
+
+@keyframes dmc-drift {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.dmc__card {
+  flex: none;
+  width: clamp(8.5rem, 15vw, 14rem);
+  aspect-ratio: 8 / 5;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--sunken);
+  overflow: hidden;
+}
+
+.dmc__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* The readability layer: solid under the headline, feathering out to the
+   edges, and closing to solid again at the top and bottom rules. */
+.dmc__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(76% 70% at 30% 44%,
+      var(--field) 0 30%,
+      color-mix(in srgb, var(--field) 76%, transparent) 56%,
+      transparent 84%),
+    linear-gradient(to bottom,
+      var(--field) 0 5%,
+      color-mix(in srgb, var(--field) 25%, transparent) 24%,
+      color-mix(in srgb, var(--field) 35%, transparent) 66%,
+      var(--field) 96%),
+    linear-gradient(to right,
+      var(--field) 0,
+      transparent 16%,
+      transparent 84%,
+      var(--field) 100%);
 }
 
 /* the measured box: four edges that draw themselves on load */
@@ -655,6 +750,52 @@ ol {
   text-underline-offset: 3px;
 }
 
+/* ---------------- STACK / TEXT ON A PATH ----------------
+   A third ground, between the plain field and the tinted surface, so the
+   band still alternates against Work above and Timeline below. */
+.band--path {
+  background: var(--sunken);
+}
+
+.pathfx {
+  position: relative;
+  /* tall glyphs ride outside the viewBox at the crests — give them room */
+  padding-block: clamp(0.9rem, 2.6vw, 1.9rem);
+}
+
+.pathfx__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.pathfx__guide {
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 1 7;
+  stroke-linecap: round;
+}
+
+/* font-size is in user units, so the whole thing scales with the viewBox */
+.pathfx__text {
+  font-family: var(--display);
+  font-size: 46px;
+  font-weight: 640;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 96;
+  fill: var(--ink);
+}
+
+.pathfx__sep {
+  fill: var(--accent);
+}
+
+/* off-canvas ruler: one pass of the phrase, measured to decide the repeat count */
+.pathfx__measure {
+  visibility: hidden;
+}
+
 /* ---------------- TIMELINE ---------------- */
 /* no top rule — .band__head already closes with one */
 .tl__item {
@@ -902,12 +1043,42 @@ ol {
   .dim {
     opacity: 1;
   }
+
+  /* the global override would fling the track to its end frame instead —
+     stop it outright and let the covers sit as a still backdrop */
+  .dmc__track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .dmc__stage {
+    opacity: calc(var(--drift) * 0.8);
+  }
 }
 
 /* ---------------- RESPONSIVE ---------------- */
 @media (max-width: 860px) {
   .about {
     grid-template-columns: 1fr;
+  }
+}
+
+/* The SVG shrinks with the column, so the path text has to grow in user
+   units just to hold its size on screen. */
+@media (max-width: 900px) {
+  .pathfx__text {
+    font-size: 62px;
+  }
+}
+
+@media (max-width: 620px) {
+  .pathfx__text {
+    font-size: 88px;
+  }
+
+  .pathfx__guide {
+    stroke-width: 2;
+    stroke-dasharray: 2 12;
   }
 }
 

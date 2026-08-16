@@ -78,6 +78,168 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   }
 })();
 
+/* ---------- HERO: DIAGONAL MARQUEE ----------
+   Three slanted rows of covers drifting behind the headline. Each row is a
+   track holding its set repeated enough times to cross the (rotated, scaled-up)
+   stage, then that whole run cloned once — so translating the track by exactly
+   -50% lands on an identical frame and the loop has no seam. */
+(() => {
+  const root = document.getElementById("heroMarquee");
+  if (!root) return;
+
+  const rows = Array.from(root.querySelectorAll(".dmc__row"));
+  if (!rows.length) return;
+
+  const card = (name) => {
+    const fig = document.createElement("figure");
+    fig.className = "dmc__card";
+    const img = document.createElement("img");
+    img.src = "covers/" + name + ".jpeg";
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.width = 800;
+    img.height = 500;
+    fig.append(img);
+    return fig;
+  };
+
+  const build = () => {
+    // The stage is scaled 1.3x and turned, so a row has to be wider than the hero.
+    const stage = (root.getBoundingClientRect().width || window.innerWidth) * 1.45;
+
+    rows.forEach((row) => {
+      const set = (row.dataset.set || "").split(",").map((s) => s.trim()).filter(Boolean);
+      if (!set.length) return;
+
+      const track = document.createElement("div");
+      track.className = "dmc__track";
+      track.style.setProperty("--dur", (row.dataset.speed || 60) + "s");
+
+      set.forEach((n) => track.append(card(n)));
+      row.replaceChildren(track);
+
+      // One pass is laid out now, so it can be measured rather than guessed at.
+      const pass = track.scrollWidth;
+      const passes = pass > 0 ? Math.max(1, Math.ceil(stage / pass)) : 1;
+      for (let i = 1; i < passes; i++) set.forEach((n) => track.append(card(n)));
+
+      track.append(...Array.from(track.children).map((n) => n.cloneNode(true)));
+    });
+  };
+
+  build();
+
+  // Rebuilding re-requests every cover, so only do it once the width has moved
+  // far enough to actually open a gap — not on every resize tick.
+  let lastW = window.innerWidth;
+  let settle;
+  window.addEventListener("resize", () => {
+    if (Math.abs(window.innerWidth - lastW) < 140) return;
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      lastW = window.innerWidth;
+      build();
+    }, 250);
+  });
+})();
+
+/* ---------- STACK: TEXT ON A PATH ----------
+   The words follow an SVG curve, and scrolling slides them along it. The phrase
+   is repeated until it comfortably overruns the path, so the visible stretch is
+   never half-empty at either end of the travel. */
+(() => {
+  const wrap = document.getElementById("pathScroll");
+  const curve = document.getElementById("stackCurve");
+  const textPath = document.getElementById("stackTextPath");
+  const ruler = document.getElementById("stackMeasure");
+  const text = document.getElementById("stackText");
+  if (!wrap || !curve || !textPath || !ruler || !text) return;
+  if (typeof curve.getTotalLength !== "function") return;
+
+  const items = (text.dataset.items || "").split("|").map((s) => s.trim()).filter(Boolean);
+  if (!items.length) return;
+
+  const SEP = " · "; // the dots never break off their neighbours
+  const plain = items.map((w) => w + SEP).join("");
+  const marked = items
+    .map((w) => `<tspan>${w}</tspan><tspan class="pathfx__sep">${SEP}</tspan>`)
+    .join("");
+
+  let start = 0;
+  let travel = 0;
+  let ready = false;
+
+  const build = () => {
+    const L = curve.getTotalLength();
+    ruler.textContent = plain;
+    const one = ruler.getComputedTextLength();
+    if (!L || !one) {
+      ready = false;
+      return;
+    }
+
+    const reps = Math.max(2, Math.ceil((L * 3) / one));
+    textPath.innerHTML = marked.repeat(reps);
+
+    const total = one * reps;
+    start = L * 0.12;
+    // Cap the sweep at ~1.2 path lengths. Further is only faster, not more
+    // interesting, and the tail would eventually run out of glyphs.
+    travel = Math.max(L * 0.2, Math.min(total + start - L * 1.05, L * 1.2));
+    ready = true;
+  };
+
+  const place = (p) => {
+    if (ready) textPath.setAttribute("startOffset", (start - p * travel).toFixed(1));
+  };
+
+  // Progress runs 0 → 1 as the block crosses the viewport, bottom edge to top.
+  const progress = () => {
+    const r = wrap.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const span = vh + r.height;
+    if (span <= 0) return 0.5;
+    return Math.min(Math.max((vh - r.top) / span, 0), 1);
+  };
+
+  // Parked mid-sweep when motion is unwelcome — composed, not cut off.
+  const settle = () => place(reduceMotion ? 0.5 : progress());
+
+  build();
+  settle();
+
+  if (!reduceMotion) {
+    let queued = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          place(progress());
+        });
+      },
+      { passive: true }
+    );
+  }
+
+  window.addEventListener("resize", () => {
+    build();
+    settle();
+  });
+
+  // Bricolage sets different advance widths than the fallback face, so the
+  // repeat count measured before it loads is wrong.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      build();
+      settle();
+    });
+  }
+})();
+
 /* ---------- THEME ---------- */
 (() => {
   const btn = document.getElementById("themeToggle");

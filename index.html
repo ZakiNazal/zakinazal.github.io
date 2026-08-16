@@ -62,6 +62,22 @@
   <main>
     <!-- ============ THESIS ============ -->
     <section class="thesis" id="top">
+
+      <!-- Decorative: three slanted rows of covers drifting at different speeds,
+           behind the headline. Built by script.js — it's ornament, so it simply
+           isn't there without JS, and nothing above it shifts. -->
+      <div class="dmc" id="heroMarquee" aria-hidden="true">
+        <div class="dmc__stage">
+          <div class="dmc__row" data-speed="58"
+            data-set="listyapp,smartdesk,cocostudy,weathersphere,lifeskills,qbooking"></div>
+          <div class="dmc__row dmc__row--rev" data-speed="76"
+            data-set="weathersphere,qbooking,listyapp,cocostudy,smartdesk,lifeskills"></div>
+          <div class="dmc__row" data-speed="66"
+            data-set="cocostudy,lifeskills,smartdesk,qbooking,weathersphere,listyapp"></div>
+        </div>
+        <div class="dmc__scrim"></div>
+      </div>
+
       <div class="shell">
         <div class="thesis__measure" id="measure">
           <div class="thesis__box" aria-hidden="true">
@@ -293,6 +309,42 @@
             Everything else on GitHub<i aria-hidden="true">→</i>
           </a>
         </p>
+      </div>
+    </section>
+
+    <!-- ============ STACK (text on a path) ============ -->
+    <section class="band band--path" id="stack">
+      <div class="shell">
+        <header class="band__head">
+          <h2 class="band__label">Stack</h2>
+          <p class="band__meta">the line moves as you scroll</p>
+        </header>
+
+        <!-- The words ride an SVG curve; script.js repeats them to fill the path
+             and drives startOffset from the section's progress through the
+             viewport. Without JS the single pass below still renders, parked. -->
+        <div class="pathfx" id="pathScroll">
+          <svg class="pathfx__svg" viewBox="0 0 1200 214" role="img"
+            aria-label="Tools I build with: Dart, Flutter, Firebase, TypeScript, Node.js, Python, C++, Figma.">
+            <path id="stackCurve" class="pathfx__guide" fill="none"
+              d="M 0 168 C 190 56 410 32 620 104 C 820 168 1010 182 1200 68" />
+
+            <text class="pathfx__text pathfx__measure" id="stackMeasure" x="0" y="-600" aria-hidden="true"></text>
+
+            <text class="pathfx__text" id="stackText"
+              data-items="Dart|Flutter|Firebase|TypeScript|Node.js|Python|C++|Figma">
+              <textPath id="stackTextPath" href="#stackCurve" startOffset="40"><tspan>Dart</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>Flutter</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>Firebase</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>TypeScript</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>Node.js</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>Python</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>C++</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan><tspan>Figma</tspan><tspan
+                  class="pathfx__sep">&nbsp;&middot;&nbsp;</tspan></textPath>
+            </text>
+          </svg>
+        </div>
       </div>
     </section>
 
