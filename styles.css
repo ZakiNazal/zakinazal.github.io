@@ -27,7 +27,7 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   /* how loud the hero marquee is allowed to be behind the headline */
-  --drift: 0.42;
+  --drift: 0.50;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -42,7 +42,7 @@
     --accent: #7ba4ff;
     --accent-quiet: #1a2540;
     /* bright covers on a near-black field read much louder — pull them back */
-    --drift: 0.3;
+    --drift: 0.8;
   }
 }
 
@@ -56,7 +56,7 @@
   --line-soft: #1b2436;
   --accent: #7ba4ff;
   --accent-quiet: #1a2540;
-  --drift: 0.3;
+  --drift: 0.7;
 }
 
 /* ---------------- BASE ---------------- */
@@ -340,6 +340,7 @@ ol {
 .dmc__scrim {
   position: absolute;
   inset: 0;
+  opacity: 0;
   background:
     radial-gradient(76% 70% at 30% 44%,
       var(--field) 0 30%,
