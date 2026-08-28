@@ -127,15 +127,25 @@
       <div class="shell">
         <header class="band__head">
           <h2 class="band__label">Work</h2>
-          <p class="band__meta">6 repositories &middot; newest commit first</p>
+          <p class="band__meta" id="workCount">6 repositories &middot; newest commit first</p>
         </header>
 
-        <div class="grid">
+        <!-- Filters are progressive: without JS every project is simply shown,
+             so the bar stays hidden until script.js wires it up. -->
+        <div class="filters" id="workFilters" role="group" aria-label="Filter projects" hidden>
+          <button type="button" class="filters__btn" data-filter="all" aria-pressed="true">All<b>6</b></button>
+          <button type="button" class="filters__btn" data-filter="mobile" aria-pressed="false">Mobile<b>5</b></button>
+          <button type="button" class="filters__btn" data-filter="web" aria-pressed="false">Web<b>1</b></button>
+          <button type="button" class="filters__btn" data-filter="live" aria-pressed="false">Live<b>3</b></button>
+        </div>
 
-          <article class="proj">
+        <div class="grid" id="workGrid">
+
+          <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
               <img src="covers/listyapp.jpeg" alt="" loading="lazy" width="800" height="500" />
+              <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -150,6 +160,14 @@
                 <li>Dart</li>
                 <li>Firebase</li>
               </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>iOS &amp; Android, one Flutter codebase</dd></div>
+                  <div><dt>Data</dt><dd>Firebase, synced live between devices</dd></div>
+                  <div><dt>Repository</dt><dd>ZakiNazal/ListyApp</dd></div>
+                </dl>
+              </details>
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-08-04">updated 2026&#8209;08&#8209;04</time>
                 <span class="proj__links">
@@ -160,10 +178,11 @@
             </div>
           </article>
 
-          <article class="proj">
+          <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
               <img src="covers/smartdesk.jpeg" alt="" loading="lazy" width="800" height="500" />
+              <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -178,6 +197,14 @@
                 <li>Dart</li>
                 <li>SLA tracking</li>
               </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>iOS &amp; Android, one Flutter codebase</dd></div>
+                  <div><dt>Roles</dt><dd>Four, each with its own view of a fault</dd></div>
+                  <div><dt>Repository</dt><dd>ZakiNazal/SmartDesk</dd></div>
+                </dl>
+              </details>
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-07-27">updated 2026&#8209;07&#8209;27</time>
                 <span class="proj__links">
@@ -188,10 +215,11 @@
             </div>
           </article>
 
-          <article class="proj">
+          <article class="proj" data-tags="web live">
             <a class="proj__cover" href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
               <img src="covers/cocostudy.jpeg" alt="" loading="lazy" />
+              <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -205,6 +233,15 @@
                 <li>TypeScript</li>
                 <li>Node.js</li>
               </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>Web, deployed on Vercel</dd></div>
+                  <div><dt>Input</dt><dd>A lecture recording</dd></div>
+                  <div><dt>Output</dt><dd>Summary, quiz, and flashcard deck</dd></div>
+                  <div><dt>Repository</dt><dd>ZakiNazal/CocoStudy</dd></div>
+                </dl>
+              </details>
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-06-20">updated 2026&#8209;06&#8209;20</time>
                 <span class="proj__links">
@@ -217,10 +254,11 @@
             </div>
           </article>
 
-          <article class="proj">
+          <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
               <img src="covers/weathersphere.jpeg" alt="" loading="lazy" />
+              <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -235,6 +273,14 @@
                 <li>Dart</li>
                 <li>Figma</li>
               </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>iOS &amp; Android, one Flutter codebase</dd></div>
+                  <div><dt>Views</dt><dd>Now, seven-day forecast, and a pin-drop map</dd></div>
+                  <div><dt>Repository</dt><dd>ZakiNazal/WeatherSphere</dd></div>
+                </dl>
+              </details>
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-05-22">updated 2026&#8209;05&#8209;22</time>
                 <span class="proj__links">
@@ -245,10 +291,11 @@
             </div>
           </article>
 
-          <article class="proj">
+          <article class="proj" data-tags="mobile live">
             <a class="proj__cover" href="https://life-skills-zeta.vercel.app" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
               <img src="covers/lifeskills.jpeg" alt="" loading="lazy" width="800" height="500" />
+              <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -263,9 +310,19 @@
                 <li>Dart</li>
                 <li>Firebase</li>
               </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>iOS &amp; Android, one Flutter codebase</dd></div>
+                  <div><dt>Data</dt><dd>Firebase, for check-ins and streak history</dd></div>
+                  <div><dt>Repository</dt><dd>ZakiNazal/LifeSkills</dd></div>
+                </dl>
+              </details>
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-05-22">updated 2026&#8209;05&#8209;22</time>
                 <span class="proj__links">
+                  <a href="https://life-skills-zeta.vercel.app" target="_blank" rel="noopener">Visit<i
+                      aria-hidden="true">→</i></a>
                   <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">Source<i
                       aria-hidden="true">→</i></a>
                 </span>
@@ -273,10 +330,11 @@
             </div>
           </article>
 
-          <article class="proj">
+          <article class="proj" data-tags="mobile live">
             <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1"
               aria-hidden="true">
               <img src="covers/qbooking.jpeg" alt="" loading="lazy" />
+              <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -291,6 +349,14 @@
                 <li>Dart</li>
                 <li>iOS &amp; Android</li>
               </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>iOS &amp; Android, companion to qbooking.app</dd></div>
+                  <div><dt>Sessions</dt><dd>Sign in once, then routed by role</dd></div>
+                  <div><dt>Repository</dt><dd>AltaDevs/qbooking-application</dd></div>
+                </dl>
+              </details>
               <footer class="proj__foot">
                 <span class="proj__when">with AltaDevs</span>
                 <span class="proj__links">
@@ -385,6 +451,27 @@
             </div>
           </li>
         </ol>
+
+        <!-- The numbers count up to their real value once the strip is in view.
+             data-to is the truth; the text content is the no-JS fallback. -->
+        <dl class="tally">
+          <div class="tally__cell">
+            <dd class="tally__num" data-to="6">6</dd>
+            <dt class="tally__key">Projects shipped</dt>
+          </div>
+          <div class="tally__cell">
+            <dd class="tally__num" data-to="5">5</dd>
+            <dt class="tally__key">Built with Flutter</dt>
+          </div>
+          <div class="tally__cell">
+            <dd class="tally__num" data-to="3">3</dd>
+            <dt class="tally__key">Live in the world</dt>
+          </div>
+          <div class="tally__cell">
+            <dd class="tally__num" data-to="7">7</dd>
+            <dt class="tally__key">Years since line one</dt>
+          </div>
+        </dl>
       </div>
     </section>
 

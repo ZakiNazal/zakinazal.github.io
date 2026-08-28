@@ -156,6 +156,12 @@ ol {
 .contact__copy,
 .contact__live,
 .colophon__meta,
+.filters,
+.tag,
+.spec__sum,
+.spec__list dt,
+.tally__key,
+.rail,
 .dim__val {
   font-family: var(--mono);
   font-weight: 400;
@@ -637,6 +643,67 @@ ol {
   transform: translateX(3px);
 }
 
+/* ---------------- WORK FILTERS ---------------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  margin-bottom: 1.25rem;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+  width: fit-content;
+}
+
+.filters__btn {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.filters__btn b {
+  font-weight: 400;
+  font-size: 0.9em;
+  color: var(--ink-2);
+  opacity: 0.65;
+}
+
+.filters__btn:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent-quiet) 45%, var(--surface));
+}
+
+.filters__btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--field);
+}
+
+.filters__btn[aria-pressed="true"] b {
+  color: var(--field);
+}
+
+/* Filtered-out cards collapse out of the grid; .is-off is set after the fade
+   so the reflow happens once the card has already gone. The .grid prefix is
+   load-bearing: it outranks the .anim.in reveal rule, which resets opacity. */
+.grid .proj.is-out {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.grid .proj.is-off {
+  display: none;
+}
+
 /* ---------------- WORK GRID ---------------- */
 .grid {
   display: grid;
@@ -652,7 +719,7 @@ ol {
   background: var(--surface);
   display: flex;
   flex-direction: column;
-  transition: background 0.2s;
+  transition: background 0.2s, opacity 0.28s var(--ease), transform 0.28s var(--ease);
 }
 
 .proj:hover {
@@ -661,10 +728,51 @@ ol {
 
 .proj__cover {
   display: block;
+  position: relative;
   background: var(--sunken);
   border-bottom: 1px solid var(--line-soft);
   aspect-ratio: 8 / 5;
   overflow: hidden;
+}
+
+/* status tag, pinned to the cover's top-left */
+.tag {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.58rem;
+  /* fixed dark chip: it sits on a screenshot, not on the page background */
+  background: rgb(8 12 22 / 72%);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.tag__pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3ddc84;
+  box-shadow: 0 0 0 0 rgb(61 220 132 / 70%);
+  animation: pip 2.4s ease-out infinite;
+}
+
+@keyframes pip {
+  50% {
+    box-shadow: 0 0 0 5px rgb(61 220 132 / 0%);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(61 220 132 / 0%);
+  }
+}
+
+.tag--src {
+  color: #cbd5ea;
 }
 
 .proj__cover img {
@@ -717,6 +825,80 @@ ol {
   border-radius: 2px;
   padding: 0.2rem 0.45rem;
   color: var(--ink-2);
+}
+
+/* ---------------- SPEC DISCLOSURE ----------------
+   Native <details>, so it opens with no JS and is announced correctly. */
+.spec {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 0.7rem;
+}
+
+.spec__sum {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.62rem;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+  width: fit-content;
+}
+
+.spec__sum::-webkit-details-marker {
+  display: none;
+}
+
+/* the caret is drawn here, so it can rotate independently of the label */
+.spec__sum::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 4px solid currentColor;
+  border-top: 3.5px solid transparent;
+  border-bottom: 3.5px solid transparent;
+  transition: transform 0.22s var(--ease);
+}
+
+.spec[open] .spec__sum::before {
+  transform: rotate(90deg);
+}
+
+.spec__sum:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.spec__list {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  animation: spec-in 0.28s var(--ease) both;
+}
+
+@keyframes spec-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.spec__list>div {
+  display: grid;
+  grid-template-columns: 6.2rem 1fr;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.spec__list dt {
+  font-size: 0.58rem;
+  color: var(--ink-2);
+}
+
+.spec__list dd {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.45;
 }
 
 .proj__foot {
@@ -833,6 +1015,40 @@ ol {
   color: var(--ink-2);
   max-width: 60ch;
   margin-top: 0.5rem;
+}
+
+/* ---------------- TALLY ---------------- */
+.tally {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1px;
+  margin-top: 2.5rem;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.tally__cell {
+  background: var(--surface);
+  padding: 1.4rem 1.2rem;
+}
+
+.tally__num {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 5vw, 3.1rem);
+  font-weight: 680;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  /* tabular figures stop the width jittering while the number counts up */
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.tally__key {
+  margin-top: 0.5rem;
+  font-size: 0.62rem;
+  color: var(--ink-2);
 }
 
 /* ---------------- ABOUT ---------------- */
@@ -981,6 +1197,81 @@ ol {
 
 .colophon__mark.in {
   color: var(--ink);
+}
+
+/* ---------------- SECTION RAIL ----------------
+   Built by script.js, and only shown where there's gutter to spare. Each entry
+   is a ruler gradation: the tick grows and the label lights on the one you're in. */
+.rail {
+  position: fixed;
+  top: 50%;
+  /* parks in the gutter: half the leftover width, less the rail's own column */
+  right: max(1rem, calc((100vw - var(--shell)) / 2 - 6.5rem));
+  transform: translateY(-50%);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.rail__link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.58rem;
+  color: var(--ink-2);
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity 0.25s, color 0.25s;
+}
+
+.rail__tick {
+  width: 14px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.28s var(--ease), background 0.25s;
+}
+
+.rail__link:hover {
+  opacity: 1;
+  color: var(--ink);
+}
+
+.rail__link[aria-current="true"] {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.rail__link[aria-current="true"] .rail__tick {
+  width: 30px;
+}
+
+/* The label is kept out of the accessibility tree's way but hidden visually
+   until the gutter is wide enough to hold it without covering the shell. */
+.rail__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Ticks alone fit beside the shell from here up. */
+@media (min-width: 1180px) and (min-height: 520px) {
+  .rail {
+    display: flex;
+  }
+}
+
+/* Past the shell's full width plus a label column, show the names too. */
+@media (min-width: 1480px) and (min-height: 520px) {
+  .rail__label {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+  }
 }
 
 /* ---------------- MOTION ---------------- */

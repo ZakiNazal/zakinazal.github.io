@@ -330,14 +330,50 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   if (el) el.textContent = new Date().getFullYear();
 })();
 
-/* ---------- NAV: mark the section you're reading ---------- */
+/* ---------- SECTION RAIL ----------
+   A ruler down the right gutter, one gradation per section. Built here rather
+   than in the markup so it can never drift out of sync with the sections that
+   actually exist, and so it simply isn't there when there's no JS to light it. */
+(() => {
+  const sections = document.querySelectorAll("main > section[id]");
+  if (sections.length < 2) return;
+
+  const rail = document.createElement("nav");
+  rail.className = "rail";
+  rail.setAttribute("aria-label", "Page sections");
+
+  sections.forEach((sec) => {
+    const a = document.createElement("a");
+    a.className = "rail__link";
+    a.href = "#" + sec.id;
+    // The thesis has no heading of its own, so it falls back to "Top".
+    const label = sec.querySelector(".band__label")?.textContent.trim() || "Top";
+    const tick = document.createElement("i");
+    tick.className = "rail__tick";
+    tick.setAttribute("aria-hidden", "true");
+    const name = document.createElement("span");
+    name.className = "rail__label";
+    name.textContent = label;
+    a.append(tick, name);
+    rail.append(a);
+  });
+
+  document.body.append(rail);
+})();
+
+/* ---------- NAV: mark the section you're reading ----------
+   Drives the masthead links and the rail from one observer, so the two can
+   never disagree about where you are. */
 (() => {
   if (!("IntersectionObserver" in window)) return;
   const links = new Map();
-  document.querySelectorAll(".masthead__nav a").forEach((a) => {
+  document.querySelectorAll(".masthead__nav a, .rail__link").forEach((a) => {
     const id = a.getAttribute("href").slice(1);
     const section = document.getElementById(id);
-    if (section) links.set(section, a);
+    if (!section) return;
+    const list = links.get(section) || [];
+    list.push(a);
+    links.set(section, list);
   });
   if (!links.size) return;
 
@@ -352,9 +388,11 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
       if (!visible.has(section)) return;
       if (!winner || section.offsetTop < winner.offsetTop) winner = section;
     });
-    links.forEach((a, section) => {
-      if (section === winner) a.setAttribute("aria-current", "true");
-      else a.removeAttribute("aria-current");
+    links.forEach((list, section) => {
+      list.forEach((a) => {
+        if (section === winner) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
     });
   };
 
@@ -369,6 +407,114 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     { rootMargin: "-20% 0px -70% 0px" }
   );
   links.forEach((_, section) => spy.observe(section));
+})();
+
+/* ---------- WORK FILTERS ----------
+   The bar ships hidden and is revealed here, so without JS every project stays
+   on the page rather than being stranded behind a control that does nothing. */
+(() => {
+  const bar = document.getElementById("workFilters");
+  const grid = document.getElementById("workGrid");
+  const count = document.getElementById("workCount");
+  if (!bar || !grid) return;
+
+  const cards = Array.from(grid.querySelectorAll(".proj"));
+  if (!cards.length) return;
+
+  const buttons = Array.from(bar.querySelectorAll(".filters__btn"));
+  const total = cards.length;
+  const matches = (card, key) =>
+    key === "all" || (card.dataset.tags || "").split(/\s+/).includes(key);
+
+  // Counts come from the cards themselves, so they can't fall out of date.
+  buttons.forEach((btn) => {
+    const n = cards.filter((c) => matches(c, btn.dataset.filter)).length;
+    const tally = btn.querySelector("b");
+    if (tally) tally.textContent = n;
+    // A filter nothing matches is dead weight — drop it rather than show a zero.
+    if (!n) btn.remove();
+  });
+
+  let timer;
+
+  const apply = (key) => {
+    const shown = cards.filter((c) => matches(c, key));
+
+    cards.forEach((card) => {
+      const keep = shown.includes(card);
+      // Un-hide first so the fade-in has something to play on.
+      if (keep) card.classList.remove("is-off");
+      card.classList.toggle("is-out", !keep);
+    });
+
+    // Collapse the hidden cards only once they've faded, so the grid reflows
+    // after the exit rather than snapping underneath it.
+    clearTimeout(timer);
+    const settle = () => {
+      cards.forEach((card) => {
+        card.classList.toggle("is-off", card.classList.contains("is-out"));
+      });
+    };
+    if (reduceMotion) settle();
+    else timer = setTimeout(settle, 280);
+
+    if (count) {
+      count.textContent =
+        shown.length === total
+          ? total + " repositories · newest commit first"
+          : shown.length + " of " + total + " repositories";
+    }
+  };
+
+  bar.addEventListener("click", (e) => {
+    const btn = e.target.closest(".filters__btn");
+    if (!btn) return;
+    bar.querySelectorAll(".filters__btn").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b === btn));
+    });
+    apply(btn.dataset.filter);
+  });
+
+  bar.hidden = false;
+})();
+
+/* ---------- TALLY: count up once, when it's in view ----------
+   The markup already carries the final number, so this only ever replays a
+   value the page would have shown anyway. */
+(() => {
+  const cells = document.querySelectorAll(".tally__num[data-to]");
+  if (!cells.length) return;
+  if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+  const run = (el) => {
+    const target = Number(el.dataset.to);
+    if (!Number.isFinite(target)) return;
+    const t0 = performance.now();
+    const dur = 900;
+    const tick = (now) => {
+      const t = Math.min((now - t0) / dur, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3)));
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = target; // always land exactly on the real figure
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        run(entry.target);
+        spy.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.6 }
+  );
+
+  cells.forEach((el) => {
+    el.textContent = "0";
+    spy.observe(el);
+  });
 })();
 
 /* ---------- SCROLL REVEALS ----------
