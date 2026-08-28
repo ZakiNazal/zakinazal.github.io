@@ -1170,6 +1170,30 @@ ol {
   font-size: 0.6rem;
 }
 
+/* ---------------- 404 ---------------- */
+.lost__inner {
+  min-height: 68vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(3rem, 10vh, 7rem);
+}
+
+.lost__measure {
+  margin-bottom: 2rem;
+}
+
+.lost__note {
+  color: var(--ink-2);
+  max-width: 52ch;
+  margin-top: 1.5rem;
+}
+
+.lost__back {
+  margin-top: 2rem;
+  text-align: left;
+}
+
 /* ---------------- COLOPHON ---------------- */
 .colophon {
   border-top: 1px solid var(--line);
@@ -1217,6 +1241,24 @@ ol {
   display: none;
   flex-direction: column;
   gap: 0.9rem;
+}
+
+/* the rule the gradations sit on, filling as the page is read */
+.rail__track {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background: var(--line);
+}
+
+.rail__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleY(var(--p, 0));
+  transform-origin: top;
 }
 
 .rail__link {
@@ -1436,4 +1478,245 @@ ol {
   .proj__foot {
     align-items: flex-start;
   }
+}
+/* ---------------- PRINT ----------------
+   Someone will hit ⌘P. Collapse the page to a clean one-pager: no ornament,
+   ink on white, and every link's destination spelled out. */
+@media print {
+
+  .dmc,
+  .rail,
+  .theme,
+  .skip,
+  .filters,
+  .band--path,
+  .colophon__mark,
+  .dim,
+  .thesis__box {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 10.5pt;
+  }
+
+  .masthead {
+    position: static;
+    border-bottom: 1px solid #999;
+    backdrop-filter: none;
+  }
+
+  .shell {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  .band,
+  .thesis {
+    padding-block: 0.6rem;
+    break-inside: avoid;
+  }
+
+  /* the grid becomes a list: two columns of cards print as ragged boxes */
+  .grid,
+  .tally {
+    display: block;
+    border: 0;
+    background: none;
+  }
+
+  .proj {
+    display: block;
+    break-inside: avoid;
+    border-bottom: 1px solid #ccc;
+    padding-block: 0.5rem;
+  }
+
+  .proj__cover,
+  .tag {
+    display: none;
+  }
+
+  /* disclosures print open — a printed page cannot be expanded */
+  .spec__list {
+    display: block !important;
+    animation: none;
+  }
+
+  .spec__sum {
+    display: none;
+  }
+
+  /* a printed link is useless without its address */
+  .proj__links a::after,
+  .contact__links a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+  }
+
+  .proj__links i,
+  .contact__links i,
+  .band__after i {
+    display: none;
+  }
+
+  .anim {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---------------- VIEW TRANSITION ----------------
+   The theme swap cross-fades where supported. Kept short: this is a change of
+   light, not a page change. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ---------------- CASE STUDY ---------------- */
+.case {
+  max-width: 46rem;
+  padding-block: clamp(3rem, 8vh, 5.5rem) clamp(3rem, 8vh, 5rem);
+}
+
+.case__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.1rem;
+}
+
+.case__title {
+  font-family: var(--display);
+  font-size: clamp(2.1rem, 6vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.03;
+  margin-bottom: 1.6rem;
+}
+
+.case__title em {
+  color: var(--accent);
+}
+
+.case__lead {
+  font-size: 1.15rem;
+  color: var(--ink-2);
+  margin-bottom: 2.4rem;
+}
+
+.case__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+
+.case__meta>div {
+  background: var(--surface);
+  padding: 0.9rem 1rem;
+}
+
+.case__meta dt {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 0.3rem;
+}
+
+.case__meta dd {
+  font-size: 0.95rem;
+}
+
+.case__h {
+  font-family: var(--display);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 640;
+  letter-spacing: -0.025em;
+  margin: 2.6rem 0 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.case p {
+  margin-bottom: 1rem;
+  max-width: 68ch;
+}
+
+.case code {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  background: var(--sunken);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+}
+
+/* the honesty note sits apart from the argument */
+.case__aside {
+  border-left: 2px solid var(--accent);
+  padding: 0.2rem 0 0.2rem 1rem;
+  color: var(--ink-2);
+  font-size: 0.96rem;
+}
+
+.case__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4rem 0 1.6rem;
+  font-size: 0.92rem;
+}
+
+.case__table caption {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-align: left;
+  padding-bottom: 0.6rem;
+}
+
+.case__table th,
+.case__table td {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 0.6rem 0.6rem 0.6rem 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.case__table th {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 400;
+  width: 9rem;
+}
+
+.case__back {
+  margin-top: 2.6rem;
+  text-align: left;
 }

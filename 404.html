@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Zaki Nazzal</title>
+  <meta name="robots" content="noindex" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b0f1a" media="(prefers-color-scheme: dark)" />
+
+  <!-- Absolute paths: GitHub Pages serves this file for any missing URL, and a
+       relative path would resolve against /some/deep/path/ and 404 as well. -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Martian+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) { /* private mode — fall back to the OS preference */ }
+    })();
+  </script>
+</head>
+
+<body class="lost">
+  <header class="masthead">
+    <div class="shell masthead__inner">
+      <a class="masthead__name" href="/">
+        <img class="masthead__logo" src="/favicon.png" alt="" width="512" height="512" />
+        Zaki&nbsp;Nazzal
+      </a>
+    </div>
+  </header>
+
+  <main class="shell lost__inner">
+    <div class="thesis__measure lost__measure">
+      <div class="thesis__box" aria-hidden="true">
+        <i class="thesis__edge thesis__edge--t"></i>
+        <i class="thesis__edge thesis__edge--b"></i>
+        <i class="thesis__edge thesis__edge--l"></i>
+        <i class="thesis__edge thesis__edge--r"></i>
+      </div>
+      <h1 class="thesis__line">
+        <span>404.</span>
+        <span>This page has <em>no size</em>.</span>
+      </h1>
+    </div>
+
+    <p class="thesis__axiom">unbounded constraint &middot; nothing to lay out</p>
+
+    <p class="lost__note">
+      The address you asked for isn't here. It may have been renamed, or it may never
+      have existed — either way, the work is one link away.
+    </p>
+
+    <p class="band__after lost__back">
+      <a href="/">Back to the start<i aria-hidden="true">→</i></a>
+    </p>
+  </main>
+</body>
+
+</html>

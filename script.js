@@ -261,11 +261,20 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     btn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
   };
 
-  btn.addEventListener("click", () => {
+  const apply = () => {
     const next = isDark() ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
     paint();
+  };
+
+  btn.addEventListener("click", () => {
+    // Cross-fade the whole page where the browser can; elsewhere it just flips.
+    if (!reduceMotion && typeof document.startViewTransition === "function") {
+      document.startViewTransition(apply);
+    } else {
+      apply();
+    }
   });
 
   // Follow the OS only while the user hasn't picked a side.
@@ -324,6 +333,32 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   setInterval(render, 30_000);
 })();
 
+/* ---------- COLOPHON: what this page actually cost ----------
+   A page whose whole argument is measurement ought to publish its own. Read
+   after load, so everything it counts has already been fetched. */
+(() => {
+  const out = document.getElementById("colophonSpec");
+  if (!out || typeof performance === "undefined" || !performance.getEntriesByType) return;
+
+  const render = () => {
+    const res = performance.getEntriesByType("resource");
+    const nav = performance.getEntriesByType("navigation")[0];
+    if (!res.length) return;
+
+    const bytes = res.reduce((n, e) => n + (e.transferSize || 0), 0) +
+      ((nav && nav.transferSize) || 0);
+    const count = res.length + (nav ? 1 : 0);
+
+    // A repeat visit serves almost everything from cache, so the byte count
+    // collapses to nothing. Saying so is truer than printing "0 KB".
+    const weight = bytes > 2048 ? Math.round(bytes / 1024) + " KB" : "from cache";
+    out.textContent = `${count} requests · ${weight} · no framework`;
+  };
+
+  if (document.readyState === "complete") setTimeout(render, 0);
+  else window.addEventListener("load", () => setTimeout(render, 0));
+})();
+
 /* ---------- FOOTER YEAR ---------- */
 (() => {
   const el = document.getElementById("year");
@@ -342,6 +377,16 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   rail.className = "rail";
   rail.setAttribute("aria-label", "Page sections");
 
+  // A gradation column needs something to measure against: this is the rule the
+  // ticks sit on, and it fills as the page is read.
+  const track = document.createElement("i");
+  track.className = "rail__track";
+  track.setAttribute("aria-hidden", "true");
+  const fillEl = document.createElement("i");
+  fillEl.className = "rail__fill";
+  track.append(fillEl);
+  rail.append(track);
+
   sections.forEach((sec) => {
     const a = document.createElement("a");
     a.className = "rail__link";
@@ -359,6 +404,34 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   });
 
   document.body.append(rail);
+
+  // Fill runs 0 → 1 across the scrollable range. Written as a custom property
+  // so the paint is a transform, not a layout change.
+  const fill = rail.querySelector(".rail__fill");
+  if (!fill) return;
+
+  let queued = false;
+  const paintFill = () => {
+    const doc = document.documentElement;
+    const range = doc.scrollHeight - doc.clientHeight;
+    const p = range > 0 ? Math.min(Math.max(window.scrollY / range, 0), 1) : 0;
+    fill.style.setProperty("--p", p.toFixed(4));
+  };
+
+  paintFill();
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        paintFill();
+      });
+    },
+    { passive: true }
+  );
+  window.addEventListener("resize", paintFill);
 })();
 
 /* ---------- NAV: mark the section you're reading ----------
