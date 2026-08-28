@@ -69,11 +69,11 @@
       <div class="dmc" id="heroMarquee" aria-hidden="true">
         <div class="dmc__stage">
           <div class="dmc__row" data-speed="58"
-            data-set="listyapp,smartdesk,cocostudy,weathersphere,lifeskills,qbooking"></div>
+            data-set="listyapp,smartdesk,scorvyn,cocostudy,weathersphere,lifeskills,qbooking"></div>
           <div class="dmc__row dmc__row--rev" data-speed="76"
-            data-set="weathersphere,qbooking,listyapp,cocostudy,smartdesk,lifeskills"></div>
+            data-set="weathersphere,qbooking,listyapp,cocostudy,scorvyn,smartdesk,lifeskills"></div>
           <div class="dmc__row" data-speed="66"
-            data-set="cocostudy,lifeskills,smartdesk,qbooking,weathersphere,listyapp"></div>
+            data-set="cocostudy,lifeskills,smartdesk,qbooking,scorvyn,weathersphere,listyapp"></div>
         </div>
         <div class="dmc__scrim"></div>
       </div>
@@ -111,8 +111,8 @@
 
         <div class="thesis__foot">
           <p class="thesis__note">
-            Computer science undergraduate at APU, Kuala&nbsp;Lumpur. Six projects so far — five of them
-            Flutter, all of them open source.
+            Computer science undergraduate at APU, Kuala&nbsp;Lumpur. Seven projects so far — five of them
+            Flutter, most of them open source.
           </p>
           <p class="thesis__status">
             <span class="dot" aria-hidden="true"></span>
@@ -127,19 +127,58 @@
       <div class="shell">
         <header class="band__head">
           <h2 class="band__label">Work</h2>
-          <p class="band__meta" id="workCount">6 repositories &middot; newest commit first</p>
+          <p class="band__meta" id="workCount">7 projects &middot; newest commit first</p>
         </header>
 
         <!-- Filters are progressive: without JS every project is simply shown,
              so the bar stays hidden until script.js wires it up. -->
         <div class="filters" id="workFilters" role="group" aria-label="Filter projects" hidden>
-          <button type="button" class="filters__btn" data-filter="all" aria-pressed="true">All<b>6</b></button>
+          <button type="button" class="filters__btn" data-filter="all" aria-pressed="true">All<b>7</b></button>
           <button type="button" class="filters__btn" data-filter="mobile" aria-pressed="false">Mobile<b>5</b></button>
-          <button type="button" class="filters__btn" data-filter="web" aria-pressed="false">Web<b>1</b></button>
+          <button type="button" class="filters__btn" data-filter="web" aria-pressed="false">Web<b>2</b></button>
           <button type="button" class="filters__btn" data-filter="live" aria-pressed="false">Live<b>3</b></button>
         </div>
 
         <div class="grid" id="workGrid">
+
+          <article class="proj" data-tags="web live">
+            <a class="proj__cover" href="https://scorvynshop.vercel.app" target="_blank" rel="noopener" tabindex="-1"
+              aria-hidden="true">
+              <img src="covers/scorvyn.jpeg" alt="" loading="lazy" width="1536" height="960" />
+              <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
+            </a>
+            <div class="proj__body">
+              <h3 class="proj__name">
+                <a href="https://scorvynshop.vercel.app" target="_blank" rel="noopener">SCORVYN.™</a>
+              </h3>
+              <p class="proj__desc">
+                A storefront for heavyweight streetwear, numbered and dated. Limited drops, no restocks — so the
+                whole shop is built around scarcity rather than a catalogue.
+              </p>
+              <ul class="chips">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>Tailwind</li>
+                <li>Stripe</li>
+              </ul>
+              <details class="spec">
+                <summary class="spec__sum">Engineering details</summary>
+                <dl class="spec__list">
+                  <div><dt>Platform</dt><dd>Web, Next.js App Router on Vercel</dd></div>
+                  <div><dt>Checkout</dt><dd>Stripe, with Resend for order mail</dd></div>
+                  <div><dt>Motion</dt><dd>Motion and Lenis for smooth scrolling</dd></div>
+                  <div><dt>Repository</dt><dd>Private</dd></div>
+                </dl>
+              </details>
+              <footer class="proj__foot">
+                <time class="proj__when" datetime="2026-08-26">updated 2026&#8209;08&#8209;26</time>
+                <span class="proj__links">
+                  <a href="https://scorvynshop.vercel.app" target="_blank" rel="noopener">Visit<i
+                      aria-hidden="true">→</i></a>
+                </span>
+              </footer>
+            </div>
+          </article>
 
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
@@ -291,11 +330,11 @@
             </div>
           </article>
 
-          <article class="proj" data-tags="mobile live">
-            <a class="proj__cover" href="https://life-skills-zeta.vercel.app" target="_blank" rel="noopener"
+          <article class="proj" data-tags="mobile">
+            <a class="proj__cover" href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
               <img src="covers/lifeskills.jpeg" alt="" loading="lazy" width="800" height="500" />
-              <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
+              <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
@@ -321,8 +360,6 @@
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-05-22">updated 2026&#8209;05&#8209;22</time>
                 <span class="proj__links">
-                  <a href="https://life-skills-zeta.vercel.app" target="_blank" rel="noopener">Visit<i
-                      aria-hidden="true">→</i></a>
                   <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">Source<i
                       aria-hidden="true">→</i></a>
                 </span>
@@ -456,7 +493,7 @@
              data-to is the truth; the text content is the no-JS fallback. -->
         <dl class="tally">
           <div class="tally__cell">
-            <dd class="tally__num" data-to="6">6</dd>
+            <dd class="tally__num" data-to="7">7</dd>
             <dt class="tally__key">Projects shipped</dt>
           </div>
           <div class="tally__cell">

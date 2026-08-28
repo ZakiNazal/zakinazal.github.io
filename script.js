@@ -461,8 +461,8 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     if (count) {
       count.textContent =
         shown.length === total
-          ? total + " repositories · newest commit first"
-          : shown.length + " of " + total + " repositories";
+          ? total + " projects · newest commit first"
+          : shown.length + " of " + total + " projects";
     }
   };
 
