@@ -1158,6 +1158,11 @@ ol {
   color: var(--accent);
 }
 
+/* the résumé arrow points down, so it should nudge that way, not sideways */
+.contact__cv:hover i {
+  transform: translateY(2px);
+}
+
 .contact__live {
   margin-top: 0.8rem;
   min-height: 1.2em;

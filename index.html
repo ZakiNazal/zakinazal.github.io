@@ -15,6 +15,14 @@
   <meta property="og:title" content="Zaki Nazzal — Personal Portfolio" />
   <meta property="og:description"
     content="Zaki Nazzal — Personal Portfolio. Computer science student in Kuala Lumpur." />
+  <!-- Absolute URL: scrapers do not resolve relative paths. -->
+  <meta property="og:url" content="https://zakinazal.github.io/" />
+  <meta property="og:image" content="https://zakinazal.github.io/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="I build software, and the tools I wish existed." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://zakinazal.github.io/og.jpg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -144,7 +152,7 @@
           <article class="proj" data-tags="web live">
             <a class="proj__cover" href="https://scorvyn.shop" target="_blank" rel="noopener" tabindex="-1"
               aria-hidden="true">
-              <img src="covers/scorvyn.jpeg" alt="" loading="lazy" width="1536" height="960" />
+              <img src="covers/scorvyn.webp" alt="" loading="lazy" width="1536" height="960" />
               <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
@@ -183,7 +191,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/listyapp.jpeg" alt="" loading="lazy" width="800" height="500" />
+              <img src="covers/listyapp.webp" alt="" loading="lazy" width="800" height="500" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -220,7 +228,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/smartdesk.jpeg" alt="" loading="lazy" width="800" height="500" />
+              <img src="covers/smartdesk.webp" alt="" loading="lazy" width="800" height="500" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -257,7 +265,7 @@
           <article class="proj" data-tags="web live">
             <a class="proj__cover" href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/cocostudy.jpeg" alt="" loading="lazy" />
+              <img src="covers/cocostudy.webp" alt="" loading="lazy" />
               <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
@@ -296,7 +304,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/weathersphere.jpeg" alt="" loading="lazy" />
+              <img src="covers/weathersphere.webp" alt="" loading="lazy" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -333,7 +341,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/lifeskills.jpeg" alt="" loading="lazy" width="800" height="500" />
+              <img src="covers/lifeskills.webp" alt="" loading="lazy" width="800" height="500" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -370,7 +378,7 @@
           <article class="proj" data-tags="mobile web live">
             <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1"
               aria-hidden="true">
-              <img src="covers/qbooking.jpeg" alt="" loading="lazy" />
+              <img src="covers/qbooking.webp" alt="" loading="lazy" />
               <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
@@ -565,6 +573,10 @@
             <a href="https://github.com/ZakiNazal" target="_blank" rel="noopener">GitHub<i aria-hidden="true">→</i></a>
             <a href="https://www.linkedin.com/in/zakinazzal/" target="_blank" rel="noopener">LinkedIn<i
                 aria-hidden="true">→</i></a>
+            <!-- RÉSUMÉ: drop resume.pdf beside index.html, then delete these two
+                 comment lines to publish the link. It is left commented rather than
+                 probed at runtime so the console stays clean until the file exists. -->
+            <!-- <a class="contact__cv" href="resume.pdf" download>Résumé<i aria-hidden="true">↓</i></a> -->
           </nav>
         </div>
         <p class="contact__live" role="status" aria-live="polite" id="copyStatus"></p>
