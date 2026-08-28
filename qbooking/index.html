@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QBooking — three portals, one app · Zaki Nazzal</title>
+  <meta name="description"
+    content="A case study on the QBooking companion app: resolving which portal an account opens, handling the case where the user picked the wrong one, and bounding session restore." />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b0f1a" media="(prefers-color-scheme: dark)" />
+  <link rel="canonical" href="https://zakinazal.github.io/qbooking/" />
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="QBooking — three portals, one app" />
+  <meta property="og:description"
+    content="Resolving which portal an account opens, handling the case where the user picked the wrong one, and bounding session restore." />
+  <meta property="og:url" content="https://zakinazal.github.io/qbooking/" />
+  <meta property="og:image" content="https://zakinazal.github.io/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" href="/fonts/bricolage-grotesque-normal-latin.woff2" as="font" type="font/woff2"
+    crossorigin />
+  <link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+  <link rel="stylesheet" href="/styles.css" />
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) { /* private mode — fall back to the OS preference */ }
+    })();
+  </script>
+</head>
+
+<body>
+  <a class="skip" href="#case">Skip to the case study</a>
+
+  <header class="masthead">
+    <div class="shell masthead__inner">
+      <a class="masthead__name" href="/">
+        <img class="masthead__logo" src="/favicon.png" alt="" width="512" height="512" />
+        Zaki&nbsp;Nazzal
+      </a>
+      <nav class="masthead__nav" aria-label="Sections">
+        <a href="/#work">work</a>
+        <a href="/#contact">contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell case" id="case">
+
+    <p class="case__kicker">Case study &middot; QBooking &middot; Flutter &middot; Client work</p>
+    <h1 class="case__title">Three portals,<br />one <em>app</em></h1>
+
+    <p class="case__lead">
+      QBooking is a booking platform with three kinds of user — customers, shop owners, and staff —
+      and each sees a different product. The companion app has to work out which one you are before
+      it can show you anything, and be graceful when it turns out you thought you were someone else.
+    </p>
+
+    <dl class="case__meta">
+      <div>
+        <dt>Role</dt>
+        <dd>Flutter developer, two-person team</dd>
+      </div>
+      <div>
+        <dt>Stack</dt>
+        <dd>Flutter, Dart, Supabase</dd>
+      </div>
+      <div>
+        <dt>Period</dt>
+        <dd>Jun–Jul 2026 · 15 of 27 commits</dd>
+      </div>
+      <div>
+        <dt>Live</dt>
+        <dd><a href="https://qbooking.app" target="_blank" rel="noopener">qbooking.app</a> ·
+          repository private</dd>
+      </div>
+    </dl>
+
+    <p class="case__aside">
+      This was client work, built alongside another developer, so I'm scoping this to the parts I
+      wrote: role routing, the three portal shells, session restore, and the shared widget set. The
+      backend and the web portal are not mine.
+    </p>
+
+    <h2 class="case__h">1 · The app doesn't know who you are yet</h2>
+    <p>
+      An account resolves to one of four actor types — customer, owner, staff, or
+      <code>unresolved</code>. That fourth one is the important one. The type arrives from the
+      backend on a wire field, and "we haven't been told yet" is a real state the UI has to survive,
+      not an error to swallow. Modelling it explicitly means the splash screen can wait honestly
+      instead of guessing and correcting itself a second later.
+    </p>
+
+    <h2 class="case__h">2 · When you picked the wrong door</h2>
+    <p>
+      Login asks which portal you want. That answer is only a <em>hint</em> — the account decides
+      what it actually opens. When the two disagree, the obvious implementations are both bad: an
+      error implies your credentials were wrong, and silently redirecting leaves you somewhere you
+      didn't ask to be, wondering if you're in someone else's account.
+    </p>
+    <p>
+      So the mismatch gets its own screen, and it names both halves of the discrepancy:
+      <em>"You selected Staff. This account opens Owner."</em> One button continues to the portal
+      that actually exists, another signs out. Nothing is hidden and nothing happens without you
+      pressing something.
+    </p>
+    <p class="case__aside">
+      This is the piece of the app I'd defend hardest in review. It's a screen most users will never
+      see, for a state that only occurs when someone is confused — which is exactly when an app is
+      least allowed to be confusing back.
+    </p>
+
+    <h2 class="case__h">3 · Restoring a session, but not forever</h2>
+    <p>
+      Staying signed in means the app resumes your session on launch. That call goes over the
+      network, and a network call with no ceiling is a splash screen that can hang indefinitely on
+      bad hotel Wi-Fi.
+    </p>
+    <p>
+      Session restore is bounded at twelve seconds. Past that it stops waiting and says so —
+      <em>"Could not restore your session. Please sign in again."</em> Signing in again is a mild
+      annoyance; a spinner with no end is the app being broken. Twelve seconds is long enough that a
+      slow-but-working connection still gets through.
+    </p>
+
+    <h2 class="case__h">4 · Three shells from one set of parts</h2>
+    <p>
+      Customer, owner and staff each get their own shell, but they're assembled from one shared
+      widget library rather than three parallel implementations — branding, buttons, glass cards,
+      text fields, a segment control, section headers, a responsive scaffold, the navigation bar,
+      and a set of state cards for empty, loading and error.
+    </p>
+    <p>
+      Consolidating that was most of my second week on the project, and it was worth it for a
+      specific reason: with three portals, any component built inline is a component that will be
+      rebuilt slightly differently twice more. The shared set is what stops the three products
+      drifting into looking like three different apps.
+    </p>
+
+    <h2 class="case__h">What I took from it</h2>
+    <p>
+      This was the first time I'd written Flutter to someone else's brief, in someone else's
+      repository, next to another developer — and the difference from my own projects wasn't
+      technical. It was that I couldn't hold the whole thing in my head, so decisions had to be
+      legible to somebody who wasn't me. Naming an <code>unresolved</code> state, giving a mismatch
+      its own screen, and putting a number on how long a wait is allowed to last are all the same
+      instinct: write down the thing you'd otherwise have to remember.
+    </p>
+
+    <p class="band__after case__back">
+      <a href="/#work">Back to the work<i aria-hidden="true">→</i></a>
+    </p>
+  </main>
+
+  <footer class="colophon">
+    <div class="shell colophon__meta">
+      <span>© <span id="year">2026</span> Zaki Nazzal</span>
+      <span>Written by hand · no framework</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>

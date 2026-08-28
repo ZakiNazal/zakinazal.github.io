@@ -6,6 +6,16 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://zakinazal.github.io/cocostudy/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zakinazal.github.io/qbooking/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://zakinazal.github.io/scorvyn/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
