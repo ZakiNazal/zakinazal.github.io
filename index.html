@@ -29,12 +29,42 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://zakinazal.github.io/og.jpg" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Martian+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap"
-    rel="stylesheet" />
+  <!-- Fonts are served from here, not Google: one less origin in front of first
+       paint, and no visitor's IP handed to a third party to read the page.
+       The two faces above the fold are preloaded; the rest arrive with the CSS. -->
+  <link rel="preload" href="fonts/bricolage-grotesque-normal-latin.woff2" as="font" type="font/woff2"
+    crossorigin />
+  <link rel="preload" href="fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="fonts/fonts.css" />
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Structured data: lets a search engine attach the name, the role and the
+       profiles to one person rather than guessing from page text. -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Zaki Nazzal",
+      "url": "https://zakinazal.github.io/",
+      "image": "https://zakinazal.github.io/og.jpg",
+      "jobTitle": "Software developer",
+      "description": "Computer science undergraduate building Flutter apps and web tools.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kuala Lumpur",
+        "addressCountry": "MY"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Asia Pacific University of Technology & Innovation"
+      },
+      "knowsAbout": ["Flutter", "Dart", "Firebase", "TypeScript", "Next.js"],
+      "sameAs": [
+        "https://github.com/ZakiNazal",
+        "https://www.linkedin.com/in/zakinazzal/"
+      ]
+    }
+  </script>
 
   <script>
     // Set the theme before first paint so the page never flashes the wrong one.
@@ -186,6 +216,7 @@
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-08-26">updated 2026&#8209;08&#8209;26</time>
                 <span class="proj__links">
+                  <a href="/scorvyn/">Case study<i aria-hidden="true">→</i></a>
                   <a href="https://scorvyn.shop" target="_blank" rel="noopener">Visit<i
                       aria-hidden="true">→</i></a>
                 </span>
@@ -474,6 +505,18 @@
         </header>
 
         <ol class="tl">
+          <li class="tl__item">
+            <span class="tl__year">2026</span>
+            <div class="tl__body">
+              <h3 class="tl__what">Built the QBooking companion app</h3>
+              <p class="tl__where">With AltaDevs · Jun–Jul 2026</p>
+              <p class="tl__note">First time writing Flutter to someone else's brief, on someone
+                else's repo, next to another developer. Role-based routing into the owner, staff and
+                customer shells, session restore, and the shared widget set the rest of the app is
+                assembled from. <a href="https://qbooking.app" target="_blank" rel="noopener">Live at
+                  qbooking.app</a>.</p>
+            </div>
+          </li>
           <li class="tl__item">
             <span class="tl__year">2025<span class="tl__year-to">→now</span></span>
             <div class="tl__body">
