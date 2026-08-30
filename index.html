@@ -95,7 +95,7 @@
         <a href="#about">about</a>
         <a href="#contact">contact</a>
       </nav>
-      <button class="theme" id="themeToggle" type="button" aria-pressed="false">
+      <button class="theme" id="themeToggle" type="button" aria-label="Switch color theme">
         <span class="theme__dot" aria-hidden="true"></span>
         <span class="theme__label" id="themeLabel">dark</span>
       </button>
@@ -152,6 +152,11 @@
 
         <p class="thesis__axiom">constraints go down &middot; sizes go up</p>
 
+        <nav class="thesis__actions" aria-label="Primary actions">
+          <a class="button button--primary" href="#work">Explore the work<i aria-hidden="true">↓</i></a>
+          <a class="button" href="resume.pdf" download="Zaki-Nazzal-CV.pdf">Download résumé<i aria-hidden="true">↓</i></a>
+        </nav>
+
         <div class="thesis__foot">
           <p class="thesis__note">
             Computer science undergraduate at APU, Kuala&nbsp;Lumpur. Seven projects so far — five of them
@@ -170,7 +175,7 @@
       <div class="shell">
         <header class="band__head">
           <h2 class="band__label">Work</h2>
-          <p class="band__meta" id="workCount">7 projects &middot; newest commit first</p>
+          <p class="band__meta" id="workCount">7 projects &middot; selected work</p>
         </header>
 
         <!-- Filters are progressive: without JS every project is simply shown,
@@ -184,9 +189,8 @@
 
         <div class="grid" id="workGrid">
 
-          <article class="proj" data-tags="web live">
-            <a class="proj__cover" href="https://scorvyn.shop" target="_blank" rel="noopener" tabindex="-1"
-              aria-hidden="true">
+          <article class="proj proj--lead" data-tags="web live">
+            <a class="proj__cover" href="https://scorvyn.shop" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
               <img src="covers/scorvyn.webp" alt="" loading="lazy" width="1536" height="960" />
               <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
@@ -198,6 +202,7 @@
                 A storefront for heavyweight streetwear, numbered and dated. Limited drops, no restocks — so the
                 whole shop is built around scarcity rather than a catalogue.
               </p>
+              <p class="proj__role">Sole developer · live commerce</p>
               <ul class="chips">
                 <li>Next.js</li>
                 <li>TypeScript</li>
@@ -216,7 +221,6 @@
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-08-26">updated 2026&#8209;08&#8209;26</time>
                 <span class="proj__links">
-                  <a href="/scorvyn/">Case study<i aria-hidden="true">→</i></a>
                   <a href="https://scorvyn.shop" target="_blank" rel="noopener">Visit<i
                       aria-hidden="true">→</i></a>
                 </span>
@@ -227,7 +231,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/listyapp.webp" alt="" loading="lazy" width="800" height="500" />
+              <img src="covers/listyapp.webp" alt="" loading="lazy" width="679" height="512" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -238,6 +242,7 @@
                 Shared lists that stay in sync. Make a list, assign items to friends, and watch them get ticked
                 off while you're still looking at the screen.
               </p>
+              <p class="proj__role">Sole developer · open source</p>
               <ul class="chips">
                 <li>Flutter</li>
                 <li>Dart</li>
@@ -261,10 +266,9 @@
             </div>
           </article>
 
-          <article class="proj" data-tags="mobile">
-            <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
-              tabindex="-1" aria-hidden="true">
-              <img src="covers/smartdesk.webp" alt="" loading="lazy" width="800" height="500" />
+          <article class="proj proj--featured" data-tags="mobile">
+            <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <img src="covers/smartdesk.webp" alt="" loading="lazy" width="800" height="600" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -275,6 +279,7 @@
                 A fault report goes in; four roles move it out. Triage sorts and scores it, routing sends it to the
                 right technician, and the SLA clock starts. Faults that keep coming back get flagged.
               </p>
+              <p class="proj__role">Sole developer · four-role workflow</p>
               <ul class="chips">
                 <li>Flutter</li>
                 <li>Dart</li>
@@ -291,7 +296,6 @@
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-07-27">updated 2026&#8209;07&#8209;27</time>
                 <span class="proj__links">
-                  <a href="/smartdesk/">Case study<i aria-hidden="true">→</i></a>
                   <a href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener">Source<i
                       aria-hidden="true">→</i></a>
                 </span>
@@ -299,20 +303,20 @@
             </div>
           </article>
 
-          <article class="proj" data-tags="web live">
-            <a class="proj__cover" href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener"
-              tabindex="-1" aria-hidden="true">
-              <img src="covers/cocostudy.webp" alt="" loading="lazy" />
+          <article class="proj proj--featured" data-tags="web live">
+            <a class="proj__cover" href="https://cocostudy.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <img src="covers/cocostudy.webp" alt="" loading="lazy" width="800" height="600" />
               <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
               <h3 class="proj__name">
-                <a href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener">CocoStudy</a>
+                <a href="https://cocostudy.vercel.app/" target="_blank" rel="noopener">CocoStudy</a>
               </h3>
               <p class="proj__desc">
                 Turns a lecture you sat through into something you can revise from — a summary, a quiz, and a deck of
                 flashcards, generated from the recording.
               </p>
+              <p class="proj__role">Sole developer · 215 logic tests</p>
               <ul class="chips">
                 <li>TypeScript</li>
                 <li>Node.js</li>
@@ -329,7 +333,6 @@
               <footer class="proj__foot">
                 <time class="proj__when" datetime="2026-06-20">updated 2026&#8209;06&#8209;20</time>
                 <span class="proj__links">
-                  <a href="/cocostudy/">Case study<i aria-hidden="true">→</i></a>
                   <a href="https://cocostudy.vercel.app/" target="_blank" rel="noopener">Visit<i
                       aria-hidden="true">→</i></a>
                   <a href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener">Source<i
@@ -342,7 +345,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/weathersphere.webp" alt="" loading="lazy" />
+              <img src="covers/weathersphere.webp" alt="" loading="lazy" width="655" height="494" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -353,6 +356,7 @@
                 Conditions now, a seven-day forecast, and a map you can drop a pin on to check anywhere else. One
                 Flutter codebase, iOS and Android.
               </p>
+              <p class="proj__role">Sole developer · open source</p>
               <ul class="chips">
                 <li>Flutter</li>
                 <li>Dart</li>
@@ -379,7 +383,7 @@
           <article class="proj" data-tags="mobile">
             <a class="proj__cover" href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener"
               tabindex="-1" aria-hidden="true">
-              <img src="covers/lifeskills.webp" alt="" loading="lazy" width="800" height="500" />
+              <img src="covers/lifeskills.webp" alt="" loading="lazy" width="800" height="600" />
               <span class="tag tag--src">Source</span>
             </a>
             <div class="proj__body">
@@ -390,6 +394,7 @@
                 Builds an exercise habit by making the streak the whole point. Daily check-ins, a mood log, an activity
                 explorer, and a profile you can actually edit.
               </p>
+              <p class="proj__role">Sole developer · open source</p>
               <ul class="chips">
                 <li>Flutter</li>
                 <li>Dart</li>
@@ -413,10 +418,9 @@
             </div>
           </article>
 
-          <article class="proj" data-tags="mobile web live">
-            <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1"
-              aria-hidden="true">
-              <img src="covers/qbooking.webp" alt="" loading="lazy" />
+          <article class="proj proj--featured" data-tags="mobile web live">
+            <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <img src="covers/qbooking.webp" alt="" loading="lazy" width="1918" height="1078" />
               <span class="tag tag--live"><i class="tag__pip" aria-hidden="true"></i>Live</span>
             </a>
             <div class="proj__body">
@@ -427,6 +431,7 @@
                 The native companion to qbooking.app. Sign in once and stay signed in, land on the right screen for your
                 role, and read the portal from your phone.
               </p>
+              <p class="proj__role">Collaborator · 15 of 27 commits</p>
               <ul class="chips">
                 <li>Flutter</li>
                 <li>Dart</li>
@@ -443,7 +448,6 @@
               <footer class="proj__foot">
                 <span class="proj__when">with AltaDevs</span>
                 <span class="proj__links">
-                  <a href="/qbooking/">Case study<i aria-hidden="true">→</i></a>
                   <a href="https://qbooking.app" target="_blank" rel="noopener">Visit<i aria-hidden="true">→</i></a>
                 </span>
               </footer>
@@ -603,8 +607,27 @@
       </div>
     </section>
 
+    <!-- ============ NOW ============ -->
+    <section class="band band--tint" id="now">
+      <div class="shell">
+        <header class="band__head">
+          <h2 class="band__label">Now</h2>
+          <p class="band__meta">current focus · August 2026</p>
+        </header>
+
+        <div class="now">
+          <p class="now__lead">Studying computer science, going deeper on backend architecture and testing, and looking for an internship where shipped software matters.</p>
+          <dl class="now__list">
+            <div><dt>Learning</dt><dd>Backend architecture and testing at scale</dd></div>
+            <div><dt>Available for</dt><dd>Software engineering internships</dd></div>
+            <div><dt>Working from</dt><dd>Kuala Lumpur · <span id="nowLocalTime">local time available above</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ CONTACT ============ -->
-    <section class="band band--tint" id="contact">
+    <section class="band" id="contact">
       <div class="shell">
         <header class="band__head">
           <h2 class="band__label">Contact</h2>

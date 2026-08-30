@@ -124,7 +124,10 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
       const passes = pass > 0 ? Math.max(1, Math.ceil(stage / pass)) : 1;
       for (let i = 1; i < passes; i++) set.forEach((n) => track.append(card(n)));
 
+      const loopWidth = track.scrollWidth;
+      const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
       track.append(...Array.from(track.children).map((n) => n.cloneNode(true)));
+      track.style.setProperty("--loop-distance", -(loopWidth + gap) + "px");
     });
   };
 
@@ -247,6 +250,7 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   if (!btn || !label) return;
 
   const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+  const themeMetas = document.querySelectorAll('meta[name="theme-color"]');
 
   const isDark = () => {
     const set = document.documentElement.getAttribute("data-theme");
@@ -257,8 +261,9 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     const dark = isDark();
     // The button names what you'll get, not what you're in.
     label.textContent = dark ? "light" : "dark";
-    btn.setAttribute("aria-pressed", String(dark));
+    btn.removeAttribute("aria-pressed");
     btn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+    themeMetas.forEach((meta) => meta.setAttribute("content", dark ? "#0b0f1a" : "#eef1f8"));
   };
 
   const apply = () => {
@@ -278,9 +283,11 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
   });
 
   // Follow the OS only while the user hasn't picked a side.
-  systemDark.addEventListener("change", () => {
+  const followSystem = () => {
     if (!document.documentElement.getAttribute("data-theme")) paint();
-  });
+  };
+  if (typeof systemDark.addEventListener === "function") systemDark.addEventListener("change", followSystem);
+  else if (typeof systemDark.addListener === "function") systemDark.addListener(followSystem);
 
   paint();
 })();
@@ -316,18 +323,20 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 
 /* ---------- LOCAL TIME (Kuala Lumpur, where he actually is) ---------- */
 (() => {
-  const el = document.getElementById("localTime");
-  if (!el) return;
+  const outputs = [document.getElementById("localTime"), document.getElementById("nowLocalTime")].filter(Boolean);
+  if (!outputs.length) return;
   const render = () => {
+    let value;
     try {
-      el.textContent = new Date().toLocaleTimeString("en-GB", {
+      value = new Date().toLocaleTimeString("en-GB", {
         timeZone: "Asia/Kuala_Lumpur",
         hour: "2-digit",
         minute: "2-digit",
       });
     } catch (e) {
-      el.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      value = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     }
+    outputs.forEach((el) => { el.textContent = value; });
   };
   render();
   setInterval(render, 30_000);
@@ -534,7 +543,7 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     if (count) {
       count.textContent =
         shown.length === total
-          ? total + " projects · newest commit first"
+          ? total + " projects · selected work"
           : shown.length + " of " + total + " projects";
     }
   };
@@ -621,3 +630,4 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 
   document.querySelectorAll(".anim, .colophon__mark").forEach((el) => reveal.observe(el));
 })();
+
