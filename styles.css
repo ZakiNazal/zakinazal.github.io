@@ -18,8 +18,8 @@
   --accent-quiet: #dfe6ff;
 
   --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --body: "Newsreader", Georgia, serif;
-  --mono: "Martian Mono", ui-monospace, "SFMono-Regular", monospace;
+  --body: "Bricolage Grotesque", Georgia, serif;
+  --mono: "Bricolage Grotesque", ui-monospace, "SFMono-Regular", monospace;
 
   --shell: 1240px;
   --gut: clamp(1.15rem, 4vw, 3rem);
@@ -164,9 +164,9 @@ ol {
 .tally__key,
 .rail,
 .dim__val {
-font-family: var(--mono);
-font-weight: 400;
-font-size: 0.72rem;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.72rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   line-height: 1.5;
@@ -1191,7 +1191,7 @@ font-size: 0.72rem;
   border-top: 1px solid var(--line);
 }
 
-.now__list > div {
+.now__list>div {
   display: grid;
   grid-template-columns: 7.5rem 1fr;
   gap: 1rem;
@@ -1516,6 +1516,7 @@ font-size: 0.72rem;
 
 /* ---------------- RESPONSIVE ---------------- */
 @media (max-width: 860px) {
+
   .about,
   .now {
     grid-template-columns: 1fr;
@@ -1621,7 +1622,7 @@ font-size: 0.72rem;
     align-items: flex-start;
   }
 
-  .now__list > div {
+  .now__list>div {
     grid-template-columns: 1fr;
     gap: 0.25rem;
   }
@@ -1645,6 +1646,7 @@ font-size: 0.72rem;
     height: 1.5rem;
   }
 }
+
 /* ---------------- PRINT ----------------
    Someone will hit ⌘P. Collapse the page to a clean one-pager: no ornament,
    ink on white, and every link's destination spelled out. */
@@ -1752,5 +1754,3 @@ font-size: 0.72rem;
     animation: none;
   }
 }
-
-
