@@ -329,7 +329,7 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     let value;
     try {
       value = new Date().toLocaleTimeString("en-GB", {
-        timeZone: "Asia/Kuala_Lumpur",
+        timeZone: "Asia/Amman",
         hour: "2-digit",
         minute: "2-digit",
       });
