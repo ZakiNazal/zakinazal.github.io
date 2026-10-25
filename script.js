@@ -1,633 +1,589 @@
 /* =========================================================
-   ZAKI NAZZAL — behaviour
+   script.js — everything on the page that isn't WebGL.
+   Every block is progressive: if GSAP or Lenis fail to load,
+   the content is already in the HTML and simply sits still.
    ========================================================= */
 
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+(function () {
+  "use strict";
 
-/* ---------- THE MEASURED HEADLINE ----------
-   The numbers under and beside the hero are the real rendered size of the
-   box, read back from layout. They re-measure on resize, so they stay true. */
-(() => {
-  const box = document.getElementById("measure");
-  const wOut = document.getElementById("dimW");
-  const hOut = document.getElementById("dimH");
-  if (!box || !wOut || !hOut) return;
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const hasGsap = typeof window.gsap !== "undefined";
+  const t0 = performance.now();
 
-  let played = false;
-  const frames = new Map();
+  if (hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+  if (hasGsap && window.Flip) gsap.registerPlugin(Flip);
 
-  // Any in-flight count-up must be cancelled before writing, or a stale
-  // animation will finish after a re-measure and leave a wrong number on screen.
-  const write = (el, value, animate) => {
-    const prev = frames.get(el);
-    if (prev) cancelAnimationFrame(prev);
-    frames.delete(el);
+  /* ---------- small facts ---------- */
+  $("#year").textContent = new Date().getFullYear();
 
-    const target = Math.round(value);
-    if (!animate) {
-      el.textContent = target + " px";
-      return;
-    }
-    const t0 = performance.now();
-    const dur = 700;
-    const tick = (now) => {
-      const t = Math.min((now - t0) / dur, 1);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))) + " px";
-      if (t < 1) frames.set(el, requestAnimationFrame(tick));
-      else frames.delete(el);
+  function tickTime() {
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Amman",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const now = fmt.format(new Date());
+    $("#localTime").textContent = now;
+    const n = $("#nowLocalTime");
+    if (n) n.textContent = now + " local time";
+  }
+  tickTime();
+  setInterval(tickTime, 30000);
+
+  /* ---------- split text into letters ---------- */
+  function splitChars(el) {
+    const walk = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          [...child.textContent].forEach((ch) => {
+            if (ch === " ") {
+              frag.appendChild(document.createTextNode(" "));
+            } else {
+              const s = document.createElement("span");
+              s.className = "char";
+              s.textContent = ch;
+              frag.appendChild(s);
+            }
+          });
+          child.replaceWith(frag);
+        } else if (child.tagName === "EM") {
+          // gradient text: background-clip breaks if its letters are transformed
+          // one by one, so the whole phrase moves as a single unit
+          child.classList.add("char");
+        } else if (child.nodeType === 1) {
+          walk(child);
+        }
+      });
     };
-    frames.set(el, requestAnimationFrame(tick));
-  };
-
-  const measure = (animate) => {
-    const r = box.getBoundingClientRect();
-    write(wOut, r.width, animate);
-    write(hOut, r.height, animate);
-  };
-
-  // Count up once, only after the display face has loaded — Bricolage reflows
-  // the headline, so measuring before then reads the fallback font's box.
-  let animating = false;
-
-  const playOnce = () => {
-    if (played) return;
-    played = true;
-    animating = !reduceMotion;
-    measure(animating);
-    if (animating) setTimeout(() => { animating = false; }, 750);
-  };
-
-  measure(false); // never leave the labels blank
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(playOnce);
-    setTimeout(playOnce, 1500); // fonts blocked or offline
-  } else {
-    playOnce();
+    walk(el);
+    return $$(".char", el);
   }
 
-  // While the count-up is running, a resize re-targets it rather than cancelling
-  // it, so the labels animate once and still always land on the true value.
-  const remeasure = () => {
-    if (played) measure(animating);
-  };
-
-  if ("ResizeObserver" in window) {
-    new ResizeObserver(remeasure).observe(box);
-  } else {
-    window.addEventListener("resize", remeasure);
-  }
-})();
-
-/* ---------- HERO: DIAGONAL MARQUEE ----------
-   Three slanted rows of covers drifting behind the headline. Each row is a
-   track holding its set repeated enough times to cross the (rotated, scaled-up)
-   stage, then that whole run cloned once — so translating the track by exactly
-   -50% lands on an identical frame and the loop has no seam. */
-(() => {
-  const root = document.getElementById("heroMarquee");
-  if (!root) return;
-
-  const rows = Array.from(root.querySelectorAll(".dmc__row"));
-  if (!rows.length) return;
-
-  const card = (name) => {
-    const fig = document.createElement("figure");
-    fig.className = "dmc__card";
-    const img = document.createElement("img");
-    img.src = "covers/" + name + ".webp";
-    img.alt = "";
-    img.loading = "lazy";
-    img.decoding = "async";
-    img.width = 800;
-    img.height = 500;
-    fig.append(img);
-    return fig;
-  };
-
-  const build = () => {
-    // The stage is scaled 1.3x and turned, so a row has to be wider than the hero.
-    const stage = (root.getBoundingClientRect().width || window.innerWidth) * 1.45;
-
-    rows.forEach((row) => {
-      const set = (row.dataset.set || "").split(",").map((s) => s.trim()).filter(Boolean);
-      if (!set.length) return;
-
-      const track = document.createElement("div");
-      track.className = "dmc__track";
-      track.style.setProperty("--dur", (row.dataset.speed || 60) + "s");
-
-      set.forEach((n) => track.append(card(n)));
-      row.replaceChildren(track);
-
-      // One pass is laid out now, so it can be measured rather than guessed at.
-      const pass = track.scrollWidth;
-      const passes = pass > 0 ? Math.max(1, Math.ceil(stage / pass)) : 1;
-      for (let i = 1; i < passes; i++) set.forEach((n) => track.append(card(n)));
-
-      const loopWidth = track.scrollWidth;
-      const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
-      track.append(...Array.from(track.children).map((n) => n.cloneNode(true)));
-      track.style.setProperty("--loop-distance", -(loopWidth + gap) + "px");
-    });
-  };
-
-  build();
-
-  // Rebuilding re-requests every cover, so only do it once the width has moved
-  // far enough to actually open a gap — not on every resize tick.
-  let lastW = window.innerWidth;
-  let settle;
-  window.addEventListener("resize", () => {
-    if (Math.abs(window.innerWidth - lastW) < 140) return;
-    clearTimeout(settle);
-    settle = setTimeout(() => {
-      lastW = window.innerWidth;
-      build();
-    }, 250);
-  });
-})();
-
-/* ---------- STACK: TEXT ON A PATH ----------
-   The words follow an SVG curve, and scrolling slides them along it. The phrase
-   is repeated until it comfortably overruns the path, so the visible stretch is
-   never half-empty at either end of the travel. */
-(() => {
-  const wrap = document.getElementById("pathScroll");
-  const curve = document.getElementById("stackCurve");
-  const textPath = document.getElementById("stackTextPath");
-  const ruler = document.getElementById("stackMeasure");
-  const text = document.getElementById("stackText");
-  if (!wrap || !curve || !textPath || !ruler || !text) return;
-  if (typeof curve.getTotalLength !== "function") return;
-
-  const items = (text.dataset.items || "").split("|").map((s) => s.trim()).filter(Boolean);
-  if (!items.length) return;
-
-  const SEP = " · "; // the dots never break off their neighbours
-  const plain = items.map((w) => w + SEP).join("");
-  const marked = items
-    .map((w) => `<tspan>${w}</tspan><tspan class="pathfx__sep">${SEP}</tspan>`)
-    .join("");
-
-  let start = 0;
-  let travel = 0;
-  let ready = false;
-
-  const build = () => {
-    const L = curve.getTotalLength();
-    ruler.textContent = plain;
-    const one = ruler.getComputedTextLength();
-    if (!L || !one) {
-      ready = false;
-      return;
-    }
-
-    const reps = Math.max(2, Math.ceil((L * 3) / one));
-    textPath.innerHTML = marked.repeat(reps);
-
-    const total = one * reps;
-    start = L * 0.12;
-    // Cap the sweep at ~1.2 path lengths. Further is only faster, not more
-    // interesting, and the tail would eventually run out of glyphs.
-    travel = Math.max(L * 0.2, Math.min(total + start - L * 1.05, L * 1.2));
-    ready = true;
-  };
-
-  const place = (p) => {
-    if (ready) textPath.setAttribute("startOffset", (start - p * travel).toFixed(1));
-  };
-
-  // Progress runs 0 → 1 as the block crosses the viewport, bottom edge to top.
-  const progress = () => {
-    const r = wrap.getBoundingClientRect();
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-    const span = vh + r.height;
-    if (span <= 0) return 0.5;
-    return Math.min(Math.max((vh - r.top) / span, 0), 1);
-  };
-
-  // Parked mid-sweep when motion is unwelcome — composed, not cut off.
-  const settle = () => place(reduceMotion ? 0.5 : progress());
-
-  build();
-  settle();
-
-  if (!reduceMotion) {
-    let queued = false;
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(() => {
-          queued = false;
-          place(progress());
-        });
-      },
-      { passive: true }
-    );
+  function splitWords(el) {
+    const walk = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach((w) => {
+            if (!w) return;
+            if (/^\s+$/.test(w)) return frag.appendChild(document.createTextNode(" "));
+            const s = document.createElement("span");
+            s.className = "word";
+            s.textContent = w;
+            frag.appendChild(s);
+          });
+          child.replaceWith(frag);
+        } else if (child.nodeType === 1) {
+          walk(child);
+        }
+      });
+    };
+    walk(el);
+    return $$(".word", el);
   }
 
-  window.addEventListener("resize", () => {
-    build();
-    settle();
-  });
-
-  // Bricolage sets different advance widths than the fallback face, so the
-  // repeat count measured before it loads is wrong.
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
-      build();
-      settle();
-    });
-  }
-})();
-
-/* ---------- THEME ---------- */
-(() => {
-  const btn = document.getElementById("themeToggle");
-  const label = document.getElementById("themeLabel");
-  if (!btn || !label) return;
-
-  const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-  const themeMetas = document.querySelectorAll('meta[name="theme-color"]');
-
-  const isDark = () => {
-    const set = document.documentElement.getAttribute("data-theme");
-    return set ? set === "dark" : systemDark.matches;
-  };
-
-  const paint = () => {
-    const dark = isDark();
-    // The button names what you'll get, not what you're in.
-    label.textContent = dark ? "light" : "dark";
-    btn.removeAttribute("aria-pressed");
-    btn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
-    themeMetas.forEach((meta) => meta.setAttribute("content", dark ? "#0b0f1a" : "#eef1f8"));
-  };
-
-  const apply = () => {
-    const next = isDark() ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
-    paint();
-  };
-
-  btn.addEventListener("click", () => {
-    // Cross-fade the whole page where the browser can; elsewhere it just flips.
-    if (!reduceMotion && typeof document.startViewTransition === "function") {
-      document.startViewTransition(apply);
+  /* ---------- smooth scroll ---------- */
+  let lenis = null;
+  if (!reduceMotion && window.Lenis) {
+    lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 4) });
+    if (hasGsap && window.ScrollTrigger) {
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
     } else {
-      apply();
+      const raf = (time) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
     }
+  }
+
+  // in-page links go through Lenis so they glide instead of jump
+  $$('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const id = a.getAttribute("href");
+      const target = id === "#top" ? document.body : $(id);
+      if (!target) return;
+      e.preventDefault();
+      if (lenis) lenis.scrollTo(id === "#top" ? 0 : target, { offset: -20 });
+      else target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    });
   });
 
-  // Follow the OS only while the user hasn't picked a side.
-  const followSystem = () => {
-    if (!document.documentElement.getAttribute("data-theme")) paint();
+  /* ---------- nav: hide on scroll down, active section ---------- */
+  const nav = $("#nav");
+  let lastY = 0;
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav.classList.toggle("is-scrolled", y > 40);
+    nav.classList.toggle("is-hidden", y > lastY && y > 400);
+    lastY = y;
   };
-  if (typeof systemDark.addEventListener === "function") systemDark.addEventListener("change", followSystem);
-  else if (typeof systemDark.addListener === "function") systemDark.addListener(followSystem);
+  window.addEventListener("scroll", onScroll, { passive: true });
 
-  paint();
-})();
+  const navLinks = $$(".nav__links a");
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        navLinks.forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === "#" + en.target.id));
+      });
+    },
+    { rootMargin: "-45% 0px -50% 0px" }
+  );
+  ["work", "stack", "timeline", "about", "contact"].forEach((id) => $("#" + id) && spy.observe($("#" + id)));
 
-/* ---------- COPY EMAIL ---------- */
-(() => {
-  const link = document.getElementById("copyEmail");
-  const chip = document.getElementById("copyLabel");
-  const status = document.getElementById("copyStatus");
-  if (!link || !chip) return;
+  /* ---------- loader + intro ---------- */
+  const heroChars = $$(".hero__title .split").flatMap(splitChars);
+  const heroBits = $$("[data-hero]");
 
-  let resetId;
-  link.addEventListener("click", (e) => {
-    if (!navigator.clipboard) return; // let the mailto through
-    e.preventDefault();
-    navigator.clipboard.writeText(link.dataset.email).then(
-      () => {
-        chip.textContent = "Copied";
-        if (status) status.textContent = "Email address copied to clipboard.";
+  function intro() {
+    document.documentElement.classList.remove("is-loading");
+    const loader = $("#loader");
+    if (!hasGsap || reduceMotion) {
+      loader.remove();
+      return;
+    }
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    tl.to(loader, { clipPath: "inset(0 0 100% 0)", duration: 1.1, ease: "expo.inOut" })
+      .set(loader, { display: "none" })
+      .from(heroChars, { yPercent: 115, rotate: 6, duration: 1.4, stagger: 0.018 }, "-=0.45")
+      .from(heroBits, { y: 24, opacity: 0, duration: 1.1, stagger: 0.08 }, "-=1.1")
+      .from(nav, { y: -30, opacity: 0, duration: 1, clearProps: "transform,opacity" }, "<");
+  }
+
+  if (hasGsap && !reduceMotion) {
+    document.documentElement.classList.add("is-loading");
+    const num = $("#loaderNum");
+    const bar = $("#loaderBar");
+    const state = { p: 0 };
+    let loaded = document.readyState === "complete";
+    window.addEventListener("load", () => (loaded = true));
+    // count to 80 on its own, then wait for load (or 2.5s) before finishing
+    gsap.to(state, {
+      p: 80,
+      duration: 1.1,
+      ease: "power2.out",
+      onUpdate: () => {
+        num.textContent = Math.round(state.p);
+        bar.style.transform = `scaleX(${state.p / 100})`;
       },
-      () => {
-        chip.textContent = "Press ⌘C";
-        if (status) status.textContent = "Couldn't copy. Select the address and copy it.";
-      }
-    );
-    clearTimeout(resetId);
-    resetId = setTimeout(() => {
-      chip.textContent = "Click to copy";
-      if (status) status.textContent = "";
-    }, 2400);
-  });
-})();
-
-/* ---------- LOCAL TIME (Kuala Lumpur, where he actually is) ---------- */
-(() => {
-  const outputs = [document.getElementById("localTime"), document.getElementById("nowLocalTime")].filter(Boolean);
-  if (!outputs.length) return;
-  const render = () => {
-    let value;
-    try {
-      value = new Date().toLocaleTimeString("en-GB", {
-        timeZone: "Asia/Amman",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch (e) {
-      value = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    }
-    outputs.forEach((el) => { el.textContent = value; });
-  };
-  render();
-  setInterval(render, 30_000);
-})();
-
-/* ---------- COLOPHON: what this page actually cost ----------
-   A page whose whole argument is measurement ought to publish its own. Read
-   after load, so everything it counts has already been fetched. */
-(() => {
-  const out = document.getElementById("colophonSpec");
-  if (!out || typeof performance === "undefined" || !performance.getEntriesByType) return;
-
-  const render = () => {
-    const res = performance.getEntriesByType("resource");
-    const nav = performance.getEntriesByType("navigation")[0];
-    if (!res.length) return;
-
-    const bytes = res.reduce((n, e) => n + (e.transferSize || 0), 0) +
-      ((nav && nav.transferSize) || 0);
-    const count = res.length + (nav ? 1 : 0);
-
-    // A repeat visit serves almost everything from cache, so the byte count
-    // collapses to nothing. Saying so is truer than printing "0 KB".
-    const weight = bytes > 2048 ? Math.round(bytes / 1024) + " KB" : "from cache";
-    out.textContent = `${count} requests · ${weight} · no framework`;
-  };
-
-  if (document.readyState === "complete") setTimeout(render, 0);
-  else window.addEventListener("load", () => setTimeout(render, 0));
-})();
-
-/* ---------- FOOTER YEAR ---------- */
-(() => {
-  const el = document.getElementById("year");
-  if (el) el.textContent = new Date().getFullYear();
-})();
-
-/* ---------- SECTION RAIL ----------
-   A ruler down the right gutter, one gradation per section. Built here rather
-   than in the markup so it can never drift out of sync with the sections that
-   actually exist, and so it simply isn't there when there's no JS to light it. */
-(() => {
-  const sections = document.querySelectorAll("main > section[id]");
-  if (sections.length < 2) return;
-
-  const rail = document.createElement("nav");
-  rail.className = "rail";
-  rail.setAttribute("aria-label", "Page sections");
-
-  // A gradation column needs something to measure against: this is the rule the
-  // ticks sit on, and it fills as the page is read.
-  const track = document.createElement("i");
-  track.className = "rail__track";
-  track.setAttribute("aria-hidden", "true");
-  const fillEl = document.createElement("i");
-  fillEl.className = "rail__fill";
-  track.append(fillEl);
-  rail.append(track);
-
-  sections.forEach((sec) => {
-    const a = document.createElement("a");
-    a.className = "rail__link";
-    a.href = "#" + sec.id;
-    // The thesis has no heading of its own, so it falls back to "Top".
-    const label = sec.querySelector(".band__label")?.textContent.trim() || "Top";
-    const tick = document.createElement("i");
-    tick.className = "rail__tick";
-    tick.setAttribute("aria-hidden", "true");
-    const name = document.createElement("span");
-    name.className = "rail__label";
-    name.textContent = label;
-    a.append(tick, name);
-    rail.append(a);
-  });
-
-  document.body.append(rail);
-
-  // Fill runs 0 → 1 across the scrollable range. Written as a custom property
-  // so the paint is a transform, not a layout change.
-  const fill = rail.querySelector(".rail__fill");
-  if (!fill) return;
-
-  let queued = false;
-  const paintFill = () => {
-    const doc = document.documentElement;
-    const range = doc.scrollHeight - doc.clientHeight;
-    const p = range > 0 ? Math.min(Math.max(window.scrollY / range, 0), 1) : 0;
-    fill.style.setProperty("--p", p.toFixed(4));
-  };
-
-  paintFill();
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        paintFill();
-      });
-    },
-    { passive: true }
-  );
-  window.addEventListener("resize", paintFill);
-})();
-
-/* ---------- NAV: mark the section you're reading ----------
-   Drives the masthead links and the rail from one observer, so the two can
-   never disagree about where you are. */
-(() => {
-  if (!("IntersectionObserver" in window)) return;
-  const links = new Map();
-  document.querySelectorAll(".masthead__nav a, .rail__link").forEach((a) => {
-    const id = a.getAttribute("href").slice(1);
-    const section = document.getElementById(id);
-    if (!section) return;
-    const list = links.get(section) || [];
-    list.push(a);
-    links.set(section, list);
-  });
-  if (!links.size) return;
-
-  // Track visibility per section, then pick a single winner each time anything
-  // changes — otherwise a section leaving without another entering clears the
-  // highlight entirely, and two overlapping sections can both stay marked.
-  const visible = new Set();
-
-  const paint = () => {
-    let winner = null;
-    links.forEach((_, section) => {
-      if (!visible.has(section)) return;
-      if (!winner || section.offsetTop < winner.offsetTop) winner = section;
+      onComplete: () => {
+        const finish = () =>
+          gsap.to(state, {
+            p: 100,
+            duration: 0.45,
+            ease: "power2.inOut",
+            onUpdate: () => {
+              num.textContent = Math.round(state.p);
+              bar.style.transform = `scaleX(${state.p / 100})`;
+            },
+            onComplete: intro,
+          });
+        if (loaded) return finish();
+        const wait = setTimeout(finish, 1400);
+        window.addEventListener("load", () => {
+          clearTimeout(wait);
+          finish();
+        }, { once: true });
+      },
     });
-    links.forEach((list, section) => {
-      list.forEach((a) => {
-        if (section === winner) a.setAttribute("aria-current", "true");
-        else a.removeAttribute("aria-current");
-      });
-    });
-  };
-
-  const spy = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) visible.add(entry.target);
-        else visible.delete(entry.target);
-      });
-      paint();
-    },
-    { rootMargin: "-20% 0px -70% 0px" }
-  );
-  links.forEach((_, section) => spy.observe(section));
-})();
-
-/* ---------- WORK FILTERS ----------
-   The bar ships hidden and is revealed here, so without JS every project stays
-   on the page rather than being stranded behind a control that does nothing. */
-(() => {
-  const bar = document.getElementById("workFilters");
-  const grid = document.getElementById("workGrid");
-  const count = document.getElementById("workCount");
-  if (!bar || !grid) return;
-
-  const cards = Array.from(grid.querySelectorAll(".proj"));
-  if (!cards.length) return;
-
-  const buttons = Array.from(bar.querySelectorAll(".filters__btn"));
-  const total = cards.length;
-  const matches = (card, key) =>
-    key === "all" || (card.dataset.tags || "").split(/\s+/).includes(key);
-
-  // Counts come from the cards themselves, so they can't fall out of date.
-  buttons.forEach((btn) => {
-    const n = cards.filter((c) => matches(c, btn.dataset.filter)).length;
-    const tally = btn.querySelector("b");
-    if (tally) tally.textContent = n;
-    // A filter nothing matches is dead weight — drop it rather than show a zero.
-    if (!n) btn.remove();
-  });
-
-  let timer;
-
-  const apply = (key) => {
-    const shown = cards.filter((c) => matches(c, key));
-
-    cards.forEach((card) => {
-      const keep = shown.includes(card);
-      // Un-hide first so the fade-in has something to play on.
-      if (keep) card.classList.remove("is-off");
-      card.classList.toggle("is-out", !keep);
-    });
-
-    // Collapse the hidden cards only once they've faded, so the grid reflows
-    // after the exit rather than snapping underneath it.
-    clearTimeout(timer);
-    const settle = () => {
-      cards.forEach((card) => {
-        card.classList.toggle("is-off", card.classList.contains("is-out"));
-      });
-    };
-    if (reduceMotion) settle();
-    else timer = setTimeout(settle, 280);
-
-    if (count) {
-      count.textContent =
-        shown.length === total
-          ? total + " projects · selected work"
-          : shown.length + " of " + total + " projects";
-    }
-  };
-
-  bar.addEventListener("click", (e) => {
-    const btn = e.target.closest(".filters__btn");
-    if (!btn) return;
-    bar.querySelectorAll(".filters__btn").forEach((b) => {
-      b.setAttribute("aria-pressed", String(b === btn));
-    });
-    apply(btn.dataset.filter);
-  });
-
-  bar.hidden = false;
-})();
-
-/* ---------- TALLY: count up once, when it's in view ----------
-   The markup already carries the final number, so this only ever replays a
-   value the page would have shown anyway. */
-(() => {
-  const cells = document.querySelectorAll(".tally__num[data-to]");
-  if (!cells.length) return;
-  if (reduceMotion || !("IntersectionObserver" in window)) return;
-
-  const run = (el) => {
-    const target = Number(el.dataset.to);
-    if (!Number.isFinite(target)) return;
-    const t0 = performance.now();
-    const dur = 900;
-    const tick = (now) => {
-      const t = Math.min((now - t0) / dur, 1);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3)));
-      if (t < 1) requestAnimationFrame(tick);
-      else el.textContent = target; // always land exactly on the real figure
-    };
-    requestAnimationFrame(tick);
-  };
-
-  const spy = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        run(entry.target);
-        spy.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.6 }
-  );
-
-  cells.forEach((el) => {
-    el.textContent = "0";
-    spy.observe(el);
-  });
-})();
-
-/* ---------- SCROLL REVEALS ----------
-   Only hide content if we have an observer that can bring it back. */
-(() => {
-  if (!("IntersectionObserver" in window)) {
-    document.querySelector(".colophon__mark")?.classList.add("in");
-    return;
+  } else {
+    intro();
   }
 
-  if (!reduceMotion) {
-    [".band__head", ".proj", ".tl__item", ".about__lead", ".facts__row", ".contact__lead", ".contact__row"]
-      .forEach((sel) => {
-        document.querySelectorAll(sel).forEach((el, i) => {
-          el.classList.add("anim");
-          el.style.setProperty("--i", i % 5);
+  /* ---------- marquee: drifts, and leans into scroll speed ---------- */
+  const track = $("#marquee");
+  if (track) {
+    track.innerHTML += track.innerHTML; // two copies for a seamless loop
+    let x = 0;
+    let speed = 1;
+    let prev = window.scrollY;
+    // measured once, not per frame: reading layout right after writing a
+    // transform forces a synchronous reflow every frame
+    let half = track.scrollWidth / 2;
+    window.addEventListener("resize", () => (half = track.scrollWidth / 2));
+    document.fonts && document.fonts.ready.then(() => (half = track.scrollWidth / 2));
+    let onScreen = true;
+    new IntersectionObserver(([en]) => (onScreen = en.isIntersecting)).observe(track);
+    const loop = () => {
+      requestAnimationFrame(loop);
+      if (!onScreen) return;
+      const y = window.scrollY;
+      const v = (y - prev) * 0.25;
+      prev = y;
+      speed += ((reduceMotion ? 0 : 1) + Math.abs(v) - speed) * 0.08;
+      const dir = v < 0 ? -1 : 1;
+      x -= speed * dir * 0.9;
+      if (x <= -half) x += half;
+      if (x > 0) x -= half;
+      track.style.transform = `translate3d(${x}px,0,0)`;
+    };
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- scroll reveals ---------- */
+  if (hasGsap && window.ScrollTrigger && !reduceMotion) {
+    // section titles: letters rise out of a mask
+    $$("[data-reveal-text]").forEach((el) => {
+      el.innerHTML = `<span class="line"><span class="split">${el.innerHTML}</span></span>`;
+      const chars = splitChars(el);
+      gsap.from(chars, {
+        yPercent: 110,
+        duration: 1.1,
+        ease: "expo.out",
+        stagger: 0.025,
+        scrollTrigger: { trigger: el, start: "top 85%" },
+      });
+    });
+
+    gsap.utils.toArray(".section__head").forEach((head) => {
+      gsap.from($$(".section__num, .section__meta", head), {
+        opacity: 0,
+        y: 12,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: { trigger: head, start: "top 85%" },
+      });
+    });
+
+    // project cards: rise in, cover image unmasks
+    gsap.set(".proj", { opacity: 0 });
+    ScrollTrigger.batch(".proj", {
+      start: "top 88%",
+      onEnter: (batch) => {
+        gsap.fromTo(
+          batch,
+          { y: 80, opacity: 0, rotateX: -8 },
+          { y: 0, opacity: 1, rotateX: 0, duration: 1.3, ease: "expo.out", stagger: 0.12, overwrite: true }
+        );
+        gsap.fromTo(
+          batch.map((b) => $(".proj__cover", b)),
+          { clipPath: "inset(18% 12% 18% 12% round 14px)" },
+          { clipPath: "inset(0% 0% 0% 0% round 10px)", duration: 1.5, ease: "expo.out", stagger: 0.12 }
+        );
+      },
+    });
+
+    // stack copy
+    gsap.from(".stack__lead, .stack__list li", {
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.08,
+      scrollTrigger: { trigger: ".stack", start: "top 75%" },
+    });
+
+    // timeline: the rail fills as you read, dots light up
+    gsap.to("#tlFill", {
+      scaleY: 1,
+      ease: "none",
+      scrollTrigger: { trigger: "#tl", start: "top 60%", end: "bottom 60%", scrub: 0.6 },
+    });
+    $$(".tl__item").forEach((item) => {
+      ScrollTrigger.create({
+        trigger: item,
+        start: "top 60%",
+        onEnter: () => item.classList.add("is-on"),
+        onLeaveBack: () => item.classList.remove("is-on"),
+      });
+      gsap.from(item.children, {
+        x: -30,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.1,
+        scrollTrigger: { trigger: item, start: "top 82%" },
+      });
+    });
+
+    // tally: count up
+    $$(".tally dd").forEach((dd) => {
+      const to = +dd.dataset.to;
+      const o = { v: 0 };
+      dd.textContent = "0";
+      gsap.to(o, {
+        v: to,
+        duration: 1.6,
+        ease: "power3.out",
+        scrollTrigger: { trigger: dd, start: "top 88%" },
+        onUpdate: () => (dd.textContent = Math.round(o.v)),
+      });
+    });
+    gsap.from(".tally", {
+      y: 40,
+      opacity: 0,
+      duration: 1.2,
+      ease: "expo.out",
+      scrollTrigger: { trigger: ".tally", start: "top 90%" },
+    });
+
+    // about: words brighten as you scroll through them
+    const lead = $("[data-words]");
+    if (lead) {
+      const words = splitWords(lead);
+      gsap.fromTo(words, { opacity: 0.12 }, {
+        opacity: 1,
+        stagger: 0.05,
+        ease: "none",
+        scrollTrigger: { trigger: lead, start: "top 80%", end: "bottom 45%", scrub: true },
+      });
+    }
+    gsap.from(".card", {
+      y: 60,
+      opacity: 0,
+      duration: 1.2,
+      ease: "expo.out",
+      stagger: 0.1,
+      scrollTrigger: { trigger: ".about__cards", start: "top 85%" },
+    });
+
+    // contact headline
+    const contactChars = $$(".contact__title .split").flatMap(splitChars);
+    gsap.from(contactChars, {
+      yPercent: 115,
+      duration: 1.3,
+      ease: "expo.out",
+      stagger: 0.015,
+      scrollTrigger: { trigger: ".contact__title", start: "top 80%" },
+    });
+    gsap.from(".contact__email, .contact__links", {
+      y: 30,
+      opacity: 0,
+      duration: 1.1,
+      ease: "power3.out",
+      stagger: 0.12,
+      scrollTrigger: { trigger: ".contact__email", start: "top 90%" },
+    });
+
+    // hero drifts up and fades as it leaves
+    gsap.to(".hero__inner", {
+      yPercent: -18,
+      opacity: 0.15,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
+    });
+
+    window.addEventListener("load", () => ScrollTrigger.refresh());
+  }
+
+  /* ---------- filters (Flip) ---------- */
+  const filters = $("#workFilters");
+  const grid = $("#workGrid");
+  if (filters && grid) {
+    const cards = $$(".proj", grid);
+    const btns = $$(".filters__btn", filters);
+    const glider = $(".filters__glider", filters);
+    const countOf = (f) => (f === "all" ? cards.length : cards.filter((c) => c.dataset.tags.split(" ").includes(f)).length);
+    btns.forEach((b) => ($("b", b).textContent = countOf(b.dataset.filter)));
+    filters.hidden = false;
+
+    const moveGlider = (btn) => {
+      glider.style.width = btn.offsetWidth + "px";
+      glider.style.transform = `translateX(${btn.offsetLeft}px)`;
+    };
+    requestAnimationFrame(() => moveGlider(btns[0]));
+    window.addEventListener("resize", () => moveGlider($('[aria-pressed="true"]', filters)));
+
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const f = btn.dataset.filter;
+        btns.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        moveGlider(btn);
+        $("#workCount").textContent = `${countOf(f)} ${countOf(f) === 1 ? "project" : "projects"}`;
+
+        const apply = () =>
+          cards.forEach((c) => c.classList.toggle("is-hidden", f !== "all" && !c.dataset.tags.split(" ").includes(f)));
+
+        if (hasGsap && window.Flip && !reduceMotion) {
+          const state = Flip.getState(cards);
+          apply();
+          Flip.from(state, {
+            duration: 0.8,
+            ease: "expo.inOut",
+            scale: true,
+            absolute: true,
+            onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 }),
+            onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.9, duration: 0.4 }),
+            onComplete: () => window.ScrollTrigger && ScrollTrigger.refresh(),
+          });
+        } else {
+          apply();
+        }
+      });
+    });
+  }
+
+  /* ---------- pointer toys: tilt, spotlight, magnetic, cursor ---------- */
+  if (finePointer && !reduceMotion) {
+    // project cards: spotlight only, at most once per frame. (No 3D tilt here:
+    // tilting a big card full of images re-rasterises it on every move.)
+    $$(".proj").forEach((card) => {
+      let pending = null;
+      card.addEventListener("pointermove", (e) => {
+        if (!pending) requestAnimationFrame(() => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", pending.x - r.left + "px");
+          card.style.setProperty("--my", pending.y - r.top + "px");
+          pending = null;
         });
+        pending = { x: e.clientX, y: e.clientY };
       });
+    });
+
+    // about cards: stronger tilt
+    $$("[data-tilt]").forEach((card) => {
+      card.addEventListener("pointermove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        if (hasGsap) gsap.to(card, { rotateY: px * 14, rotateX: -py * 14, duration: 0.5, ease: "power3.out" });
+      });
+      card.addEventListener("pointerleave", () => {
+        if (hasGsap) gsap.to(card, { rotateY: 0, rotateX: 0, duration: 1, ease: "elastic.out(1, 0.5)" });
+      });
+    });
+
+    // magnetic buttons
+    $$("[data-magnetic]").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        if (hasGsap) gsap.to(el, { x: x * 0.3, y: y * 0.4, duration: 0.5, ease: "power3.out" });
+      });
+      el.addEventListener("pointerleave", () => {
+        if (hasGsap) gsap.to(el, { x: 0, y: 0, duration: 0.9, ease: "elastic.out(1, 0.4)" });
+      });
+    });
+
+    // custom cursor
+    const cursor = $("#cursor");
+    const dot = $("#cursorDot");
+    const label = $("#cursorLabel");
+    let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
+    window.addEventListener("pointermove", (e) => {
+      tx = e.clientX;
+      ty = e.clientY;
+      dot.style.transform = `translate3d(${tx}px,${ty}px,0)`;
+    }, { passive: true });
+    const follow = () => {
+      cx += (tx - cx) * 0.18;
+      cy += (ty - cy) * 0.18;
+      cursor.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+      requestAnimationFrame(follow);
+    };
+    requestAnimationFrame(follow);
+
+    document.addEventListener("pointerover", (e) => {
+      const labeled = e.target.closest("[data-cursor]");
+      const hot = e.target.closest("a, button, summary, .sphere");
+      cursor.classList.toggle("is-label", !!labeled);
+      cursor.classList.toggle("is-hover", !labeled && !!hot);
+      label.textContent = labeled ? labeled.dataset.cursor : "";
+    });
+    document.addEventListener("pointerleave", () => cursor.classList.remove("is-hover", "is-label"));
   }
 
-  const reveal = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("in");
-        reveal.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.08, rootMargin: "0px 0px -6% 0px" }
-  );
+  /* ---------- word sphere ---------- */
+  const sphere = $("#sphere");
+  if (sphere) {
+    const words = $$("span", sphere);
+    const n = words.length;
+    // Fibonacci sphere: evenly spread points
+    const pts = words.map((_, i) => {
+      const y = 1 - (i / (n - 1)) * 2;
+      const r = Math.sqrt(1 - y * y);
+      const th = Math.PI * (3 - Math.sqrt(5)) * i;
+      return [Math.cos(th) * r, y, Math.sin(th) * r];
+    });
+    sphere.classList.add("is-3d");
 
-  document.querySelectorAll(".anim, .colophon__mark").forEach((el) => reveal.observe(el));
+    let rx = 0.3, ry = 0, vx = 0.0018, vy = 0.004;
+    let dragging = false, px = 0, py = 0;
+    let visible = false;
+    new IntersectionObserver(([en]) => (visible = en.isIntersecting)).observe(sphere);
+
+    sphere.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      px = e.clientX;
+      py = e.clientY;
+      sphere.setPointerCapture(e.pointerId);
+    });
+    sphere.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      vy = (e.clientX - px) * 0.0009;
+      vx = -(e.clientY - py) * 0.0009;
+      px = e.clientX;
+      py = e.clientY;
+    });
+    const stop = () => (dragging = false);
+    sphere.addEventListener("pointerup", stop);
+    sphere.addEventListener("pointercancel", stop);
+
+    const render = () => {
+      if (visible) {
+        if (!dragging) {
+          // ease back to a slow idle spin
+          vx += (0.0012 - vx) * 0.02;
+          vy += ((reduceMotion ? 0 : 0.0035) - vy) * 0.02;
+        }
+        rx += vx;
+        ry += vy;
+        const R = sphere.clientWidth * 0.4;
+        const cX = Math.cos(rx), sX = Math.sin(rx), cY = Math.cos(ry), sY = Math.sin(ry);
+        words.forEach((w, i) => {
+          let [x, y, z] = pts[i];
+          // rotate around Y then X
+          const x1 = x * cY + z * sY;
+          const z1 = -x * sY + z * cY;
+          const y1 = y * cX - z1 * sX;
+          const z2 = y * sX + z1 * cX;
+          const scale = 0.6 + (z2 + 1) * 0.35;
+          w.style.transform = `translate(-50%,-50%) translate3d(${x1 * R}px,${y1 * R}px,0) scale(${scale})`;
+          w.style.opacity = (0.15 + (z2 + 1) * 0.42).toFixed(3);
+          w.style.zIndex = Math.round(z2 * 100) + 100;
+          w.style.color = z2 > 0.55 ? "var(--accent)" : "";
+        });
+      }
+      requestAnimationFrame(render);
+    };
+    requestAnimationFrame(render);
+  }
+
+  /* ---------- copy email ---------- */
+  const email = $("#copyEmail");
+  if (email && navigator.clipboard) {
+    email.addEventListener("click", (e) => {
+      e.preventDefault();
+      navigator.clipboard.writeText(email.dataset.email).then(
+        () => {
+          $("#copyLabel").textContent = "Copied ✓";
+          $("#copyStatus").textContent = "Email address copied to clipboard";
+          setTimeout(() => ($("#copyLabel").textContent = "Click to copy"), 2200);
+        },
+        () => (window.location.href = email.href)
+      );
+    });
+  }
+
+  /* ---------- colophon: what this page actually cost ---------- */
+  window.addEventListener("load", () => {
+    const out = $("#colophonSpec");
+    if (!out || !performance.getEntriesByType) return;
+    setTimeout(() => {
+      const nav = performance.getEntriesByType("navigation")[0];
+      const res = performance.getEntriesByType("resource");
+      const bytes = res.reduce((a, r) => a + (r.transferSize || 0), nav ? nav.transferSize || 0 : 0);
+      const ms = Math.round(performance.now() - t0);
+      if (bytes > 0) out.textContent = `Hand-written · three.js · ${(bytes / 1024).toFixed(0)} KB · ${ms} ms to interactive`;
+    }, 300);
+  });
 })();
-
