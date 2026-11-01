@@ -403,6 +403,50 @@ main,
   }
 }
 
+/* phones: buttons as two equal halves, a legible ©, a two-line meta */
+@media (max-width: 600px) {
+  .hero {
+    padding-top: 112px;
+  }
+
+  .hero__foot {
+    width: 100%;
+  }
+
+  .hero__foot .hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero__foot .hero__actions .btn {
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 12px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .hero__mark {
+    margin-top: 28px;
+  }
+
+  .hero__mark sup {
+    font-size: max(0.11em, 10px);
+    top: 0.35em;
+  }
+
+  .hero__meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hero__meta .hero__scroll {
+    display: none;
+  }
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
