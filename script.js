@@ -171,6 +171,7 @@
   }
 
   /* ---------- scroll reveals ---------- */
+  let projReveal = []; // the project cards' triggers; the filters retire them
   if (hasGsap && window.ScrollTrigger && !reduceMotion) {
     // section titles: letters rise out of a mask
     $$("[data-reveal-text]").forEach((el) => {
@@ -199,7 +200,7 @@
     // follows. Transform and opacity only (no clip-path or 3D, which repaint every
     // frame), and props are cleared after so hover and the Flip filters start clean.
     gsap.set(".proj", { opacity: 0, y: 56 });
-    ScrollTrigger.batch(".proj", {
+    projReveal = ScrollTrigger.batch(".proj", {
       start: "top 90%",
       once: true,
       onEnter: (batch) => {
@@ -319,6 +320,7 @@
   const grid = $("#workGrid");
   if (filters && grid) {
     const cards = $$(".proj", grid);
+    let flip = null;
     const btns = $$(".filters__btn", filters);
     const glider = $(".filters__glider", filters);
     const countOf = (f) => (f === "all" ? cards.length : cards.filter((c) => c.dataset.tags.split(" ").includes(f)).length);
@@ -343,16 +345,38 @@
           cards.forEach((c) => c.classList.toggle("is-hidden", f !== "all" && !c.dataset.tags.split(" ").includes(f)));
 
         if (hasGsap && window.Flip && !reduceMotion) {
+          // Once someone filters, every card counts as revealed: a scroll reveal
+          // still pending would fight the Flip over opacity and position.
+          projReveal.forEach((t) => t.kill());
+          projReveal = [];
+          // A click mid-animation: land the last one first, so we measure real layout.
+          if (flip) flip.progress(1);
+          gsap.killTweensOf(grid);
+          // stop reveals still playing on the cards or inside them, or they keep
+          // moving the cards while Flip measures, and cards fly across the grid
+          const parts = cards.flatMap((c) => [c, $(".proj__cover", c), ...$(".proj__body", c).children]);
+          gsap.killTweensOf(parts);
+          gsap.set(parts, { clearProps: "opacity,transform" });
+
+          // absolute: true lifts the cards out of the flow while they move, which
+          // collapsed the grid and pulled the next section up underneath them.
+          // Hold the grid's height and ease it to the new one instead.
+          const from = grid.offsetHeight;
           const state = Flip.getState(cards);
           apply();
-          Flip.from(state, {
+          const to = grid.offsetHeight;
+          gsap.fromTo(grid, { height: from }, { height: to, duration: 0.8, ease: "expo.inOut", clearProps: "height" });
+          flip = Flip.from(state, {
             duration: 0.8,
             ease: "expo.inOut",
             scale: true,
             absolute: true,
-            onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 }),
-            onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.9, duration: 0.4 }),
-            onComplete: () => window.ScrollTrigger && ScrollTrigger.refresh(),
+            onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.2 }),
+            onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.94, duration: 0.3 }),
+            onComplete: () => {
+              flip = null;
+              if (window.ScrollTrigger) ScrollTrigger.refresh();
+            },
           });
         } else {
           apply();

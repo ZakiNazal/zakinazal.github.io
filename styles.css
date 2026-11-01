@@ -709,8 +709,11 @@ html.js .nav {
 
 /* ---------- project grid ---------- */
 .grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* the filters hold this grid's height while cards move; rows must not stretch into it */
+  align-content: start;
   gap: clamp(16px, 2vw, 28px);
 }
 
