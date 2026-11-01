@@ -1,23 +1,23 @@
 /* =========================================================
    Zaki Nazzal — portfolio
-   Paper-light surfaces over a soft, moving WebGL backdrop.
+   Monochrome paper over a soft, moving WebGL backdrop.
    ========================================================= */
 
 :root {
   color-scheme: light;
-  --bg: #f4efe7;
-  --bg-2: #ebe4d9;
-  --surface: rgba(40, 24, 10, 0.04);
-  --surface-2: rgba(40, 24, 10, 0.07);
-  --line: rgba(40, 24, 10, 0.11);
-  --line-2: rgba(40, 24, 10, 0.2);
-  --ink: #17130f;
-  --ink-2: #4d4640;
-  --ink-3: #766e67;
-  /* one vivid accent; this vermilion keeps small text at 4.5:1 on the paper */
-  --accent: #c2370a;
-  --accent-2: #f08a12;
-  --accent-3: #e8457d;
+  --bg: #f2f2f0;
+  --bg-2: #e7e7e4;
+  --surface: rgba(0, 0, 0, 0.04);
+  --surface-2: rgba(0, 0, 0, 0.07);
+  --line: rgba(0, 0, 0, 0.11);
+  --line-2: rgba(0, 0, 0, 0.2);
+  --ink: #111111;
+  --ink-2: #4a4a48;
+  --ink-3: #6f6f6c;
+  /* mono: ink is the accent; the greys carry the gradient words */
+  --accent: #111111;
+  --accent-2: #555555;
+  --accent-3: #8a8a8a;
   --live: #14b86a;
 
   --sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
@@ -1427,8 +1427,8 @@ html.js .nav {
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     inset 0 -1px 0 rgba(255, 255, 255, 0.3),
     inset 0 0 28px rgba(255, 255, 255, 0.3),
-    0 1px 2px rgba(60, 35, 15, 0.05),
-    0 22px 50px -26px rgba(110, 60, 25, 0.32);
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 22px 50px -26px rgba(0, 0, 0, 0.32);
   overflow: hidden;
   transition: box-shadow 0.5s var(--ease);
 }
@@ -1453,7 +1453,7 @@ html.js .nav {
   padding: 1px;
   border-radius: inherit;
   pointer-events: none;
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.95), transparent 32%, transparent 70%, color-mix(in srgb, var(--accent) 45%, transparent));
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.95), transparent 32%, transparent 70%, color-mix(in srgb, var(--accent) 16%, transparent));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -1469,8 +1469,8 @@ html.js .nav {
     inset 0 1px 0 rgba(255, 255, 255, 1),
     inset 0 -1px 0 rgba(255, 255, 255, 0.35),
     inset 0 0 28px rgba(255, 255, 255, 0.4),
-    0 1px 2px rgba(60, 35, 15, 0.05),
-    0 30px 60px -26px rgba(110, 60, 25, 0.4);
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 30px 60px -26px rgba(0, 0, 0, 0.4);
 }
 
 .card:hover::before {
@@ -1580,7 +1580,7 @@ html.js .nav {
 .footer {
   overflow: hidden;
   border-top: 1px solid var(--line);
-  background: linear-gradient(transparent, rgba(185, 167, 255, 0.05));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.03));
 }
 
 .footer__meta {

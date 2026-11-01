@@ -1,7 +1,7 @@
 /* =========================================================
    scene.js — the fixed WebGL backdrop behind the page.
 
-   Four soft warm colour fields drifting through a warped
+   Four soft grey fields drifting through a warped
    space, washed over the paper background. Scroll drifts and
    quickens them; the pointer adds a little light. Rendered at
    half resolution — it's all soft, and that keeps it cheap.
@@ -9,8 +9,8 @@
 
 import * as THREE from "three";
 
-const BG = "#f4efe7";
-const COLORS = ["#ffb38a", "#ffd89a", "#ffb3c7"];
+const BG = "#f2f2f0";
+const COLORS = ["#d4d4d0", "#ecece9", "#c9c9c5"];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- shared GLSL: Ashima simplex noise ---------- */
