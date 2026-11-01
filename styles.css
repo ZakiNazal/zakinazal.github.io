@@ -710,8 +710,7 @@ html.js .nav {
   flex-direction: column;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  /* opaque on purpose: a backdrop blur here re-samples the WebGL canvas
-     under every card on every frame, which is what made this section crawl */
+  /* glass.css turns this into liquid glass */
   background: color-mix(in srgb, var(--bg-2) 92%, transparent);
   overflow: hidden;
   transition: border-color 0.5s var(--ease);
