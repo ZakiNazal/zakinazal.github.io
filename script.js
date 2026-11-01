@@ -444,7 +444,7 @@
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
-        if (hasGsap) gsap.to(card, { rotateY: px * 14, rotateX: -py * 14, duration: 0.5, ease: "power3.out" });
+        if (hasGsap) gsap.to(card, { rotateY: px * 14, rotateX: -py * 14, transformPerspective: 900, duration: 0.5, ease: "power3.out" });
       });
       card.addEventListener("pointerleave", () => {
         if (hasGsap) gsap.to(card, { rotateY: 0, rotateX: 0, duration: 1, ease: "elastic.out(1, 0.5)" });

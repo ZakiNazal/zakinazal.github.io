@@ -17,8 +17,8 @@
   --accent-2: #6ee7f9;
   --live: #7dffb0;
 
-  --sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --serif: "Bodoni Moda", ui-serif, Georgia, serif;
+  --sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --serif: "Outfit", ui-sans-serif, system-ui, sans-serif;
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1360px;
@@ -529,11 +529,18 @@ main,
 
 .hero__title em {
   font-weight: 300;
-  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 60%, #ffd1f2 100%);
+  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 45%, #ffd1f2 75%, var(--accent) 100%);
+  background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   padding-right: 0.08em;
+  animation: gradient-drift 7s ease-in-out infinite alternate;
+}
+
+@keyframes gradient-drift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
 }
 
 .line {
@@ -1403,7 +1410,6 @@ main,
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
-  perspective: 900px;
 }
 
 .card {
@@ -1438,7 +1444,6 @@ main,
   margin: 0;
   font-size: 17px;
   line-height: 1.45;
-  transform: translateZ(24px);
 }
 
 @media (max-width: 1000px) {
@@ -1478,11 +1483,13 @@ main,
 
 .contact__title em {
   font-weight: 300;
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 45%, #ffd1f2 75%, var(--accent) 100%);
+  background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   padding-right: 0.06em;
+  animation: gradient-drift 7s ease-in-out infinite alternate;
 }
 
 .contact__email {
