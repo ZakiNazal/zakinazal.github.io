@@ -447,7 +447,9 @@
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "cmdk-trigger";
-    btn.setAttribute("aria-label", "Open command palette");
+    // no aria-label: the visible text is the name, so "click Search" works by voice
+    btn.setAttribute("aria-keyshortcuts", isMac ? "Meta+K" : "Control+K");
+    btn.setAttribute("aria-haspopup", "dialog");
     btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <span>Search</span><kbd>${isMac ? "⌘" : "Ctrl"} K</kbd>`;
     btn.addEventListener("click", openPalette);

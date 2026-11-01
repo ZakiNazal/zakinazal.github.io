@@ -293,7 +293,8 @@
     const lead = $("[data-words]");
     if (lead) {
       const words = splitWords(lead);
-      gsap.fromTo(words, { opacity: 0.12 }, {
+      // starts at half strength, not faint: unscrolled, it still reads at 3:1
+      gsap.fromTo(words, { opacity: 0.5 }, {
         opacity: 1,
         stagger: 0.05,
         ease: "none",
