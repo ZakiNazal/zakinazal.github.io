@@ -1,6 +1,6 @@
 /* =========================================================
    Zaki Nazzal — portfolio
-   Dark, quiet surfaces; the WebGL stage does the shouting.
+   Quiet surfaces over a moving, themeable WebGL backdrop.
    ========================================================= */
 
 :root {
@@ -336,7 +336,7 @@ main,
 }
 
 .nav.is-scrolled {
-  background: rgba(6, 7, 10, 0.55);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid var(--line);
@@ -366,7 +366,7 @@ main,
   padding: 5px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -529,7 +529,7 @@ main,
 
 .hero__title em {
   font-weight: 300;
-  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 45%, #ffd1f2 75%, var(--accent) 100%);
+  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 45%, var(--accent-3) 75%, var(--accent) 100%);
   background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -634,7 +634,7 @@ main,
   overflow: hidden;
   padding: 26px 0;
   border-block: 1px solid var(--line);
-  background: rgba(6, 7, 10, 0.75);
+  background: color-mix(in srgb, var(--bg) 75%, transparent);
 }
 
 .marquee__track {
@@ -787,7 +787,7 @@ main,
 }
 
 .filters__btn[aria-pressed="true"] b {
-  color: rgba(6, 7, 10, 0.55);
+  color: color-mix(in srgb, var(--bg) 55%, transparent);
 }
 
 .filters__glider {
@@ -817,7 +817,7 @@ main,
   border-radius: var(--radius);
   /* opaque on purpose: a backdrop blur here re-samples the WebGL canvas
      under every card on every frame, which is what made this section crawl */
-  background: rgba(12, 14, 19, 0.92);
+  background: color-mix(in srgb, var(--bg-2) 92%, transparent);
   overflow: hidden;
   transition: border-color 0.5s var(--ease);
 }
@@ -888,7 +888,7 @@ main,
   gap: 7px;
   padding: 6px 11px;
   border-radius: 999px;
-  background: rgba(6, 7, 10, 0.7);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-family: var(--sans);
@@ -1335,7 +1335,7 @@ main,
   margin: clamp(48px, 7vw, 96px) 0 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(12, 14, 19, 0.88);
+  background: color-mix(in srgb, var(--bg-2) 88%, transparent);
   overflow: hidden;
 }
 
@@ -1421,7 +1421,7 @@ main,
   gap: 24px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(12, 14, 19, 0.9);
+  background: color-mix(in srgb, var(--bg-2) 90%, transparent);
   transform-style: preserve-3d;
   transition: border-color 0.4s;
 }
@@ -1483,7 +1483,7 @@ main,
 
 .contact__title em {
   font-weight: 300;
-  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 45%, #ffd1f2 75%, var(--accent) 100%);
+  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 45%, var(--accent-3) 75%, var(--accent) 100%);
   background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;

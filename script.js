@@ -91,6 +91,7 @@
   let lenis = null;
   if (!reduceMotion && window.Lenis) {
     lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 4) });
+    window.__lenis = lenis; // features.js scrolls through it too
     if (hasGsap && window.ScrollTrigger) {
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add((time) => lenis.raf(time * 1000));
