@@ -7,8 +7,8 @@
   <title>Zaki Nazzal — Personal Portfolio</title>
   <meta name="description"
     content="Zaki Nazzal — Personal Portfolio. Flutter, Dart, Firebase, TypeScript. Computer science student in Kuala Lumpur." />
-  <meta name="color-scheme" content="dark" />
-  <meta name="theme-color" content="#0b0807" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#f4f1ec" />
   <link rel="canonical" href="https://zakinazal.github.io/" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="apple-touch-icon" href="favicon.png" />
@@ -31,7 +31,6 @@
   <link rel="preload" href="fonts/outfit-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="fonts/fonts.css" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="theme.css" />
   <link rel="stylesheet" href="features.css" />
 
   <script type="application/ld+json">
@@ -62,17 +61,6 @@
 
   <!-- Flag JS early so the no-JS page never hides content behind reveal states. -->
   <script>document.documentElement.classList.add("js");</script>
-  <!-- Set the theme before first paint: ?theme=, then the saved choice, then Ember. -->
-  <script>
-    (function () {
-      var t = "ember";
-      try {
-        var c = new URLSearchParams(location.search).get("theme") || localStorage.getItem("theme");
-        if (/^(aurora|ocean|ember|daylight)$/.test(c)) t = c;
-      } catch (e) {}
-      document.documentElement.dataset.theme = t;
-    })();
-  </script>
 
   <script type="importmap">
     {
@@ -90,20 +78,13 @@
   <a class="skip" href="#work">Skip to work</a>
 
   <!-- ============ LOADER ============ -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader__count"><span id="loaderNum">0</span><sup>%</sup></div>
-    <div class="loader__bar"><i id="loaderBar"></i></div>
-    <p class="loader__name">Zaki Nazzal — Portfolio</p>
-  </div>
 
   <!-- ============ WEBGL STAGE ============ -->
-  <!-- One fixed canvas behind the whole page: scene.js paints the themed backdrop. -->
+  <!-- One fixed canvas behind the whole page: scene.js paints the backdrop. -->
   <canvas class="stage" id="stage" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div>
 
   <!-- ============ CURSOR ============ -->
-  <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label" id="cursorLabel"></span></div>
-  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
@@ -190,7 +171,7 @@
 
         <article class="proj proj--wide" data-tags="web live">
           <a class="proj__cover" href="https://scorvyn.shop" target="_blank" rel="noopener" tabindex="-1"
-            aria-hidden="true" data-cursor="Visit">
+            aria-hidden="true">
             <img src="covers/scvn.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
@@ -230,7 +211,7 @@
 
         <article class="proj" data-tags="web live">
           <a class="proj__cover" href="https://brim-drab.vercel.app/" target="_blank" rel="noopener" tabindex="-1"
-            aria-hidden="true" data-cursor="Visit">
+            aria-hidden="true">
             <img src="covers/brim.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
@@ -268,7 +249,7 @@
 
         <article class="proj" data-tags="web live">
           <a class="proj__cover" href="https://cocostudy.vercel.app/" target="_blank" rel="noopener" tabindex="-1"
-            aria-hidden="true" data-cursor="Visit">
+            aria-hidden="true">
             <img src="covers/coco.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
@@ -309,7 +290,7 @@
 
         <article class="proj proj--wide" data-tags="mobile web live">
           <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1"
-            aria-hidden="true" data-cursor="Visit">
+            aria-hidden="true">
             <img src="covers/qbook.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
@@ -347,7 +328,7 @@
 
         <article class="proj" data-tags="web live">
           <a class="proj__cover" href="https://dietersdiet.fit" target="_blank" rel="noopener" tabindex="-1"
-            aria-hidden="true" data-cursor="Visit">
+            aria-hidden="true">
             <img src="covers/dietersdiet.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
@@ -382,7 +363,7 @@
 
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
-            tabindex="-1" aria-hidden="true" data-cursor="Source">
+            tabindex="-1" aria-hidden="true">
             <img src="covers/smart.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag">Source</span>
           </a>
@@ -422,7 +403,7 @@
 
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
-            tabindex="-1" aria-hidden="true" data-cursor="Source">
+            tabindex="-1" aria-hidden="true">
             <img src="covers/listy.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag">Source</span>
           </a>
@@ -462,7 +443,7 @@
 
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener"
-            tabindex="-1" aria-hidden="true" data-cursor="Source">
+            tabindex="-1" aria-hidden="true">
             <img src="covers/weather.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag">Source</span>
           </a>
@@ -502,7 +483,7 @@
 
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener"
-            tabindex="-1" aria-hidden="true" data-cursor="Source">
+            tabindex="-1" aria-hidden="true">
             <img src="covers/lifeskills.webp" alt="" loading="lazy" decoding="async" width="800" height="600" />
             <span class="tag">Source</span>
           </a>
@@ -761,7 +742,7 @@
       </h2>
 
       <a class="contact__email" href="mailto:zakinazal112@gmail.com" id="copyEmail"
-        data-email="zakinazal112@gmail.com" data-cursor="Copy">
+        data-email="zakinazal112@gmail.com">
         <span>zakinazal112@gmail.com</span>
         <small id="copyLabel">Click to copy</small>
       </a>
@@ -781,7 +762,7 @@
   <footer class="footer">
     <div class="footer__meta">
       <span>© <span id="year">2026</span> Zaki Nazzal</span>
-      <span id="colophonSpec">Written by hand · three.js · no framework</span>
+      <span>Designed &amp; built by Zaki Nazzal</span>
       <a href="#top">Back to top ↑</a>
     </div>
   </footer>

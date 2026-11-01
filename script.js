@@ -12,7 +12,6 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const hasGsap = typeof window.gsap !== "undefined";
-  const t0 = performance.now();
 
   if (hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
   if (hasGsap && window.Flip) gsap.registerPlugin(Flip);
@@ -140,64 +139,6 @@
   );
   ["work", "stack", "timeline", "about", "contact"].forEach((id) => $("#" + id) && spy.observe($("#" + id)));
 
-  /* ---------- loader + intro ---------- */
-  const heroChars = $$(".hero__title .split").flatMap(splitChars);
-  const heroBits = $$("[data-hero]");
-
-  function intro() {
-    document.documentElement.classList.remove("is-loading");
-    const loader = $("#loader");
-    if (!hasGsap || reduceMotion) {
-      loader.remove();
-      return;
-    }
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-    tl.to(loader, { clipPath: "inset(0 0 100% 0)", duration: 1.1, ease: "expo.inOut" })
-      .set(loader, { display: "none" })
-      .from(heroChars, { yPercent: 115, rotate: 6, duration: 1.4, stagger: 0.018 }, "-=0.45")
-      .from(heroBits, { y: 24, opacity: 0, duration: 1.1, stagger: 0.08 }, "-=1.1")
-      .from(nav, { y: -30, opacity: 0, duration: 1, clearProps: "transform,opacity" }, "<");
-  }
-
-  if (hasGsap && !reduceMotion) {
-    document.documentElement.classList.add("is-loading");
-    const num = $("#loaderNum");
-    const bar = $("#loaderBar");
-    const state = { p: 0 };
-    let loaded = document.readyState === "complete";
-    window.addEventListener("load", () => (loaded = true));
-    // count to 80 on its own, then wait for load (or 2.5s) before finishing
-    gsap.to(state, {
-      p: 80,
-      duration: 1.1,
-      ease: "power2.out",
-      onUpdate: () => {
-        num.textContent = Math.round(state.p);
-        bar.style.transform = `scaleX(${state.p / 100})`;
-      },
-      onComplete: () => {
-        const finish = () =>
-          gsap.to(state, {
-            p: 100,
-            duration: 0.45,
-            ease: "power2.inOut",
-            onUpdate: () => {
-              num.textContent = Math.round(state.p);
-              bar.style.transform = `scaleX(${state.p / 100})`;
-            },
-            onComplete: intro,
-          });
-        if (loaded) return finish();
-        const wait = setTimeout(finish, 1400);
-        window.addEventListener("load", () => {
-          clearTimeout(wait);
-          finish();
-        }, { once: true });
-      },
-    });
-  } else {
-    intro();
-  }
 
   /* ---------- marquee: drifts, and leans into scroll speed ---------- */
   const track = $("#marquee");
@@ -254,21 +195,19 @@
       });
     });
 
-    // project cards: rise in, cover image unmasks
-    gsap.set(".proj", { opacity: 0 });
+    // project cards: each rises and fades in, its cover settles, then the copy
+    // follows. Transform and opacity only (no clip-path or 3D, which repaint every
+    // frame), and props are cleared after so hover and the Flip filters start clean.
+    gsap.set(".proj", { opacity: 0, y: 56 });
     ScrollTrigger.batch(".proj", {
-      start: "top 88%",
+      start: "top 90%",
+      once: true,
       onEnter: (batch) => {
-        gsap.fromTo(
-          batch,
-          { y: 80, opacity: 0, rotateX: -8 },
-          { y: 0, opacity: 1, rotateX: 0, duration: 1.3, ease: "expo.out", stagger: 0.12, overwrite: true }
-        );
-        gsap.fromTo(
-          batch.map((b) => $(".proj__cover", b)),
-          { clipPath: "inset(18% 12% 18% 12% round 14px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 10px)", duration: 1.5, ease: "expo.out", stagger: 0.12 }
-        );
+        gsap.timeline({ defaults: { ease: "power3.out" } })
+          .to(batch, { opacity: 1, y: 0, duration: 1, stagger: 0.1, clearProps: "transform,opacity" })
+          .from(batch.map((b) => $(".proj__cover", b)), { scale: 0.94, duration: 1.2, stagger: 0.1, clearProps: "transform" }, 0)
+          .from(batch.flatMap((b) => [...$(".proj__body", b).children]),
+            { opacity: 0, y: 16, duration: 0.8, stagger: 0.04, clearProps: "transform,opacity" }, 0.15);
       },
     });
 
@@ -422,7 +361,7 @@
     });
   }
 
-  /* ---------- pointer toys: tilt, spotlight, magnetic, cursor ---------- */
+  /* ---------- pointer toys: spotlight, tilt, magnetic ---------- */
   if (finePointer && !reduceMotion) {
     // project cards: spotlight only, at most once per frame. (No 3D tilt here:
     // tilting a big card full of images re-rasterises it on every move.)
@@ -445,7 +384,9 @@
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
-        if (hasGsap) gsap.to(card, { rotateY: px * 14, rotateX: -py * 14, transformPerspective: 900, duration: 0.5, ease: "power3.out" });
+        card.style.setProperty("--gx", (px + 0.5) * 100 + "%");
+        card.style.setProperty("--gy", (py + 0.5) * 100 + "%");
+        if (hasGsap) gsap.to(card, { rotateY: px * 10, rotateX: -py * 10, transformPerspective: 900, duration: 0.5, ease: "power3.out" });
       });
       card.addEventListener("pointerleave", () => {
         if (hasGsap) gsap.to(card, { rotateY: 0, rotateX: 0, duration: 1, ease: "elastic.out(1, 0.5)" });
@@ -465,32 +406,6 @@
       });
     });
 
-    // custom cursor
-    const cursor = $("#cursor");
-    const dot = $("#cursorDot");
-    const label = $("#cursorLabel");
-    let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
-    window.addEventListener("pointermove", (e) => {
-      tx = e.clientX;
-      ty = e.clientY;
-      dot.style.transform = `translate3d(${tx}px,${ty}px,0)`;
-    }, { passive: true });
-    const follow = () => {
-      cx += (tx - cx) * 0.18;
-      cy += (ty - cy) * 0.18;
-      cursor.style.transform = `translate3d(${cx}px,${cy}px,0)`;
-      requestAnimationFrame(follow);
-    };
-    requestAnimationFrame(follow);
-
-    document.addEventListener("pointerover", (e) => {
-      const labeled = e.target.closest("[data-cursor]");
-      const hot = e.target.closest("a, button, summary, .sphere");
-      cursor.classList.toggle("is-label", !!labeled);
-      cursor.classList.toggle("is-hover", !labeled && !!hot);
-      label.textContent = labeled ? labeled.dataset.cursor : "";
-    });
-    document.addEventListener("pointerleave", () => cursor.classList.remove("is-hover", "is-label"));
   }
 
   /* ---------- word sphere ---------- */
@@ -575,16 +490,4 @@
     });
   }
 
-  /* ---------- colophon: what this page actually cost ---------- */
-  window.addEventListener("load", () => {
-    const out = $("#colophonSpec");
-    if (!out || !performance.getEntriesByType) return;
-    setTimeout(() => {
-      const nav = performance.getEntriesByType("navigation")[0];
-      const res = performance.getEntriesByType("resource");
-      const bytes = res.reduce((a, r) => a + (r.transferSize || 0), nav ? nav.transferSize || 0 : 0);
-      const ms = Math.round(performance.now() - t0);
-      if (bytes > 0) out.textContent = `Hand-written · three.js · ${(bytes / 1024).toFixed(0)} KB · ${ms} ms to interactive`;
-    }, 300);
-  });
 })();

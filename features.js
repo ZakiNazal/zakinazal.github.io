@@ -64,8 +64,6 @@
     }
   }
 
-  const theme = () => window.portfolioTheme; // set by scene.js once three.js loads
-
   /* ---------- GitHub activity (shared by the pulse and `git log`) ---------- */
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
   function ago(iso) {
@@ -280,13 +278,6 @@
         group: "Projects", label: p.name, icon: "↗", hint: new URL(p.url).host, keys: "project open visit",
         run: () => openUrl(p.url),
       }));
-      const t = theme();
-      if (t) {
-        for (const [id, th] of Object.entries(t.list)) list.push({
-          group: "Theme", label: `${th.name} theme`, icon: "◐", hint: t.get() === id ? "current" : "", keys: "theme colour color look " + id,
-          run: () => t.set(id),
-        });
-      }
       list.push(
         { group: "Actions", label: "Copy email address", icon: "@", hint: EMAIL, keys: "mail contact", run: copyEmail },
         { group: "Actions", label: "Write me an email", icon: "✉", keys: "mail contact hire", run: () => { window.location.href = "mailto:" + EMAIL; } },
@@ -317,7 +308,7 @@
       <div class="cmdk__panel" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="cmdk__search">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search projects, sections, themes…" role="combobox" aria-expanded="true"
+          <input type="text" placeholder="Search projects, sections, actions…" role="combobox" aria-expanded="true"
             aria-controls="cmdkList" aria-autocomplete="list" autocomplete="off" spellcheck="false" />
           <kbd data-close>esc</kbd>
         </div>
@@ -444,7 +435,7 @@
       }
     });
 
-    // a trigger in the nav, beside the theme switcher
+    // a trigger in the nav, beside the call to action
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "cmdk-trigger";
@@ -452,9 +443,13 @@
     btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <span>Search</span><kbd>${isMac ? "⌘" : "Ctrl"} K</kbd>`;
     btn.addEventListener("click", openPalette);
-    const end = $(".nav__end");
-    if (end) end.insertBefore(btn, end.firstChild);
-    else $(".nav__cta")?.before(btn);
+    const cta = $(".nav__cta");
+    if (cta) {
+      const end = document.createElement("div");
+      end.className = "nav__end";
+      cta.replaceWith(end);
+      end.append(btn, cta);
+    }
 
     window.portfolioPalette = { open: openPalette };
   })();
@@ -503,7 +498,7 @@
       help() {
         [
           ["whoami", "who's behind this page"], ["projects", "what I've built"], ["open <n|name>", "open a project"],
-          ["stack", "tools I use"], ["git log", "latest public GitHub activity"], ["theme [name]", "list or switch themes"],
+          ["stack", "tools I use"], ["git log", "latest public GitHub activity"],
           ["contact", "how to reach me"], ["resume", "download my CV"], ["date", "time where I am"], ["clear", "clear the screen"],
         ].forEach(([c, d]) => line([hl(c.padEnd(14, " ")), dim(d)]));
         line(dim("Psst: there's a sudo command too."));
@@ -549,18 +544,6 @@
       date() {
         const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Amman", weekday: "long", hour: "2-digit", minute: "2-digit" });
         line(fmt.format(new Date()) + dim(" — Amman (UTC+3)").text);
-      },
-      theme(args) {
-        const t = theme();
-        if (!t) return line(dim("Themes need WebGL, which didn't load here."), "term__err");
-        const want = (args[0] || "").toLowerCase();
-        if (!want) {
-          Object.entries(t.list).forEach(([id, th]) => line([t.get() === id ? hl("● " + id) : "○ " + id, dim("  " + th.name)]));
-          return line(dim("usage: theme <name>"));
-        }
-        if (!t.list[want]) return line(`theme: unknown theme “${want}”.`, "term__err");
-        t.set(want);
-        line(["Switched to ", hl(t.list[want].name), "."]);
       },
       git(args) {
         if (args[0] !== "log") return line(dim("Only git log works here."));
