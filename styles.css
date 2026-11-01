@@ -178,12 +178,23 @@ main,
   left: 0;
   right: 0;
   z-index: 100;
-  display: flex;
+  /* full width, with the links on the true centre: equal side columns */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
-  padding: 18px max(var(--gutter), calc(50% - var(--max) / 2 + var(--gutter)));
+  padding: 18px var(--gutter);
   transition: transform 0.6s var(--ease), background 0.4s, backdrop-filter 0.4s;
+}
+
+.nav > :first-child {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.nav > :last-child {
+  grid-column: 3;
+  justify-self: end;
 }
 
 .nav.is-scrolled {
@@ -212,6 +223,7 @@ main,
 }
 
 .nav__links {
+  grid-column: 2;
   display: flex;
   gap: 4px;
   padding: 5px;
@@ -225,9 +237,9 @@ main,
 .nav__links a {
   position: relative;
   display: block;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--ink-2);
   overflow: hidden;
   transition: color 0.3s, background 0.3s;
