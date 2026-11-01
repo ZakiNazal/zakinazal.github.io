@@ -4,8 +4,8 @@
   "description": "Computer science undergraduate in Kuala Lumpur. Flutter, Dart, Firebase, TypeScript.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f4f1ec",
-  "theme_color": "#f4f1ec",
+  "background_color": "#f4efe7",
+  "theme_color": "#f4efe7",
   "icons": [
     {
       "src": "favicon.png",

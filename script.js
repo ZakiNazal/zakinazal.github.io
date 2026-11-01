@@ -33,6 +33,19 @@
   tickTime();
   setInterval(tickTime, 30000);
 
+  /* ---------- hero wordmark: sized to fill the column exactly ---------- */
+  const mark = $(".hero__mark");
+  if (mark) {
+    const word = $(".split", mark);
+    const fit = () => {
+      mark.style.fontSize = "100px";
+      mark.style.fontSize = (100 * mark.clientWidth) / word.offsetWidth + "px";
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    if (document.fonts) document.fonts.ready.then(fit);
+  }
+
   /* ---------- split text into letters ---------- */
   function splitChars(el) {
     const walk = (node) => {
