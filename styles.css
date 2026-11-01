@@ -17,8 +17,8 @@
   --accent-2: #6ee7f9;
   --live: #7dffb0;
 
-  --sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --serif: "Newsreader", ui-serif, Georgia, serif;
+  --sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --serif: "Bodoni Moda", ui-serif, Georgia, serif;
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1360px;
@@ -645,7 +645,7 @@ main,
 .marquee__track span:nth-of-type(odd) {
   font-family: var(--serif);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--ink-2);
 }
 
