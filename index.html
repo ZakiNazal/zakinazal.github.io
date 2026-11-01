@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="fonts/fonts.css" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="features.css" />
 
   <script type="application/ld+json">
     {
@@ -548,10 +549,53 @@
       </p>
     </section>
 
+    <!-- ============ PLAYGROUND ============ -->
+    <!-- Full-page captures of the live sites (most of them refuse to be framed, rightly).
+         features.js adds the tabs and the self-guided tour; without JS the first one still scrolls. -->
+    <section class="section" id="playground">
+      <header class="section__head">
+        <p class="section__num">02</p>
+        <h2 class="section__title" data-reveal-text>Take a look inside</h2>
+        <p class="section__meta">captured from the live sites</p>
+      </header>
+
+      <div class="pg">
+        <div class="pg__bar">
+          <div class="pg__tabs" id="pgTabs" role="tablist" aria-label="Live projects" hidden></div>
+          <div class="pg__views" role="group" aria-label="Viewport" hidden>
+            <button type="button" class="pg__view" data-view="desktop" aria-pressed="true">Desktop</button>
+            <button type="button" class="pg__view" data-view="mobile" aria-pressed="false">Phone</button>
+          </div>
+        </div>
+
+        <div class="pg__stage">
+          <figure class="pg__device" id="pgDevice" data-view="desktop">
+            <div class="pg__chrome">
+              <span class="pg__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="pg__url">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+                <span id="pgHost">scorvyn.shop</span>
+              </span>
+              <a class="pg__open" id="pgOpen" href="https://scorvyn.shop" target="_blank" rel="noopener">Open live<i aria-hidden="true">↗</i></a>
+            </div>
+            <span class="pg__notch" aria-hidden="true"></span>
+            <div class="pg__screen" id="pgScreen" tabindex="0" data-lenis-prevent
+              aria-label="Scrollable capture of scorvyn.shop">
+              <img id="pgShot" src="playground/scvn-desktop.webp" alt="Full-page capture of scorvyn.shop (desktop)"
+                loading="lazy" decoding="async" width="1200" height="4898" />
+            </div>
+            <span class="pg__progress" aria-hidden="true"><i id="pgProgress"></i></span>
+          </figure>
+          <p class="pg__caption" id="pgCaption"><b>SCORVYN.™</b><span>Streetwear storefront: numbered drops, Stripe checkout.</span></p>
+          <p class="pg__hint" id="pgHint">Scroll inside the window.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ STACK ============ -->
     <section class="section section--stack" id="stack">
       <header class="section__head">
-        <p class="section__num">02</p>
+        <p class="section__num">03</p>
         <h2 class="section__title" data-reveal-text>The stack</h2>
         <p class="section__meta">drag the sphere</p>
       </header>
@@ -585,7 +629,7 @@
     <!-- ============ TIMELINE ============ -->
     <section class="section" id="timeline">
       <header class="section__head">
-        <p class="section__num">03</p>
+        <p class="section__num">04</p>
         <h2 class="section__title" data-reveal-text>Timeline</h2>
         <p class="section__meta">2019 → now</p>
       </header>
@@ -653,7 +697,7 @@
     <!-- ============ ABOUT + NOW ============ -->
     <section class="section" id="about">
       <header class="section__head">
-        <p class="section__num">04</p>
+        <p class="section__num">05</p>
         <h2 class="section__title" data-reveal-text>About</h2>
         <p class="section__meta">current focus · October 2026</p>
       </header>
@@ -682,12 +726,34 @@
             <p class="card__v">Amman, Jordan · <span id="nowLocalTime">local time</span></p>
           </div>
         </div>
+
+        <a class="pulse" id="ghPulse" href="https://github.com/ZakiNazal" target="_blank" rel="noopener" hidden>
+          <span class="pulse__label"><span class="dot"></span>Live on GitHub</span>
+          <span class="pulse__what"></span>
+          <span class="pulse__msg"></span>
+          <time class="pulse__when"></time>
+        </a>
+
+        <!-- A small shell: features.js gives it commands. Without JS it's a note. -->
+        <div class="term" id="term">
+          <div class="term__bar">
+            <span class="pg__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term__title">zaki@portfolio — ~</span>
+          </div>
+          <div class="term__body" id="termBody" data-lenis-prevent role="log" aria-live="polite"
+            aria-label="Terminal output"></div>
+          <form class="term__line" id="termForm" hidden>
+            <label class="term__prompt" for="termInput">~ %</label>
+            <input id="termInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+              aria-label="Terminal command" placeholder="type help" />
+          </form>
+        </div>
       </div>
     </section>
 
     <!-- ============ CONTACT ============ -->
     <section class="contact" id="contact">
-      <p class="section__num">05 — Contact</p>
+      <p class="section__num">06 — Contact</p>
       <h2 class="contact__title">
         <span class="line"><span class="split">Hiring an intern,</span></span>
         <span class="line"><span class="split">or just curious?</span></span>
@@ -730,6 +796,7 @@
     integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed"></script>
   <script src="script.js" defer></script>
   <script type="module" src="scene.js"></script>
+  <script src="features.js" defer></script>
 </body>
 
 </html>
