@@ -252,7 +252,15 @@
     }
     requestAnimationFrame(tour);
 
-    show(site, view);
+    // nothing loads until the section is near: the capture is the heaviest
+    // thing on the page and most visits never reach it
+    shot.removeAttribute("src");
+    const near = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      near.disconnect();
+      show(site, view);
+    }, { rootMargin: "800px 0px" });
+    near.observe(device);
     release();
   })();
 

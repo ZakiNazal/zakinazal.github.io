@@ -37,16 +37,20 @@
   const mark = $(".hero__mark");
   if (mark) {
     const word = $(".split", mark);
+    // read everything, then write once: the type scales linearly with
+    // font-size, so one measurement is exact and no layout is forced twice
     const fit = () => {
-      mark.style.fontSize = "100px";
-      // twice: the © has a minimum size, so it doesn't scale in step with the name
-      for (let i = 0; i < 2; i++) {
-        const size = parseFloat(mark.style.fontSize);
-        mark.style.fontSize = (size * mark.clientWidth) / word.offsetWidth + "px";
-      }
+      const size = parseFloat(getComputedStyle(mark).fontSize);
+      const ratio = mark.clientWidth / word.offsetWidth;
+      if (Math.abs(ratio - 1) > 0.002) mark.style.fontSize = size * ratio + "px";
     };
     fit();
-    window.addEventListener("resize", fit);
+    let fitQueued = false;
+    window.addEventListener("resize", () => {
+      if (fitQueued) return;
+      fitQueued = true;
+      requestAnimationFrame(() => { fitQueued = false; fit(); });
+    });
     if (document.fonts) document.fonts.ready.then(fit);
   }
 
@@ -166,7 +170,9 @@
     let prev = window.scrollY;
     // measured once, not per frame: reading layout right after writing a
     // transform forces a synchronous reflow every frame
-    let half = track.scrollWidth / 2;
+    // and not straight after the innerHTML write above either: wait a frame
+    let half = 0;
+    requestAnimationFrame(() => (half = track.scrollWidth / 2));
     window.addEventListener("resize", () => (half = track.scrollWidth / 2));
     document.fonts && document.fonts.ready.then(() => (half = track.scrollWidth / 2));
     let onScreen = true;

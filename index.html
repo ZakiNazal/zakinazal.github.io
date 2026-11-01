@@ -27,12 +27,9 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://zakinazal.github.io/og.jpg" />
 
-  <!-- Fonts are self-hosted; the two faces above the fold are preloaded. -->
+  <!-- Fonts are self-hosted (declared in styles.css); the hero's face is preloaded. -->
   <link rel="preload" href="fonts/outfit-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="fonts/fonts.css" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="features.css" />
-  <link rel="stylesheet" href="glass.css" />
 
   <script type="application/ld+json">
     {
@@ -66,10 +63,10 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js"
       },
       "integrity": {
-        "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js": "sha384-GY5FqjttLCFRt/McQbyaVdCk2O1IQtOeX8Py6NfD89BIAsIyJFRl4UgSXrk2vXAk"
+        "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js": "sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28"
       }
     }
   </script>
@@ -90,7 +87,7 @@
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
     <a class="nav__brand" href="#top" data-magnetic>
-      <img src="favicon.png" alt="" width="512" height="512" />
+      <img src="brand.png" alt="" width="28" height="28" />
       <span>Zaki Nazzal</span>
     </a>
     <nav class="nav__links" aria-label="Sections">
@@ -175,7 +172,8 @@
         <article class="proj proj--wide" data-tags="web live">
           <a class="proj__cover" href="https://scorvyn.shop" target="_blank" rel="noopener" tabindex="-1"
             aria-hidden="true">
-            <img src="covers/scvn.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/scvn.webp" srcset="covers/scvn-800.webp 800w, covers/scvn.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 56vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
           <div class="proj__body">
@@ -215,7 +213,8 @@
         <article class="proj" data-tags="web live">
           <a class="proj__cover" href="https://brim-drab.vercel.app/" target="_blank" rel="noopener" tabindex="-1"
             aria-hidden="true">
-            <img src="covers/brim.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/brim.webp" srcset="covers/brim-800.webp 800w, covers/brim.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
           <div class="proj__body">
@@ -253,7 +252,8 @@
         <article class="proj" data-tags="web live">
           <a class="proj__cover" href="https://cocostudy.vercel.app/" target="_blank" rel="noopener" tabindex="-1"
             aria-hidden="true">
-            <img src="covers/coco.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/coco.webp" srcset="covers/coco-800.webp 800w, covers/coco.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
           <div class="proj__body">
@@ -294,7 +294,8 @@
         <article class="proj proj--wide" data-tags="mobile web live">
           <a class="proj__cover" href="https://qbooking.app" target="_blank" rel="noopener" tabindex="-1"
             aria-hidden="true">
-            <img src="covers/qbook.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/qbook.webp" srcset="covers/qbook-800.webp 800w, covers/qbook.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 56vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
           <div class="proj__body">
@@ -332,7 +333,8 @@
         <article class="proj" data-tags="web live">
           <a class="proj__cover" href="https://dietersdiet.fit" target="_blank" rel="noopener" tabindex="-1"
             aria-hidden="true">
-            <img src="covers/dietersdiet.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/dietersdiet.webp" srcset="covers/dietersdiet-800.webp 800w, covers/dietersdiet.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag tag--live"><i></i>Live</span>
           </a>
           <div class="proj__body">
@@ -367,7 +369,8 @@
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
             tabindex="-1" aria-hidden="true">
-            <img src="covers/smart.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/smart.webp" srcset="covers/smart-800.webp 800w, covers/smart.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag">Source</span>
           </a>
           <div class="proj__body">
@@ -407,7 +410,8 @@
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener"
             tabindex="-1" aria-hidden="true">
-            <img src="covers/listy.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/listy.webp" srcset="covers/listy-800.webp 800w, covers/listy.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag">Source</span>
           </a>
           <div class="proj__body">
@@ -447,7 +451,8 @@
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener"
             tabindex="-1" aria-hidden="true">
-            <img src="covers/weather.webp" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+            <img src="covers/weather.webp" srcset="covers/weather-800.webp 800w, covers/weather.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
             <span class="tag">Source</span>
           </a>
           <div class="proj__body">
@@ -779,7 +784,15 @@
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer crossorigin="anonymous"
     integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed"></script>
   <script src="script.js" defer></script>
-  <script type="module" src="scene.js"></script>
+  <!-- The WebGL backdrop is decoration: three.js loads once the page has painted and gone idle,
+       so it never sits in front of the first paint. The canvas fades in when it's ready. -->
+  <script>
+    addEventListener("load", function () {
+      var start = function () { import("./scene.js"); };
+      if ("requestIdleCallback" in window) requestIdleCallback(start, { timeout: 1500 });
+      else setTimeout(start, 200);
+    });
+  </script>
   <script src="features.js" defer></script>
 </body>
 
