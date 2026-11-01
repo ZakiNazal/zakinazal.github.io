@@ -277,6 +277,7 @@ main,
 }
 
 .nav__cta {
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -403,10 +404,45 @@ main,
   }
 }
 
-/* phones: buttons as two equal halves, a legible ©, a two-line meta */
+/* phones: the name becomes a masthead under the eyebrow, then the statement,
+   intro and buttons; the meta sits at the foot. No dead gap in the middle. */
 @media (max-width: 600px) {
   .hero {
-    padding-top: 112px;
+    justify-content: flex-start;
+    padding-top: 100px;
+  }
+
+  .hero__inner {
+    display: contents;
+  }
+
+  .hero__eyebrow {
+    order: 1;
+  }
+
+  .hero__mark {
+    order: 2;
+  }
+
+  .hero__title {
+    order: 3;
+  }
+
+  .hero__foot {
+    order: 4;
+    margin-top: 20px;
+  }
+
+  .hero .hero__meta {
+    order: 5;
+    margin-top: auto;
+  }
+
+  /* the small caps lines: tight enough to stay on one line at 360px */
+  .hero .hero__eyebrow,
+  .hero .hero__meta {
+    font-size: 11px;
+    letter-spacing: 0.06em;
   }
 
   .hero__foot {
@@ -428,8 +464,12 @@ main,
     white-space: nowrap;
   }
 
-  .hero__mark {
-    margin-top: 28px;
+  .hero .hero__mark {
+    margin: 22px 0 28px;
+  }
+
+  .hero .hero__title {
+    font-size: 42px;
   }
 
   .hero__mark sup {

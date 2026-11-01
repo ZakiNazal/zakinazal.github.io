@@ -39,7 +39,11 @@
     const word = $(".split", mark);
     const fit = () => {
       mark.style.fontSize = "100px";
-      mark.style.fontSize = (100 * mark.clientWidth) / word.offsetWidth + "px";
+      // twice: the © has a minimum size, so it doesn't scale in step with the name
+      for (let i = 0; i < 2; i++) {
+        const size = parseFloat(mark.style.fontSize);
+        mark.style.fontSize = (size * mark.clientWidth) / word.offsetWidth + "px";
+      }
     };
     fit();
     window.addEventListener("resize", fit);
