@@ -407,7 +407,9 @@ main,
 /* phones: the name becomes a masthead under the eyebrow, then the statement,
    intro and buttons; the meta sits at the foot. No dead gap in the middle. */
 @media (max-width: 600px) {
+  /* content-height on phones: a full-screen hero left a blank band */
   .hero {
+    min-height: 0;
     justify-content: flex-start;
     padding-top: 100px;
   }
@@ -435,7 +437,7 @@ main,
 
   .hero .hero__meta {
     order: 5;
-    margin-top: auto;
+    margin-top: 36px;
   }
 
   /* the small caps lines: tight enough to stay on one line at 360px */
