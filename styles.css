@@ -2098,15 +2098,19 @@ html.js .nav {
   background: var(--surface-2);
   color: var(--ink-2);
   font: 500 11.5px var(--sans);
+  white-space: nowrap;
+}
+
+/* the nav can't fit the shortcut hint below this without wrapping the brand */
+@media (max-width: 860px) {
+  .cmdk-trigger kbd {
+    display: none;
+  }
 }
 
 @media (max-width: 760px) {
   .cmdk-trigger {
     padding: 8px;
-  }
-
-  .cmdk-trigger kbd {
-    display: none;
   }
 
   /* hidden from sight, not from screen readers: it's the button's name */
