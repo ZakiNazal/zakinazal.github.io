@@ -32,7 +32,7 @@
   function downloadResume() {
     const a = document.createElement("a");
     a.href = "resume.pdf";
-    a.download = "Zaki-Nazzal-CV.pdf";
+    a.download = "Zaki-Nazzal-Resume.pdf";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -135,8 +135,8 @@
     { id: "scvn", name: "SCORVYN.™", url: "https://scorvyn.shop", note: "Streetwear storefront: numbered drops, Stripe checkout.", d: [1200, 4898], m: [540, 8778] },
     { id: "qbook", name: "QBooking", url: "https://qbooking.app", note: "Booking pages and a shared schedule for appointment teams.", d: [1200, 3718], m: [540, 9064] },
     { id: "dieters", name: "Dieters Diet", url: "https://dietersdiet.fit", note: "Meal plans written meal by meal and in grams. Arabic-first.", d: [1200, 5453], m: [540, 12462] },
-    { id: "brim", name: "Brim", url: "https://brim-drab.vercel.app/", note: "A 3D design studio that runs in the browser.", d: [1200, 750], m: [540, 1169] },
-    { id: "coco", name: "CocoStudy", url: "https://cocostudy.vercel.app/", note: "Turns a lecture or messy notes into a study guide.", d: [1200, 750], m: [540, 1169] },
+    { id: "brim", name: "Brim", url: "https://brim3d.vercel.app/", note: "A 3D design studio that runs in the browser.", d: [1200, 750], m: [540, 1169] },
+    { id: "coco", name: "CocoStudy", url: "https://cocostudy.space/", note: "Turns a lecture or messy notes into a study guide.", d: [1200, 750], m: [540, 1169] },
   ];
 
   (function playground() {
@@ -201,7 +201,7 @@
         requestAnimationFrame(() => shot.classList.remove("is-swapping"));
       };
       const wait = new Promise((r) => setTimeout(r, reduceMotion ? 0 : 260));
-      Promise.all([img.decode().catch(() => {}), wait]).then(swap);
+      Promise.all([img.decode().catch(() => { }), wait]).then(swap);
     }
 
     views.forEach((b) => b.addEventListener("click", () => show(site, b.dataset.view)));
@@ -549,7 +549,7 @@
         line(["linkedin  ", { href: "https://www.linkedin.com/in/zakinazzal/", text: "linkedin.com/in/zakinazzal" }]);
       },
       email() { copyEmail(); line(dim("Copied " + EMAIL + " to your clipboard.")); },
-      resume() { line(dim("Downloading Zaki-Nazzal-CV.pdf…")); downloadResume(); },
+      resume() { line(dim("Downloading Zaki-Nazzal-Resume.pdf…")); downloadResume(); },
       github() { line(["Opening ", { href: "https://github.com/" + GH_USER, text: "github.com/" + GH_USER }]); openUrl("https://github.com/" + GH_USER); },
       date() {
         const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Amman", weekday: "long", hour: "2-digit", minute: "2-digit" });
