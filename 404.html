@@ -4,64 +4,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 — Zaki Nazzal</title>
+  <!-- No scripts on this page at all, so the policy can forbid them outright. -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Page not found — Zaki Nazzal</title>
   <meta name="robots" content="noindex" />
-  <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0b0f1a" media="(prefers-color-scheme: dark)" />
+  <meta name="description" content="This page does not exist. The portfolio of Zaki Nazzal, software developer, is one click away." />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#f2f2f0" />
 
   <!-- Absolute paths: GitHub Pages serves this file for any missing URL, and a
        relative path would resolve against /some/deep/path/ and 404 as well. -->
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="stylesheet" href="/fonts/fonts.css" />
   <link rel="stylesheet" href="/styles.css" />
-
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem("theme");
-        if (saved === "dark" || saved === "light") {
-          document.documentElement.setAttribute("data-theme", saved);
-        }
-      } catch (e) { /* private mode — fall back to the OS preference */ }
-    })();
-  </script>
 </head>
 
 <body class="lost">
-  <header class="masthead">
-    <div class="shell masthead__inner">
-      <a class="masthead__name" href="/">
-        <img class="masthead__logo" src="/favicon.png" alt="" width="512" height="512" />
-        Zaki&nbsp;Nazzal
-      </a>
-    </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="lost__bar">
+    <a class="nav__brand" href="/" aria-label="Zaki Nazzal, home">
+      <img src="/brand.png" alt="" width="28" height="28" />
+      <span>Zaki Nazzal</span>
+    </a>
+    <a class="nav__cta" href="/#contact">
+      <span class="dot" aria-hidden="true"></span> Let's talk
+    </a>
   </header>
 
-  <main class="shell lost__inner">
-    <div class="thesis__measure lost__measure">
-      <div class="thesis__box" aria-hidden="true">
-        <i class="thesis__edge thesis__edge--t"></i>
-        <i class="thesis__edge thesis__edge--b"></i>
-        <i class="thesis__edge thesis__edge--l"></i>
-        <i class="thesis__edge thesis__edge--r"></i>
-      </div>
-      <h1 class="thesis__line">
-        <span>404.</span>
-        <span>This page has <em>no size</em>.</span>
-      </h1>
+  <main class="lost__main">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Error 404</p>
+    <h1 class="lost__code"><span class="sr-only">Page not found. Error </span>404</h1>
+    <p class="lost__note">This page doesn't exist. It may have moved, or the link has a typo. Everything else is one click away.</p>
+    <div class="lost__actions">
+      <a class="btn btn--solid" href="/"><span>Back to the portfolio</span><i aria-hidden="true">←</i></a>
+      <a class="btn" href="/#work"><span>See the projects</span><i aria-hidden="true">→</i></a>
     </div>
-
-    <p class="thesis__axiom">unbounded constraint &middot; nothing to lay out</p>
-
-    <p class="lost__note">
-      The address you asked for isn't here. It may have been renamed, or it may never
-      have existed — either way, the work is one link away.
-    </p>
-
-    <p class="band__after lost__back">
-      <a href="/">Back to the start<i aria-hidden="true">→</i></a>
-    </p>
   </main>
 </body>
 

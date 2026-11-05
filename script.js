@@ -12,7 +12,6 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const hasGsap = typeof window.gsap !== "undefined";
-  const t0 = performance.now();
 
   if (hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
   if (hasGsap && window.Flip) gsap.registerPlugin(Flip);
@@ -33,6 +32,27 @@
   }
   tickTime();
   setInterval(tickTime, 30000);
+
+  /* ---------- hero wordmark: sized to fill the column exactly ---------- */
+  const mark = $(".hero__mark");
+  if (mark) {
+    const word = $(".split", mark);
+    // read everything, then write once: the type scales linearly with
+    // font-size, so one measurement is exact and no layout is forced twice
+    const fit = () => {
+      const size = parseFloat(getComputedStyle(mark).fontSize);
+      const ratio = mark.clientWidth / word.offsetWidth;
+      if (Math.abs(ratio - 1) > 0.002) mark.style.fontSize = size * ratio + "px";
+    };
+    fit();
+    let fitQueued = false;
+    window.addEventListener("resize", () => {
+      if (fitQueued) return;
+      fitQueued = true;
+      requestAnimationFrame(() => { fitQueued = false; fit(); });
+    });
+    if (document.fonts) document.fonts.ready.then(fit);
+  }
 
   /* ---------- split text into letters ---------- */
   function splitChars(el) {
@@ -91,6 +111,7 @@
   let lenis = null;
   if (!reduceMotion && window.Lenis) {
     lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 4) });
+    window.__lenis = lenis; // features.js scrolls through it too
     if (hasGsap && window.ScrollTrigger) {
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add((time) => lenis.raf(time * 1000));
@@ -139,64 +160,6 @@
   );
   ["work", "stack", "timeline", "about", "contact"].forEach((id) => $("#" + id) && spy.observe($("#" + id)));
 
-  /* ---------- loader + intro ---------- */
-  const heroChars = $$(".hero__title .split").flatMap(splitChars);
-  const heroBits = $$("[data-hero]");
-
-  function intro() {
-    document.documentElement.classList.remove("is-loading");
-    const loader = $("#loader");
-    if (!hasGsap || reduceMotion) {
-      loader.remove();
-      return;
-    }
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-    tl.to(loader, { clipPath: "inset(0 0 100% 0)", duration: 1.1, ease: "expo.inOut" })
-      .set(loader, { display: "none" })
-      .from(heroChars, { yPercent: 115, rotate: 6, duration: 1.4, stagger: 0.018 }, "-=0.45")
-      .from(heroBits, { y: 24, opacity: 0, duration: 1.1, stagger: 0.08 }, "-=1.1")
-      .from(nav, { y: -30, opacity: 0, duration: 1, clearProps: "transform,opacity" }, "<");
-  }
-
-  if (hasGsap && !reduceMotion) {
-    document.documentElement.classList.add("is-loading");
-    const num = $("#loaderNum");
-    const bar = $("#loaderBar");
-    const state = { p: 0 };
-    let loaded = document.readyState === "complete";
-    window.addEventListener("load", () => (loaded = true));
-    // count to 80 on its own, then wait for load (or 2.5s) before finishing
-    gsap.to(state, {
-      p: 80,
-      duration: 1.1,
-      ease: "power2.out",
-      onUpdate: () => {
-        num.textContent = Math.round(state.p);
-        bar.style.transform = `scaleX(${state.p / 100})`;
-      },
-      onComplete: () => {
-        const finish = () =>
-          gsap.to(state, {
-            p: 100,
-            duration: 0.45,
-            ease: "power2.inOut",
-            onUpdate: () => {
-              num.textContent = Math.round(state.p);
-              bar.style.transform = `scaleX(${state.p / 100})`;
-            },
-            onComplete: intro,
-          });
-        if (loaded) return finish();
-        const wait = setTimeout(finish, 1400);
-        window.addEventListener("load", () => {
-          clearTimeout(wait);
-          finish();
-        }, { once: true });
-      },
-    });
-  } else {
-    intro();
-  }
 
   /* ---------- marquee: drifts, and leans into scroll speed ---------- */
   const track = $("#marquee");
@@ -207,7 +170,9 @@
     let prev = window.scrollY;
     // measured once, not per frame: reading layout right after writing a
     // transform forces a synchronous reflow every frame
-    let half = track.scrollWidth / 2;
+    // and not straight after the innerHTML write above either: wait a frame
+    let half = 0;
+    requestAnimationFrame(() => (half = track.scrollWidth / 2));
     window.addEventListener("resize", () => (half = track.scrollWidth / 2));
     document.fonts && document.fonts.ready.then(() => (half = track.scrollWidth / 2));
     let onScreen = true;
@@ -229,6 +194,7 @@
   }
 
   /* ---------- scroll reveals ---------- */
+  let projReveal = []; // the project cards' triggers; the filters retire them
   if (hasGsap && window.ScrollTrigger && !reduceMotion) {
     // section titles: letters rise out of a mask
     $$("[data-reveal-text]").forEach((el) => {
@@ -253,21 +219,19 @@
       });
     });
 
-    // project cards: rise in, cover image unmasks
-    gsap.set(".proj", { opacity: 0 });
-    ScrollTrigger.batch(".proj", {
-      start: "top 88%",
+    // project cards: each rises and fades in, its cover settles, then the copy
+    // follows. Transform and opacity only (no clip-path or 3D, which repaint every
+    // frame), and props are cleared after so hover and the Flip filters start clean.
+    gsap.set(".proj", { opacity: 0, y: 56 });
+    projReveal = ScrollTrigger.batch(".proj", {
+      start: "top 90%",
+      once: true,
       onEnter: (batch) => {
-        gsap.fromTo(
-          batch,
-          { y: 80, opacity: 0, rotateX: -8 },
-          { y: 0, opacity: 1, rotateX: 0, duration: 1.3, ease: "expo.out", stagger: 0.12, overwrite: true }
-        );
-        gsap.fromTo(
-          batch.map((b) => $(".proj__cover", b)),
-          { clipPath: "inset(18% 12% 18% 12% round 14px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 10px)", duration: 1.5, ease: "expo.out", stagger: 0.12 }
-        );
+        gsap.timeline({ defaults: { ease: "power3.out" } })
+          .to(batch, { opacity: 1, y: 0, duration: 1, stagger: 0.1, clearProps: "transform,opacity" })
+          .from(batch.map((b) => $(".proj__cover", b)), { scale: 0.94, duration: 1.2, stagger: 0.1, clearProps: "transform" }, 0)
+          .from(batch.flatMap((b) => [...$(".proj__body", b).children]),
+            { opacity: 0, y: 16, duration: 0.8, stagger: 0.04, clearProps: "transform,opacity" }, 0.15);
       },
     });
 
@@ -329,7 +293,8 @@
     const lead = $("[data-words]");
     if (lead) {
       const words = splitWords(lead);
-      gsap.fromTo(words, { opacity: 0.12 }, {
+      // starts at half strength, not faint: unscrolled, it still reads at 3:1
+      gsap.fromTo(words, { opacity: 0.5 }, {
         opacity: 1,
         stagger: 0.05,
         ease: "none",
@@ -379,6 +344,7 @@
   const grid = $("#workGrid");
   if (filters && grid) {
     const cards = $$(".proj", grid);
+    let flip = null;
     const btns = $$(".filters__btn", filters);
     const glider = $(".filters__glider", filters);
     const countOf = (f) => (f === "all" ? cards.length : cards.filter((c) => c.dataset.tags.split(" ").includes(f)).length);
@@ -403,16 +369,38 @@
           cards.forEach((c) => c.classList.toggle("is-hidden", f !== "all" && !c.dataset.tags.split(" ").includes(f)));
 
         if (hasGsap && window.Flip && !reduceMotion) {
+          // Once someone filters, every card counts as revealed: a scroll reveal
+          // still pending would fight the Flip over opacity and position.
+          projReveal.forEach((t) => t.kill());
+          projReveal = [];
+          // A click mid-animation: land the last one first, so we measure real layout.
+          if (flip) flip.progress(1);
+          gsap.killTweensOf(grid);
+          // stop reveals still playing on the cards or inside them, or they keep
+          // moving the cards while Flip measures, and cards fly across the grid
+          const parts = cards.flatMap((c) => [c, $(".proj__cover", c), ...$(".proj__body", c).children]);
+          gsap.killTweensOf(parts);
+          gsap.set(parts, { clearProps: "opacity,transform" });
+
+          // absolute: true lifts the cards out of the flow while they move, which
+          // collapsed the grid and pulled the next section up underneath them.
+          // Hold the grid's height and ease it to the new one instead.
+          const from = grid.offsetHeight;
           const state = Flip.getState(cards);
           apply();
-          Flip.from(state, {
+          const to = grid.offsetHeight;
+          gsap.fromTo(grid, { height: from }, { height: to, duration: 0.8, ease: "expo.inOut", clearProps: "height" });
+          flip = Flip.from(state, {
             duration: 0.8,
             ease: "expo.inOut",
             scale: true,
             absolute: true,
-            onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 }),
-            onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.9, duration: 0.4 }),
-            onComplete: () => window.ScrollTrigger && ScrollTrigger.refresh(),
+            onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.2 }),
+            onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.94, duration: 0.3 }),
+            onComplete: () => {
+              flip = null;
+              if (window.ScrollTrigger) ScrollTrigger.refresh();
+            },
           });
         } else {
           apply();
@@ -421,7 +409,7 @@
     });
   }
 
-  /* ---------- pointer toys: tilt, spotlight, magnetic, cursor ---------- */
+  /* ---------- pointer toys: spotlight, tilt, magnetic ---------- */
   if (finePointer && !reduceMotion) {
     // project cards: spotlight only, at most once per frame. (No 3D tilt here:
     // tilting a big card full of images re-rasterises it on every move.)
@@ -444,7 +432,9 @@
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
-        if (hasGsap) gsap.to(card, { rotateY: px * 14, rotateX: -py * 14, duration: 0.5, ease: "power3.out" });
+        card.style.setProperty("--gx", (px + 0.5) * 100 + "%");
+        card.style.setProperty("--gy", (py + 0.5) * 100 + "%");
+        if (hasGsap) gsap.to(card, { rotateY: px * 10, rotateX: -py * 10, transformPerspective: 900, duration: 0.5, ease: "power3.out" });
       });
       card.addEventListener("pointerleave", () => {
         if (hasGsap) gsap.to(card, { rotateY: 0, rotateX: 0, duration: 1, ease: "elastic.out(1, 0.5)" });
@@ -464,32 +454,6 @@
       });
     });
 
-    // custom cursor
-    const cursor = $("#cursor");
-    const dot = $("#cursorDot");
-    const label = $("#cursorLabel");
-    let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
-    window.addEventListener("pointermove", (e) => {
-      tx = e.clientX;
-      ty = e.clientY;
-      dot.style.transform = `translate3d(${tx}px,${ty}px,0)`;
-    }, { passive: true });
-    const follow = () => {
-      cx += (tx - cx) * 0.18;
-      cy += (ty - cy) * 0.18;
-      cursor.style.transform = `translate3d(${cx}px,${cy}px,0)`;
-      requestAnimationFrame(follow);
-    };
-    requestAnimationFrame(follow);
-
-    document.addEventListener("pointerover", (e) => {
-      const labeled = e.target.closest("[data-cursor]");
-      const hot = e.target.closest("a, button, summary, .sphere");
-      cursor.classList.toggle("is-label", !!labeled);
-      cursor.classList.toggle("is-hover", !labeled && !!hot);
-      label.textContent = labeled ? labeled.dataset.cursor : "";
-    });
-    document.addEventListener("pointerleave", () => cursor.classList.remove("is-hover", "is-label"));
   }
 
   /* ---------- word sphere ---------- */
@@ -574,16 +538,4 @@
     });
   }
 
-  /* ---------- colophon: what this page actually cost ---------- */
-  window.addEventListener("load", () => {
-    const out = $("#colophonSpec");
-    if (!out || !performance.getEntriesByType) return;
-    setTimeout(() => {
-      const nav = performance.getEntriesByType("navigation")[0];
-      const res = performance.getEntriesByType("resource");
-      const bytes = res.reduce((a, r) => a + (r.transferSize || 0), nav ? nav.transferSize || 0 : 0);
-      const ms = Math.round(performance.now() - t0);
-      if (bytes > 0) out.textContent = `Hand-written · three.js · ${(bytes / 1024).toFixed(0)} KB · ${ms} ms to interactive`;
-    }, 300);
-  });
 })();
