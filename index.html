@@ -613,7 +613,8 @@
         <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener"
             tabindex="-1" aria-hidden="true">
-            <img src="covers/lifeskills.webp" alt="" loading="lazy" decoding="async" width="800" height="600" />
+            <img src="covers/lifeskills.webp" srcset="covers/lifeskills-800.webp 800w, covers/lifeskills.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1000" />
             <span class="tag">Source</span>
           </a>
           <div class="proj__body">
@@ -623,8 +624,8 @@
                   rel="noopener">LifeSkills</a></h3>
             </div>
             <p class="proj__desc">
-              Builds an exercise habit by making the streak the whole point. Daily check-ins, a mood log, an activity
-              explorer, and a profile you can actually edit.
+              Builds a daily habit out of short timed drills. Pick a skill or an activity, follow the countdown, and
+              your streak, points and daily goal move the moment it ends.
             </p>
             <p class="proj__role">Sole developer · open source</p>
             <ul class="chips">
@@ -641,7 +642,7 @@
                 </div>
                 <div>
                   <dt>Data</dt>
-                  <dd>Firebase, for check-ins and streak history</dd>
+                  <dd>Firestore; each finished session is written in one transaction</dd>
                 </div>
                 <div>
                   <dt>Repository</dt>
@@ -650,7 +651,7 @@
               </dl>
             </details>
             <footer class="proj__foot">
-              <time datetime="2026-05-22">Updated 2026-05-22</time>
+              <time datetime="2026-11-05">Updated 2026-11-05</time>
               <span class="proj__links">
                 <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">Source<i
                     aria-hidden="true">↗</i></a>
