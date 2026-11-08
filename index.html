@@ -122,7 +122,7 @@
 
         <div class="hero__foot">
           <p class="hero__note" data-hero>
-            Computer science undergraduate at APU, Kuala&nbsp;Lumpur. Nine projects so far — five of them Flutter,
+            Computer science undergraduate at APU, Kuala&nbsp;Lumpur. Ten projects so far — six of them Flutter,
             most of them open source.
           </p>
           <div class="hero__actions" data-hero>
@@ -160,7 +160,7 @@
       <header class="section__head">
         <p class="section__num">01</p>
         <h2 class="section__title" data-reveal-text>My Projects</h2>
-        <p class="section__meta" id="workCount">9 projects</p>
+        <p class="section__meta" id="workCount">10 projects</p>
       </header>
 
       <!-- Hidden until script.js wires it up; without JS every project shows. -->
@@ -417,6 +417,50 @@
         </article>
 
         <article class="proj" data-tags="mobile">
+          <div class="proj__cover" aria-hidden="true">
+            <img src="covers/kaash.webp" srcset="covers/kaash-800.webp 800w, covers/kaash.webp 1600w"
+              sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1000" />
+            <span class="tag">In development</span>
+          </div>
+          <div class="proj__body">
+            <div class="proj__top">
+              <span class="proj__idx">06</span>
+              <h3 class="proj__name">KAASH</h3>
+            </div>
+            <p class="proj__desc">
+              Point the camera at a receipt and every line becomes a purchase. Other currencies convert at dated rates,
+              budgets keep score, and it tracks what things cost over time. All of it stays on the phone.
+            </p>
+            <p class="proj__role">Sole developer · on-device OCR</p>
+            <ul class="chips">
+              <li>Flutter</li>
+              <li>Dart</li>
+              <li>ML Kit</li>
+            </ul>
+            <details class="spec">
+              <summary>Engineering details</summary>
+              <dl>
+                <div>
+                  <dt>Platform</dt>
+                  <dd>iOS &amp; Android, one Flutter codebase, plus a home screen widget</dd>
+                </div>
+                <div>
+                  <dt>Data</dt>
+                  <dd>Local-first SQLite through Drift; money stored as integer minor units</dd>
+                </div>
+                <div>
+                  <dt>Security</dt>
+                  <dd>Face ID, Touch ID or passcode lock</dd>
+                </div>
+              </dl>
+            </details>
+            <footer class="proj__foot">
+              <time datetime="2026-11-08">Updated 2026-11-08</time>
+            </footer>
+          </div>
+        </article>
+
+        <article class="proj" data-tags="mobile">
           <a class="proj__cover" href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener"
             tabindex="-1" aria-hidden="true">
             <img src="covers/smart.webp" srcset="covers/smart-800.webp 800w, covers/smart.webp 1600w"
@@ -425,7 +469,7 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">06</span>
+              <span class="proj__idx">07</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/SmartDesk" target="_blank"
                   rel="noopener">SmartDesk</a></h3>
             </div>
@@ -475,7 +519,7 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">07</span>
+              <span class="proj__idx">08</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/ListyApp" target="_blank"
                   rel="noopener">ListyApp</a></h3>
             </div>
@@ -525,7 +569,7 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">08</span>
+              <span class="proj__idx">09</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank"
                   rel="noopener">WeatherSphere</a></h3>
             </div>
@@ -574,7 +618,7 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">09</span>
+              <span class="proj__idx">10</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/LifeSkills" target="_blank"
                   rel="noopener">LifeSkills</a></h3>
             </div>
@@ -768,11 +812,11 @@
       <!-- data-to is the truth; the text content is the no-JS fallback. -->
       <dl class="tally">
         <div>
-          <dd data-to="9">9</dd>
+          <dd data-to="10">10</dd>
           <dt>Projects shipped</dt>
         </div>
         <div>
-          <dd data-to="5">5</dd>
+          <dd data-to="6">6</dd>
           <dt>Built with Flutter</dt>
         </div>
         <div>
