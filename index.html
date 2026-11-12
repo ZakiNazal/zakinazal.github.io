@@ -8,7 +8,7 @@
        pinned by hash: edit one and its hash here must be regenerated, or it won't run.
        Style attributes are allowed (GSAP Flip writes them); style sheets stay 'self'. -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'sha256-WZRJfWvsnNCPcxzZwvyhovnZGqhZaC+8gPGPRbx6wTk=' 'sha256-K/i3Ldj0hB7p/itTvgNB2zm4HeIloVWiCHjbBLeVxFY=' 'sha256-/LW8xE1PSlyBeCwE+bkm+ZEpTEiLqm+UasPsVO+KwE8=' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests" />
+    content="default-src 'self'; script-src 'self' 'sha256-WZRJfWvsnNCPcxzZwvyhovnZGqhZaC+8gPGPRbx6wTk=' 'sha256-K/i3Ldj0hB7p/itTvgNB2zm4HeIloVWiCHjbBLeVxFY=' 'sha256-/LW8xE1PSlyBeCwE+bkm+ZEpTEiLqm+UasPsVO+KwE8=' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net https://va.vercel-scripts.com; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://va.vercel-scripts.com; manifest-src 'self'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Zaki Nazzal</title>
   <meta name="description"
@@ -941,6 +941,8 @@
     });
   </script>
   <script src="features.js" defer></script>
+  <!-- Vercel Web Analytics: Initialize tracking for page views and visitor data -->
+  <script type="module" src="analytics.js"></script>
 </body>
 
 </html>
