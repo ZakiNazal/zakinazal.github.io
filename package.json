@@ -1,0 +1,30 @@
+{
+  "name": "zakinazzal-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio website for Zaki Nazzal with Vercel Web Analytics",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "npx serve .",
+    "check": "node -c analytics.js && echo 'Syntax check passed'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZakiNazal/zakinazal.github.io.git"
+  },
+  "keywords": [
+    "portfolio",
+    "vercel",
+    "analytics",
+    "web"
+  ],
+  "author": "Zaki Nazzal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZakiNazal/zakinazal.github.io/issues"
+  },
+  "homepage": "https://github.com/ZakiNazal/zakinazal.github.io#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
