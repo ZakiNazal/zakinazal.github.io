@@ -88,7 +88,7 @@
       case "ReleaseEvent": return { verb: "released", repo, msg: p.release ? p.release.name || p.release.tag_name : "" };
       case "WatchEvent": return { verb: "starred", repo, msg: "" };
       case "IssuesEvent": return { verb: `${p.action || "opened"} an issue in`, repo, msg: p.issue ? p.issue.title : "" };
-      default: return { verb: ev.type.replace(/Event$/, "").toLowerCase() + " ·", repo, msg: "" };
+      default: return { verb: ev.type.replace(/Event$/, "").toLowerCase() + " in", repo, msg: "" };
     }
   }
 
@@ -164,7 +164,6 @@
       b.setAttribute("role", "tab");
       b.setAttribute("aria-selected", String(i === 0));
       b.setAttribute("aria-controls", "pgScreen");
-      b.innerHTML = "<i aria-hidden='true'></i>";
       b.append(s.name);
       b.addEventListener("click", () => show(s));
       tabs.appendChild(b);
@@ -519,7 +518,7 @@
         line(dim("Building from Amman, Jordan."));
       },
       projects() {
-        projects.forEach((p) => line([hl(String(p.n).padStart(2, "0")), "  " + p.name + "  ", dim(p.tags.join(" · "))]));
+        projects.forEach((p) => line([hl(String(p.n).padStart(2, "0")), "  " + p.name + "  ", dim(p.tags.join(", "))]));
         line(dim("Try: open 1   or   open brim"));
       },
       open(args) {
@@ -541,7 +540,7 @@
         line(`cat: ${f || "?"}: No such file`, "term__err");
       },
       stack() {
-        line(stack.join(" · "));
+        line(stack.join(", "));
       },
       contact() {
         line(["email     ", { href: "mailto:" + EMAIL, text: EMAIL }]);

@@ -8,7 +8,7 @@
        pinned by hash: edit one and its hash here must be regenerated, or it won't run.
        Style attributes are allowed (GSAP Flip writes them); style sheets stay 'self'. -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'sha256-WZRJfWvsnNCPcxzZwvyhovnZGqhZaC+8gPGPRbx6wTk=' 'sha256-K/i3Ldj0hB7p/itTvgNB2zm4HeIloVWiCHjbBLeVxFY=' 'sha256-/LW8xE1PSlyBeCwE+bkm+ZEpTEiLqm+UasPsVO+KwE8=' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests" />
+    content="default-src 'self'; script-src 'self' 'sha256-WZRJfWvsnNCPcxzZwvyhovnZGqhZaC+8gPGPRbx6wTk=' 'sha256-K/i3Ldj0hB7p/itTvgNB2zm4HeIloVWiCHjbBLeVxFY=' 'sha256-/LW8xE1PSlyBeCwE+bkm+ZEpTEiLqm+UasPsVO+KwE8=' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Zaki Nazzal</title>
   <meta name="description"
@@ -66,27 +66,10 @@
   <!-- Flag JS early so the no-JS page never hides content behind reveal states. -->
   <script>document.documentElement.classList.add("js");</script>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js"
-      },
-      "integrity": {
-        "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js": "sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28"
-      }
-    }
-  </script>
 </head>
 
 <body>
   <a class="skip" href="#work">Skip to work</a>
-
-  <!-- ============ LOADER ============ -->
-
-  <!-- ============ WEBGL STAGE ============ -->
-  <!-- One fixed canvas behind the whole page: scene.js paints the backdrop. -->
-  <canvas class="stage" id="stage" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
@@ -101,7 +84,7 @@
       <a href="#about"><span class="roll"><span data-text="About">About</span></span></a>
     </nav>
     <a class="nav__cta" href="#contact" data-magnetic>
-      <span class="dot" aria-hidden="true"></span> Let's talk
+      Get in touch
     </a>
   </header>
 
@@ -109,15 +92,10 @@
     <!-- ============ HERO ============ -->
     <section class="hero" id="top">
       <div class="hero__inner">
-        <p class="eyebrow hero__eyebrow" data-hero>
-          <span class="dot" aria-hidden="true"></span>
-          Software developer · Flutter &amp; the web
-        </p>
-
         <h1 class="hero__title" aria-label="I build software, and the tools I wish existed.">
           <span class="line" aria-hidden="true"><span class="split">I build software,</span></span>
           <span class="line" aria-hidden="true"><span class="split">and the tools</span></span>
-          <span class="line" aria-hidden="true"><span class="split">I <em>wish existed.</em></span></span>
+          <span class="line" aria-hidden="true"><span class="split">I wish existed.</span></span>
         </h1>
 
         <div class="hero__foot">
@@ -127,10 +105,10 @@
           </p>
           <div class="hero__actions" data-hero>
             <a class="btn btn--solid" href="#work" data-magnetic>
-              <span>Explore the work</span><i aria-hidden="true">↓</i>
+              <span>See the projects</span>
             </a>
             <a class="btn" href="resume.pdf" download="Zaki-Nazzal-Resume.pdf" data-magnetic>
-              <span>Download Résumé</span><i aria-hidden="true">↓</i>
+              <span>Download résumé</span>
             </a>
           </div>
         </div>
@@ -141,25 +119,14 @@
 
       <div class="hero__meta" data-hero>
         <span>Open to freelance, full-time &amp; open source</span>
-        <span>Amman, Jordan · <b id="localTime">—</b></span>
-        <span class="hero__scroll">Scroll <i aria-hidden="true"></i></span>
+        <span>Amman, Jordan, where it is <b id="localTime">—</b></span>
       </div>
     </section>
-
-    <!-- ============ MARQUEE ============ -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee__track" id="marquee">
-        <span>Flutter</span><b>✦</b><span>Dart</span><b>✦</b><span>Firebase</span><b>✦</b>
-        <span>TypeScript</span><b>✦</b><span>Next.js</span><b>✦</b><span>Supabase</span><b>✦</b>
-        <span>Node.js</span><b>✦</b><span>Python</span><b>✦</b><span>C++</span><b>✦</b><span>Figma</span><b>✦</b>
-      </div>
-    </div>
 
     <!-- ============ WORK ============ -->
     <section class="section" id="work">
       <header class="section__head">
-        <p class="section__num">01</p>
-        <h2 class="section__title" data-reveal-text>My Projects</h2>
+        <h2 class="section__title">My Projects</h2>
         <p class="section__meta" id="workCount">10 projects</p>
       </header>
 
@@ -179,18 +146,17 @@
             aria-hidden="true">
             <img src="covers/scvn.webp" srcset="covers/scvn-800.webp 800w, covers/scvn.webp 1600w"
               sizes="(max-width: 860px) 92vw, 56vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
-            <span class="tag tag--live"><i></i>Live</span>
+            <span class="tag tag--live">Live</span>
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">01</span>
               <h3 class="proj__name"><a href="https://scorvyn.shop" target="_blank" rel="noopener">SCORVYN.™</a></h3>
             </div>
             <p class="proj__desc">
               A storefront for heavyweight streetwear, numbered and dated. Limited drops, no restocks — so the whole
               shop is built around scarcity rather than a catalogue.
             </p>
-            <p class="proj__role">Sole developer · live commerce</p>
+            <p class="proj__role">Sole developer, live commerce</p>
             <ul class="chips">
               <li>Next.js</li>
               <li>TypeScript</li>
@@ -221,7 +187,7 @@
             <footer class="proj__foot">
               <time datetime="2026-08-26">Updated 2026-08-26</time>
               <span class="proj__links">
-                <a href="https://scorvyn.shop" target="_blank" rel="noopener">Visit<i aria-hidden="true">↗</i></a>
+                <a href="https://scorvyn.shop" target="_blank" rel="noopener">Visit</a>
               </span>
             </footer>
           </div>
@@ -232,11 +198,10 @@
             aria-hidden="true">
             <img src="covers/brim.webp" srcset="covers/brim-800.webp 800w, covers/brim.webp 1600w"
               sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
-            <span class="tag tag--live"><i></i>Live</span>
+            <span class="tag tag--live">Live</span>
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">02</span>
               <h3 class="proj__name"><a href="https://brim3d.vercel.app/" target="_blank" rel="noopener">Brim</a>
               </h3>
             </div>
@@ -244,7 +209,7 @@
               A 3D design studio that runs in your browser. Design 3D objects, export them to OBJ, STL or 3MF, import
               existing designs, and send them straight to a 3D printer.
             </p>
-            <p class="proj__role">Sole developer · open source</p>
+            <p class="proj__role">Sole developer, open source</p>
             <ul class="chips">
               <li>Next.js</li>
               <li>TypeScript</li>
@@ -266,7 +231,7 @@
             <footer class="proj__foot">
               <time datetime="2026-10-20">Updated 2026-10-20</time>
               <span class="proj__links">
-                <a href="https://brim3d.vercel.app/" target="_blank" rel="noopener">Live<i aria-hidden="true">↗</i></a>
+                <a href="https://brim3d.vercel.app/" target="_blank" rel="noopener">Visit</a>
               </span>
             </footer>
           </div>
@@ -277,11 +242,10 @@
             aria-hidden="true">
             <img src="covers/coco.webp" srcset="covers/coco-800.webp 800w, covers/coco.webp 1600w"
               sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
-            <span class="tag tag--live"><i></i>Live</span>
+            <span class="tag tag--live">Live</span>
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">03</span>
               <h3 class="proj__name"><a href="https://cocostudy.space/" target="_blank" rel="noopener">CocoStudy</a>
               </h3>
             </div>
@@ -289,7 +253,7 @@
               Turns a lecture you sat through into something you can revise from — a summary, a quiz, and a deck of
               flashcards, generated from the recording.
             </p>
-            <p class="proj__role">Sole developer · 215 logic tests</p>
+            <p class="proj__role">Sole developer, 215 logic tests</p>
             <ul class="chips">
               <li>TypeScript</li>
               <li>Node.js</li>
@@ -318,9 +282,8 @@
             <footer class="proj__foot">
               <time datetime="2026-06-20">Updated 2026-06-20</time>
               <span class="proj__links">
-                <a href="https://cocostudy.space/" target="_blank" rel="noopener">Visit<i aria-hidden="true">↗</i></a>
-                <a href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener">Source<i
-                    aria-hidden="true">↗</i></a>
+                <a href="https://cocostudy.space/" target="_blank" rel="noopener">Visit</a>
+                <a href="https://github.com/ZakiNazal/CocoStudy" target="_blank" rel="noopener">Source</a>
               </span>
             </footer>
           </div>
@@ -331,18 +294,17 @@
             aria-hidden="true">
             <img src="covers/qbook.webp" srcset="covers/qbook-800.webp 800w, covers/qbook.webp 1600w"
               sizes="(max-width: 860px) 92vw, 56vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
-            <span class="tag tag--live"><i></i>Live</span>
+            <span class="tag tag--live">Live</span>
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">04</span>
               <h3 class="proj__name"><a href="https://qbooking.app" target="_blank" rel="noopener">QBooking</a></h3>
             </div>
             <p class="proj__desc">
               The native companion to qbooking.app. Sign in once and stay signed in, land on the right screen for your
               role, and read the portal from your phone.
             </p>
-            <p class="proj__role">Collaborator · 15 of 27 commits</p>
+            <p class="proj__role">Collaborator, 15 of 27 commits</p>
             <ul class="chips">
               <li>Flutter</li>
               <li>Dart</li>
@@ -368,7 +330,7 @@
             <footer class="proj__foot">
               <span>With AltaDevs</span>
               <span class="proj__links">
-                <a href="https://qbooking.app" target="_blank" rel="noopener">Visit<i aria-hidden="true">↗</i></a>
+                <a href="https://qbooking.app" target="_blank" rel="noopener">Visit</a>
               </span>
             </footer>
           </div>
@@ -379,11 +341,10 @@
             aria-hidden="true">
             <img src="covers/dietersdiet.webp" srcset="covers/dietersdiet-800.webp 800w, covers/dietersdiet.webp 1600w"
               sizes="(max-width: 860px) 92vw, 46vw" alt="" loading="lazy" decoding="async" width="1600" height="1200" />
-            <span class="tag tag--live"><i></i>Live</span>
+            <span class="tag tag--live">Live</span>
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">05</span>
               <h3 class="proj__name"><a href="https://dietersdiet.fit" target="_blank" rel="noopener">Dieters Diet</a>
               </h3>
             </div>
@@ -410,7 +371,7 @@
             <footer class="proj__foot">
               <span></span>
               <span class="proj__links">
-                <a href="https://dietersdiet.fit" target="_blank" rel="noopener">Visit<i aria-hidden="true">↗</i></a>
+                <a href="https://dietersdiet.fit" target="_blank" rel="noopener">Visit</a>
               </span>
             </footer>
           </div>
@@ -424,14 +385,13 @@
           </div>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">06</span>
               <h3 class="proj__name">KAASH</h3>
             </div>
             <p class="proj__desc">
               Point the camera at a receipt and every line becomes a purchase. Other currencies convert at dated rates,
               budgets keep score, and it tracks what things cost over time. All of it stays on the phone.
             </p>
-            <p class="proj__role">Sole developer · on-device OCR</p>
+            <p class="proj__role">Sole developer, on-device OCR</p>
             <ul class="chips">
               <li>Flutter</li>
               <li>Dart</li>
@@ -469,7 +429,6 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">07</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/SmartDesk" target="_blank"
                   rel="noopener">SmartDesk</a></h3>
             </div>
@@ -477,7 +436,7 @@
               A fault report goes in; four roles move it out. Triage sorts and scores it, routing sends it to the right
               technician, and the SLA clock starts. Faults that keep coming back get flagged.
             </p>
-            <p class="proj__role">Sole developer · four-role workflow</p>
+            <p class="proj__role">Sole developer, four-role workflow</p>
             <ul class="chips">
               <li>Flutter</li>
               <li>Dart</li>
@@ -503,8 +462,7 @@
             <footer class="proj__foot">
               <time datetime="2026-07-27">Updated 2026-07-27</time>
               <span class="proj__links">
-                <a href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener">Source<i
-                    aria-hidden="true">↗</i></a>
+                <a href="https://github.com/ZakiNazal/SmartDesk" target="_blank" rel="noopener">Source</a>
               </span>
             </footer>
           </div>
@@ -519,7 +477,6 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">08</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/ListyApp" target="_blank"
                   rel="noopener">ListyApp</a></h3>
             </div>
@@ -527,7 +484,7 @@
               Shared lists that stay in sync. Make a list, assign items to friends, and watch them get ticked off while
               you're still looking at the screen.
             </p>
-            <p class="proj__role">Sole developer · open source</p>
+            <p class="proj__role">Sole developer, open source</p>
             <ul class="chips">
               <li>Flutter</li>
               <li>Dart</li>
@@ -553,8 +510,7 @@
             <footer class="proj__foot">
               <time datetime="2026-08-04">Updated 2026-08-04</time>
               <span class="proj__links">
-                <a href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener">Source<i
-                    aria-hidden="true">↗</i></a>
+                <a href="https://github.com/ZakiNazal/ListyApp" target="_blank" rel="noopener">Source</a>
               </span>
             </footer>
           </div>
@@ -569,7 +525,6 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">09</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank"
                   rel="noopener">WeatherSphere</a></h3>
             </div>
@@ -577,7 +532,7 @@
               Conditions now, a seven-day forecast, and a map you can drop a pin on to check anywhere else. One Flutter
               codebase, iOS and Android.
             </p>
-            <p class="proj__role">Sole developer · open source</p>
+            <p class="proj__role">Sole developer, open source</p>
             <ul class="chips">
               <li>Flutter</li>
               <li>Dart</li>
@@ -603,8 +558,7 @@
             <footer class="proj__foot">
               <time datetime="2026-05-22">Updated 2026-05-22</time>
               <span class="proj__links">
-                <a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener">Source<i
-                    aria-hidden="true">↗</i></a>
+                <a href="https://github.com/ZakiNazal/WeatherSphere" target="_blank" rel="noopener">Source</a>
               </span>
             </footer>
           </div>
@@ -619,7 +573,6 @@
           </a>
           <div class="proj__body">
             <div class="proj__top">
-              <span class="proj__idx">10</span>
               <h3 class="proj__name"><a href="https://github.com/ZakiNazal/LifeSkills" target="_blank"
                   rel="noopener">LifeSkills</a></h3>
             </div>
@@ -627,7 +580,7 @@
               Builds a daily habit out of short timed drills. Pick a skill or an activity, follow the countdown, and
               your streak, points and daily goal move the moment it ends.
             </p>
-            <p class="proj__role">Sole developer · open source</p>
+            <p class="proj__role">Sole developer, open source</p>
             <ul class="chips">
               <li>Flutter</li>
               <li>Dart</li>
@@ -653,8 +606,7 @@
             <footer class="proj__foot">
               <time datetime="2026-11-05">Updated 2026-11-05</time>
               <span class="proj__links">
-                <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">Source<i
-                    aria-hidden="true">↗</i></a>
+                <a href="https://github.com/ZakiNazal/LifeSkills" target="_blank" rel="noopener">Source</a>
               </span>
             </footer>
           </div>
@@ -664,7 +616,7 @@
 
       <p class="section__after">
         <a class="link-arrow" href="https://github.com/ZakiNazal?tab=repositories" target="_blank" rel="noopener">
-          Everything else on GitHub<i aria-hidden="true">↗</i>
+          Everything else on GitHub
         </a>
       </p>
     </section>
@@ -674,8 +626,7 @@
          features.js adds the tabs and the self-guided tour; without JS the first one still scrolls. -->
     <section class="section" id="playground">
       <header class="section__head">
-        <p class="section__num">02</p>
-        <h2 class="section__title" data-reveal-text>Take a look inside</h2>
+        <h2 class="section__title">Take a look inside</h2>
         <p class="section__meta">captured from the live sites</p>
       </header>
 
@@ -699,8 +650,7 @@
                 </svg>
                 <span id="pgHost">scorvyn.shop</span>
               </span>
-              <a class="pg__open" id="pgOpen" href="https://scorvyn.shop" target="_blank" rel="noopener">Open live<i
-                  aria-hidden="true">↗</i></a>
+              <a class="pg__open" id="pgOpen" href="https://scorvyn.shop" target="_blank" rel="noopener">Open live</a>
             </div>
             <span class="pg__notch" aria-hidden="true"></span>
             <div class="pg__screen" id="pgScreen" tabindex="0" data-lenis-prevent
@@ -720,22 +670,21 @@
     <!-- ============ STACK ============ -->
     <section class="section section--stack" id="stack">
       <header class="section__head">
-        <p class="section__num">03</p>
-        <h2 class="section__title" data-reveal-text>The stack</h2>
+        <h2 class="section__title">The stack</h2>
         <p class="section__meta">drag the sphere</p>
       </header>
 
       <div class="stack">
         <div class="stack__copy">
           <p class="stack__lead">
-            Mobile first, in <em>Flutter</em> and Dart. On the web, <em>TypeScript</em> and Next.js. Firebase or
+            Mobile first, in Flutter and Dart. On the web, TypeScript and Next.js. Firebase or
             Supabase behind both, and Figma before any of it.
           </p>
           <ul class="stack__list">
-            <li><b>Mobile</b><span>Flutter · Dart · Firebase</span></li>
-            <li><b>Web</b><span>TypeScript · Next.js · Tailwind · Node.js</span></li>
-            <li><b>Data</b><span>Firebase · Supabase · Stripe</span></li>
-            <li><b>Also</b><span>Python · C++ · JavaScript · Figma</span></li>
+            <li><b>Mobile</b><span>Flutter, Dart, Firebase</span></li>
+            <li><b>Web</b><span>TypeScript, Next.js, Tailwind, Node.js</span></li>
+            <li><b>Data</b><span>Firebase, Supabase, Stripe</span></li>
+            <li><b>Also</b><span>Python, C++, JavaScript, Figma</span></li>
           </ul>
         </div>
         <!-- Word sphere. script.js places each word on a Fibonacci sphere and spins it;
@@ -754,28 +703,27 @@
     <!-- ============ TIMELINE ============ -->
     <section class="section" id="timeline">
       <header class="section__head">
-        <p class="section__num">04</p>
-        <h2 class="section__title" data-reveal-text>Timeline</h2>
-        <p class="section__meta">2019 → now</p>
+        <h2 class="section__title">Timeline</h2>
+        <p class="section__meta">2019 to now</p>
       </header>
 
       <ol class="tl" id="tl">
-        <i class="tl__rail" aria-hidden="true"><i class="tl__fill" id="tlFill"></i></i>
+        <i class="tl__rail" aria-hidden="true"></i>
         <li class="tl__item">
-          <span class="tl__year">2026 <small>→ now</small></span>
+          <span class="tl__year">2026 <small>to now</small></span>
           <div class="tl__body">
             <h3>Intern at Housing Bank</h3>
-            <p class="tl__where">Housing Bank · Amman, Jordan · Oct 2026 – present</p>
+            <p class="tl__where">Housing Bank, Amman, Jordan. Oct 2026 to present</p>
             <p>My first official internship, as a Mobile Application Developer, working on the bank's new mobile
               banking application — and getting hands-on with the software development life cycle, RPA, BPM and other
               enterprise-level systems.</p>
           </div>
         </li>
         <li class="tl__item">
-          <span class="tl__year">2026 <small>→ now</small></span>
+          <span class="tl__year">2026 <small>to now</small></span>
           <div class="tl__body">
             <h3>Built the QBooking companion app</h3>
-            <p class="tl__where">Collaborator with AltaDevs · Jun 2026 – present</p>
+            <p class="tl__where">Collaborator with AltaDevs. Jun 2026 to present</p>
             <p>First time writing Flutter to someone else's brief, on someone else's repo, next to another developer.
               Role-based routing into the owner, staff and customer shells, session restore, and the shared widget set
               the rest of the app is assembled from. <a href="https://qbooking.app" target="_blank" rel="noopener">Live
@@ -783,7 +731,7 @@
           </div>
         </li>
         <li class="tl__item">
-          <span class="tl__year">2024 <small>→ now</small></span>
+          <span class="tl__year">2024 <small>to now</small></span>
           <div class="tl__body">
             <h3>BSc Computer Science</h3>
             <p class="tl__where">Asia Pacific University of Technology &amp; Innovation, Kuala Lumpur</p>
@@ -797,7 +745,7 @@
             <h3>Started shipping my own projects</h3>
             <p class="tl__where">Self-directed</p>
             <p>Picked up Flutter properly and started finishing things instead of abandoning them. LifeSkills was the
-              first one that made it to a real user.</p>
+              first one someone other than me used every day.</p>
           </div>
         </li>
         <li class="tl__item">
@@ -810,62 +758,42 @@
         </li>
       </ol>
 
-      <!-- data-to is the truth; the text content is the no-JS fallback. -->
-      <dl class="tally">
-        <div>
-          <dd data-to="10">10</dd>
-          <dt>Projects shipped</dt>
-        </div>
-        <div>
-          <dd data-to="6">6</dd>
-          <dt>Built with Flutter</dt>
-        </div>
-        <div>
-          <dd data-to="5">5</dd>
-          <dt>Live in the world</dt>
-        </div>
-        <div>
-          <dd data-to="7">7</dd>
-          <dt>Years since line one</dt>
-        </div>
-      </dl>
     </section>
 
     <!-- ============ ABOUT + NOW ============ -->
     <section class="section" id="about">
       <header class="section__head">
-        <p class="section__num">05</p>
-        <h2 class="section__title" data-reveal-text>About</h2>
-        <p class="section__meta">current focus · October 2026</p>
+        <h2 class="section__title">About</h2>
+        <p class="section__meta">As of October 2026</p>
       </header>
 
       <div class="about">
-        <p class="about__lead" data-words>
+        <p class="about__lead">
           I write code because building a thing is the fastest way to understand it. Most of what I know started as
-          <em>“how hard could it be?”</em> and finished two weeks later, working.
+          “how hard could it be?” and finished two weeks later, working.
         </p>
 
-        <div class="about__cards">
-          <div class="card" data-tilt>
-            <p class="card__k">Now</p>
-            <p class="card__v">Intern Mobile Application Developer at Housing Bank, while studying computer science.</p>
+        <dl class="facts">
+          <div>
+            <dt>Now</dt>
+            <dd>Intern mobile application developer at Housing Bank, while studying computer science.</dd>
           </div>
-          <div class="card" data-tilt>
-            <p class="card__k">Learning next</p>
-            <p class="card__v">Backend architecture and testing at scale.</p>
+          <div>
+            <dt>Learning next</dt>
+            <dd>Backend architecture and testing at scale.</dd>
           </div>
-          <div class="card" data-tilt>
-            <p class="card__k">Studying</p>
-            <p class="card__v">BSc Computer Science, APU — Kuala Lumpur, Malaysia.</p>
+          <div>
+            <dt>Studying</dt>
+            <dd>BSc Computer Science at APU in Kuala Lumpur, Malaysia.</dd>
           </div>
-          <div class="card" data-tilt>
-            <p class="card__k">Working from</p>
-            <p class="card__v">Amman, Jordan · <span id="nowLocalTime">local time</span></p>
+          <div>
+            <dt>Working from</dt>
+            <dd>Amman, Jordan, <span id="nowLocalTime">local time</span></dd>
           </div>
-        </div>
+        </dl>
 
         <a class="pulse" id="ghPulse" href="https://github.com/ZakiNazal" target="_blank" rel="noopener" hidden>
-          <span class="pulse__label"><span class="dot"></span>Live on GitHub</span>
+          <span class="pulse__label">Latest on GitHub</span>
           <span class="pulse__what"></span>
           <span class="pulse__msg"></span>
           <time class="pulse__when"></time>
@@ -890,11 +818,10 @@
 
     <!-- ============ CONTACT ============ -->
     <section class="contact" id="contact">
-      <p class="section__num">06 — Contact</p>
-      <h2 class="contact__title">
+        <h2 class="contact__title">
         <span class="line"><span class="split">Hiring an intern,</span></span>
         <span class="line"><span class="split">or just curious?</span></span>
-        <span class="line"><span class="split"><em>Write to me.</em></span></span>
+        <span class="line"><span class="split">Write to me.</span></span>
       </h2>
 
       <a class="contact__email" href="mailto:zakinazal112@gmail.com" id="copyEmail" data-email="zakinazal112@gmail.com">
@@ -904,11 +831,11 @@
 
       <nav class="contact__links" aria-label="Elsewhere">
         <a class="btn" href="https://github.com/ZakiNazal" target="_blank" rel="noopener"
-          data-magnetic><span>GitHub</span><i aria-hidden="true">↗</i></a>
+          data-magnetic><span>GitHub</span></a>
         <a class="btn" href="https://www.linkedin.com/in/zakinazzal/" target="_blank" rel="noopener"
-          data-magnetic><span>LinkedIn</span><i aria-hidden="true">↗</i></a>
+          data-magnetic><span>LinkedIn</span></a>
         <a class="btn btn--solid" href="resume.pdf" download="Zaki-Nazzal-Resume.pdf"
-          data-magnetic><span>Résumé</span><i aria-hidden="true">↓</i></a>
+          data-magnetic><span>Résumé</span></a>
       </nav>
       <p class="sr-only" role="status" aria-live="polite" id="copyStatus"></p>
     </section>
@@ -918,28 +845,17 @@
     <div class="footer__meta">
       <span>© <span id="year">2026</span> Zaki Nazzal</span>
       <span>Designed &amp; built by Zaki Nazzal</span>
-      <a href="#top">Back to top ↑</a>
+      <a href="#top">Back to top</a>
     </div>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer crossorigin="anonymous"
     integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer crossorigin="anonymous"
-    integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js" defer crossorigin="anonymous"
     integrity="sha384-CHvG5TSBYWY4gs18D+se5IrGOZ6r8JlhAWob7LbkaUcfqD8PWzaYz2pqZdH7LsXQ"></script>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer crossorigin="anonymous"
     integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed"></script>
   <script src="script.js" defer></script>
-  <!-- The WebGL backdrop is decoration: three.js loads once the page has painted and gone idle,
-       so it never sits in front of the first paint. The canvas fades in when it's ready. -->
-  <script>
-    addEventListener("load", function () {
-      var start = function () { import("./scene.js"); };
-      if ("requestIdleCallback" in window) requestIdleCallback(start, { timeout: 1500 });
-      else setTimeout(start, 200);
-    });
-  </script>
   <script src="features.js" defer></script>
 </body>
 
